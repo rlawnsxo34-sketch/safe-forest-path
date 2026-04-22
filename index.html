@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>포이·마리의 노르딕워킹 숲길 윷놀이</title>
+    <!-- 아케이드 픽셀 한글 폰트 (둥근모꼴) -->
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/neodgm/neodgm-webfont@latest/neodgm/style.css');
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'DungGeunMo', 'Courier New', monospace;
+            background-color: #111827; /* 어두운 아케이드 배경 */
+            color: #f3f4f6;
+            overflow: hidden; 
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            word-break: keep-all;
+            -webkit-tap-highlight-color: transparent;
+            /* 레트로 스캔라인 효과 */
+            background-image: linear-gradient(rgba(17, 24, 39, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+        }
+        
+        .leading-beautiful { line-height: 1.6; }
+        .break-keep { word-break: keep-all; }
+
+        /* --- 네온 텍스트 효과 --- */
+        .neon-text-green { text-shadow: 0 0 5px #4ade80, 0 0 10px #4ade80, 0 0 20px #22c55e; }
+        .neon-text-pink { text-shadow: 0 0 5px #f472b6, 0 0 10px #f472b6, 0 0 20px #ec4899; }
+        .neon-text-yellow { text-shadow: 0 0 5px #fde047, 0 0 10px #fde047, 0 0 20px #eab308; }
+
+        /* --- 버튼 공통 아케이드 스타일 --- */
+        .arcade-btn {
+            border: 4px solid #fff;
+            box-shadow: 4px 4px 0 #000;
+            text-transform: uppercase;
+            transition: all 0.1s;
+        }
+        .arcade-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0 #000;
+        }
+        .arcade-btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(100%);
+        }
+
+        /* --- 윷판 영역 (네온 테마) --- */
+        #board-container {
+            position: relative; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        #yut-board {
+            position: relative;
+            width: min(90%, 80vh); height: min(90%, 80vh);
+            background-color: #1f2937;
+            border-radius: 1rem;
+            border: 8px solid #22d3ee; 
+            box-shadow: 0 0 20px #22d3ee inset, 0 0 20px #22d3ee;
+        }
+
+        @media (max-width: 768px) {
+            #yut-board {
+                width: min(95vw, 55vh); height: min(95vw, 55vh);
+                border-width: 4px; border-radius: 0.5rem;
+            }
+        }
+
+        #board-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+
+        .yut-node {
+            position: absolute; transform: translate(-50%, -50%); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; z-index: 10;
+            background-color: #111827; width: 8%; height: 8%;
+            font-size: clamp(0.6rem, 2vw, 1.2rem);
+            border: 3px solid #22d3ee;
+            color: #22d3ee;
+            box-shadow: 0 0 10px #22d3ee;
+        }
+        .yut-node.corner {
+            width: 13%; height: 13%;
+            background-color: #22d3ee; color: #111;
+            font-size: clamp(0.8rem, 2.5vw, 1.5rem);
+            border: 3px solid #fff; box-shadow: 0 0 15px #22d3ee;
+        }
+        .yut-node.event-node {
+            background-color: #facc15 !important; color: #111 !important;
+            border-color: #fff !important; box-shadow: 0 0 15px #facc15 !important;
+        }
+        .yut-node.item-node {
+            background-color: #f472b6 !important; color: #111 !important;
+            border-color: #fff !important; box-shadow: 0 0 15px #f472b6 !important;
+        }
+
+        /* --- 윷말 --- */
+        .piece {
+            position: absolute; width: 11%; height: 11%; border-radius: 50%;
+            transform: translate(-50%, -50%); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 2px 2px 0px #000; z-index: 20; cursor: pointer;
+            border: 3px solid #fff; display: flex; align-items: center; justify-content: center;
+            font-weight: 900; color: white; font-size: clamp(0.7rem, 2.5vw, 1.4rem);
+        }
+
+        .piece.clickable { animation: bounce-glow 0.8s infinite alternate; }
+
+        @keyframes bounce-glow {
+            from { box-shadow: 0 0 5px #fff, 2px 2px 0px #000; transform: translate(-50%, -50%) scale(1); }
+            to { box-shadow: 0 0 20px #fff, 2px 2px 0px #000; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        .piggyback-badge {
+            position: absolute; top: -25%; right: -25%;
+            background-color: #ef4444; color: white; border-radius: 50%;
+            width: 50%; height: 50%; font-size: clamp(0.6rem, 1.5vw, 1rem);
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid #fff; z-index: 25; box-shadow: 1px 1px 0 #000;
+        }
+
+        /* --- 3D 윷 던지기 애니메이션 --- */
+        .yut-stick-wrapper { perspective: 800px; margin: 0 5px; }
+        .yut-stick {
+            width: clamp(30px, 6vw, 45px); height: clamp(100px, 18vw, 140px);
+            position: relative; transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .yut-face {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 15px;
+        }
+        .yut-back { background: linear-gradient(to right, #78350f, #d97706, #78350f); border: 2px solid #451a03; transform: rotateY(0deg); }
+        .yut-front {
+            background: #fde047; border: 3px solid #ca8a04; transform: rotateY(180deg);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .yut-front::after {
+            content: "xxx"; font-size: 16px; color: #b45309; opacity: 0.5;
+            letter-spacing: 2px; writing-mode: vertical-rl; text-orientation: upright;
+        }
+        .yut-bbaek .yut-front::after { content: "빽도"; color: #dc2626; opacity: 1; font-weight: bold; font-size: 20px; }
+
+        .rolling-anim .yut-stick { animation: roll3D 0.4s infinite linear; }
+        
+        @keyframes roll3D {
+            0% { transform: rotateY(0deg) rotateX(0deg) translateY(0); }
+            25% { transform: rotateY(180deg) rotateX(90deg) translateY(-40px); }
+            50% { transform: rotateY(360deg) rotateX(180deg) translateY(-60px); }
+            75% { transform: rotateY(540deg) rotateX(270deg) translateY(-40px); }
+            100% { transform: rotateY(720deg) rotateX(360deg) translateY(0); }
+        }
+
+        .result-up { transform: rotateY(180deg) rotateZ(0deg); } 
+        .result-down { transform: rotateY(0deg) rotateZ(0deg); } 
+        .tilt-1 { transform: rotateY(180deg) rotateZ(15deg); }
+        .tilt-2 { transform: rotateY(0deg) rotateZ(-10deg); }
+
+        .dashboard-scroll {
+            overflow-y: auto; -webkit-overflow-scrolling: touch; 
+            scrollbar-width: thin; scrollbar-color: #22d3ee #1f2937;
+        }
+        
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .modal-content { max-height: 90vh; display: flex; flex-direction: column; background-color: #1f2937; border: 6px solid #fff; box-shadow: 10px 10px 0 #000; }
+        .modal-scroll-area { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    </style>
+</head>
+<body class="flex flex-col">
+
+    <!-- 1. 인트로 -->
+    <div id="intro-screen" class="fixed inset-0 bg-gray-900 z-[100] flex flex-col items-center justify-center p-4 fade-in">
+        <div class="text-center bg-gray-800 p-8 md:p-12 rounded-xl shadow-2xl border-4 md:border-8 border-cyan-400 w-full max-w-2xl arcade-btn" style="box-shadow: 10px 10px 0 #000;">
+            
+            <!-- 업로드된 이미지 및 새로운 테마 타이틀 배치 -->
+            <img src="계절(봄)_노르딕워킹 포이,마리.png" alt="포이 마리 노르딕워킹" class="w-48 md:w-64 mx-auto mb-4 drop-shadow-[0_10px_10px_rgba(0,0,0,0.6)] animate-float">
+            
+            <h1 class="text-3xl md:text-5xl font-extrabold neon-text-green text-green-400 mb-2 break-keep">포이·마리의 숲길 탐험</h1>
+            <p class="text-lg md:text-xl text-cyan-300 mb-8 font-bold break-keep">노르딕워킹 안전 윷놀이</p>
+            
+            <div class="mb-10 bg-gray-900 p-6 rounded-lg border-2 border-gray-600">
+                <label for="team-count-input" class="block text-lg md:text-xl font-bold text-pink-400 mb-4 break-keep">참여할 조(팀)의 숫자를 입력하세요</label>
+                <div class="flex justify-center items-center gap-4">
+                    <span class="text-2xl text-gray-400">P</span>
+                    <input type="number" id="team-count-input" min="2" max="6" value="6" class="w-24 h-16 text-center text-4xl font-black bg-black text-yellow-300 border-4 border-yellow-500 rounded arcade-btn focus:outline-none focus:border-white">
+                    <span class="text-2xl text-gray-400">조</span>
+                </div>
+                <p class="text-sm text-gray-500 mt-2">최소 2조, 최대 6조</p>
+            </div>
+
+            <button onclick="initAudio(); showTutorial();" class="w-full px-8 py-5 bg-green-500 text-white text-2xl md:text-3xl font-extrabold rounded-lg hover:bg-green-400 arcade-btn">
+                INSERT COIN (시작)
+            </button>
+        </div>
+    </div>
+
+    <!-- 1-1. 튜토리얼 -->
+    <div id="tutorial-screen" class="fixed inset-0 bg-gray-900 z-[90] hidden flex-col items-center justify-center p-4 fade-in">
+        <div class="bg-gray-800 p-6 md:p-10 rounded-xl shadow-2xl border-4 border-cyan-400 w-full max-w-4xl modal-content">
+            <h2 class="text-3xl md:text-4xl font-black text-cyan-300 mb-6 text-center break-keep shrink-0">HOW TO PLAY</h2>
+            <div class="modal-scroll-area space-y-4 md:space-y-6 text-base md:text-xl font-bold text-gray-200 leading-beautiful break-keep mb-8 p-4 bg-gray-900 rounded border-2 border-gray-700">
+                <div class="flex items-start"><span class="text-2xl text-yellow-400 mr-3 shrink-0">🎲</span><p>화면의 <span class="text-cyan-400">[디지털 윷]</span>을 누르거나 직접 던져 결과를 입력하세요.</p></div>
+                <div class="flex items-start"><span class="text-2xl text-green-400 mr-3 shrink-0">📍</span><p>모서리나 중앙 칸에 <span class="text-green-400">정확히</span> 도착하면 대각선 지름길로 꺾어 갑니다!</p></div>
+                <div class="flex items-start"><span class="text-2xl text-yellow-400 mr-3 shrink-0">❓</span><p><span class="text-yellow-400">노란 칸(?)</span>에서는 퀴즈를, <span class="text-pink-400">분홍 칸(🎁)</span>에서는 아이템 획득!</p></div>
+                <div class="flex items-start"><span class="text-2xl text-pink-400 mr-3 shrink-0">🏆</span><p>말 2개가 모두 결승선을 통과하면 GAME CLEAR!</p></div>
+            </div>
+            <button onclick="startGame()" class="shrink-0 w-full py-4 md:py-5 bg-cyan-500 text-black text-xl md:text-3xl font-extrabold rounded-lg hover:bg-cyan-400 arcade-btn">
+                READY! (윷판으로)
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. 메인 게임 -->
+    <div id="game-screen" class="hidden w-full h-full flex-col z-[80] overflow-hidden bg-gray-900">
+        <!-- 헤더 -->
+        <header class="bg-gray-800 text-white p-2 md:p-4 border-b-4 border-cyan-500 flex justify-between items-center shrink-0">
+            <h1 class="text-xl md:text-2xl font-extrabold truncate mr-2 neon-text-green text-green-400">노르딕워킹 윷놀이 ARCADE</h1>
+            <div id="turn-indicator" class="text-sm md:text-lg font-black bg-black border-2 border-white px-3 py-1 md:px-6 md:py-2 rounded shadow-inner truncate text-white">
+                LOADING...
+            </div>
+        </header>
+
+        <!-- 메인 영역 -->
+        <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+            
+            <!-- 윷판 -->
+            <div class="flex-[3] relative p-2 md:p-6 flex items-center justify-center shrink-0 md:shrink border-b-4 md:border-b-0 md:border-r-4 border-gray-700 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-800 to-gray-900">
+                <div id="board-container">
+                    <div id="yut-board">
+                        <svg id="board-lines"></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 컨트롤 패널 -->
+            <div class="flex-[2] md:flex-[1.5] lg:flex-[1] flex flex-col bg-gray-800 p-2 md:p-4 overflow-hidden max-w-full md:max-w-md">
+                
+                <div class="shrink-0 mb-2 md:mb-4 bg-gray-900 p-3 md:p-4 rounded border-2 border-cyan-500 flex flex-col">
+                    <h2 class="text-sm md:text-base font-extrabold text-cyan-300 mb-3 text-center">ACTION</h2>
+                    
+                    <button onclick="rollDigitalYut()" id="btn-digital-roll" class="mb-3 w-full py-3 bg-yellow-400 text-black font-extrabold text-sm md:text-xl rounded hover:bg-yellow-300 arcade-btn flex items-center justify-center gap-2">
+                        <span>▶ 화면에서 윷 던지기!</span>
+                    </button>
+                    
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="inputYutResult(1, '도')" class="yut-btn py-2 bg-gray-700 border-2 border-gray-500 text-white font-bold text-xs md:text-sm rounded arcade-btn">도</button>
+                        <button onclick="inputYutResult(2, '개')" class="yut-btn py-2 bg-gray-700 border-2 border-gray-500 text-white font-bold text-xs md:text-sm rounded arcade-btn">개</button>
+                        <button onclick="inputYutResult(3, '걸')" class="yut-btn py-2 bg-gray-700 border-2 border-gray-500 text-white font-bold text-xs md:text-sm rounded arcade-btn">걸</button>
+                        <button onclick="inputYutResult(4, '윷')" class="yut-btn py-2 bg-cyan-600 border-2 border-cyan-400 text-white font-bold text-xs md:text-sm rounded arcade-btn">윷</button>
+                        <button onclick="inputYutResult(5, '모')" class="yut-btn py-2 bg-pink-600 border-2 border-pink-400 text-white font-bold text-xs md:text-sm rounded arcade-btn">모</button>
+                        <button onclick="inputYutResult(-1, '빽도')" class="yut-btn py-2 bg-red-600 border-2 border-red-400 text-white font-bold text-xs md:text-sm rounded arcade-btn">빽도</button>
+                    </div>
+                    <div id="roll-result" class="mt-3 text-center text-sm md:text-lg font-black text-yellow-400 h-6">READY</div>
+                </div>
+
+                <div class="flex-1 flex flex-col overflow-hidden">
+                    <h2 class="shrink-0 text-sm md:text-lg font-extrabold text-pink-400 mb-2">STATUS</h2>
+                    <div id="team-dashboard" class="flex-1 dashboard-scroll space-y-2 pb-2 pr-1">
+                        <!-- JS 렌더링 -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 3. 모달창들 -->
+
+    <!-- 3D 윷가락 애니메이션 모달 -->
+    <div id="yut-animation-modal" class="fixed inset-0 bg-black/90 z-[120] hidden flex-col items-center justify-center p-4">
+        <h2 class="text-3xl md:text-5xl font-black text-cyan-400 mb-16 animate-pulse neon-text-green">ROLLING...</h2>
+        <div id="yut-sticks-container" class="flex justify-center items-center gap-2 md:gap-4 perspective-[800px]">
+            <!-- JS -->
+        </div>
+        <div id="yut-final-result" class="mt-16 text-5xl md:text-7xl font-black text-yellow-400 opacity-0 transition-opacity duration-300 transform scale-50 neon-text-yellow border-4 border-yellow-400 p-4 rounded bg-black"></div>
+    </div>
+
+    <!-- 알림창 -->
+    <div id="alert-modal" class="fixed inset-0 bg-black/80 z-[110] hidden items-center justify-center p-4">
+        <div class="bg-gray-800 p-6 md:p-8 rounded w-full max-w-sm md:max-w-md text-center fade-in border-4 border-pink-500 arcade-btn" style="box-shadow: 10px 10px 0 #000;">
+            <h2 id="alert-title" class="text-2xl md:text-3xl font-black text-pink-400 mb-4 break-keep"></h2>
+            <p id="alert-desc" class="text-lg md:text-xl text-white mb-6 font-bold break-keep"></p>
+            <button onclick="closeAlert()" class="w-full py-3 md:py-4 bg-pink-500 text-white text-xl md:text-2xl font-bold rounded arcade-btn">OK</button>
+        </div>
+    </div>
+
+    <!-- 퀴즈 -->
+    <div id="quiz-modal" class="fixed inset-0 bg-black/90 z-[110] hidden items-center justify-center p-2 md:p-4">
+        <div class="bg-gray-800 p-4 md:p-8 rounded w-full max-w-3xl fade-in border-4 border-yellow-400 modal-content">
+            <div class="flex items-center mb-4 shrink-0">
+                <span class="text-3xl md:text-5xl mr-3">❓</span>
+                <h2 class="text-2xl md:text-3xl font-black text-yellow-400 break-keep neon-text-yellow">QUIZ STAGE</h2>
+            </div>
+            
+            <div class="modal-scroll-area flex-1 pr-2">
+                <p id="quiz-question" class="text-xl md:text-2xl font-extrabold text-white mb-6 leading-beautiful break-keep border-l-4 border-yellow-400 pl-4"></p>
+                <div id="quiz-options" class="grid grid-cols-1 gap-3 mb-4"></div>
+                
+                <div id="quiz-rationale-box" class="hidden bg-gray-900 p-4 rounded border-2 border-gray-600 mb-2">
+                    <h3 id="quiz-result-title" class="text-xl md:text-2xl font-black mb-2 break-keep"></h3>
+                    <p id="quiz-rationale-text" class="text-md md:text-lg text-gray-300 leading-beautiful break-keep"></p>
+                </div>
+            </div>
+
+            <button id="btn-quiz-close" onclick="closeQuiz()" class="hidden shrink-0 mt-4 w-full py-3 md:py-4 bg-yellow-500 text-black text-lg md:text-xl font-bold rounded arcade-btn">CONTINUE</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 0. 웹 오디오 사운드 시스템 (외부 파일 불필요) ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            playSound('click');
+        }
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            const t = audioCtx.currentTime;
+
+            switch (type) {
+                case 'click':
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(800, t);
+                    gain.gain.setValueAtTime(0.3, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+                    osc.start(t); osc.stop(t + 0.1);
+                    break;
+                case 'roll':
+                    osc.type = 'square'; osc.frequency.setValueAtTime(150, t); osc.frequency.exponentialRampToValueAtTime(50, t + 0.05);
+                    gain.gain.setValueAtTime(0.5, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
+                    osc.start(t); osc.stop(t + 0.05);
+                    break;
+                case 'move':
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(400, t);
+                    gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0.01, t + 0.1);
+                    osc.start(t); osc.stop(t + 0.1);
+                    break;
+                case 'catch':
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(400, t); osc.frequency.exponentialRampToValueAtTime(100, t + 0.3);
+                    gain.gain.setValueAtTime(0.5, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+                    osc.start(t); osc.stop(t + 0.3);
+                    break;
+                case 'correct':
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, t); osc.frequency.setValueAtTime(659.25, t + 0.1); osc.frequency.setValueAtTime(783.99, t + 0.2); osc.frequency.setValueAtTime(1046.50, t + 0.3);
+                    gain.gain.setValueAtTime(0.3, t); gain.gain.linearRampToValueAtTime(0, t + 0.5);
+                    osc.start(t); osc.stop(t + 0.5);
+                    break;
+                case 'wrong':
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, t); osc.frequency.linearRampToValueAtTime(100, t + 0.3);
+                    gain.gain.setValueAtTime(0.4, t); gain.gain.linearRampToValueAtTime(0, t + 0.3);
+                    osc.start(t); osc.stop(t + 0.3);
+                    break;
+                case 'item':
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(880, t); osc.frequency.setValueAtTime(1760, t + 0.1);
+                    gain.gain.setValueAtTime(0.3, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.4);
+                    osc.start(t); osc.stop(t + 0.4);
+                    break;
+                case 'win':
+                    osc.type = 'square'; osc.frequency.setValueAtTime(440, t); osc.frequency.setValueAtTime(554.37, t + 0.2); osc.frequency.setValueAtTime(659.25, t + 0.4); osc.frequency.setValueAtTime(880, t + 0.6);
+                    gain.gain.setValueAtTime(0.3, t); gain.gain.linearRampToValueAtTime(0, t + 1.5);
+                    osc.start(t); osc.stop(t + 1.5);
+                    break;
+            }
+        }
+
+        // --- 1. 기초 설정 ---
+        let selectedTeamCount = 6; 
+        
+        const allTeams = [
+            { id: 0, name: "1P", color: "#ef4444", char: "A", finished: false, items: [] },
+            { id: 1, name: "2P", color: "#3b82f6", char: "B", finished: false, items: [] },
+            { id: 2, name: "3P", color: "#10b981", char: "C", finished: false, items: [] },
+            { id: 3, name: "4P", color: "#eab308", char: "D", finished: false, items: [] },
+            { id: 4, name: "5P", color: "#a855f7", char: "E", finished: false, items: [] },
+            { id: 5, name: "6P", color: "#ec4899", char: "F", finished: false, items: [] }
+        ];
+        let teams = [];
+        let pieces = [];
+        let currentTeamIdx = 0;
+        let gameState = 'WAIT_ROLL'; 
+        let currentRoll = 0;
+        let bonusRoll = false;
+
+        const quizBank = [
+            { groupId: "wasp", type: "객관식", question: "탐험 중 큰 말벌을 만났습니다! 대피 방법은?", options: [ { text: "제자리에 엎드려 기다린다.", isCorrect: false, rationale: "벌은 머리를 공격하므로 엎드리면 위험합니다." }, { text: "옷을 휘둘러 쫓아낸다.", isCorrect: false, rationale: "크게 움직이면 벌이 더 공격합니다." }, { text: "머리를 감싸고 20m 밖으로 뛴다.", isCorrect: true, rationale: "정답! 멀어지면 벌은 추격을 포기합니다." }, { text: "조용히 뒷걸음질 친다.", isCorrect: false, rationale: "천천히 움직이면 오히려 더 많이 쏘입니다." } ] },
+            { groupId: "wasp", type: "OX", question: "말벌을 만나면 가만히 서 있어야 한다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "가만히 있으면 표적이 됩니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 무조건 빠르게 도망쳐야 합니다." } ] },
+            { groupId: "photo", type: "객관식", question: "곤충을 스마트폰으로 잘 찍으려면?", options: [ { text: "10배 확대해서 찍는다.", isCorrect: false, rationale: "사진이 깨져서 알아보기 힘듭니다." }, { text: "곤충 코앞까지 다가간다.", isCorrect: false, rationale: "그림자 때문에 어둡게 찍힙니다." }, { text: "인물 사진 모드로 배경을 흐리게 한다.", isCorrect: true, rationale: "정답! 곤충이 선명하게 돋보입니다." }, { text: "플래시를 터뜨린다.", isCorrect: false, rationale: "강한 빛은 곤충을 다치게 할 수 있습니다." } ] },
+            { groupId: "downhill", type: "객관식", question: "내리막길에서 무릎을 보호하는 방법은?", options: [ { text: "가볍게 뛰며 내려간다.", isCorrect: false, rationale: "무릎에 체중의 몇 배 충격이 갑니다." }, { text: "무릎을 펴고 쿵쿵 디딘다.", isCorrect: false, rationale: "충격이 척추까지 전달됩니다." }, { text: "무릎을 살짝 굽히고 보폭을 좁힌다.", isCorrect: true, rationale: "정답! 다리가 스프링처럼 충격을 흡수합니다." }, { text: "까치발로 내려간다.", isCorrect: false, rationale: "종아리에 쥐가 나거나 미끄러집니다." } ] }
+        ];
+        let availableQuizGroups = [...new Set(quizBank.map(q => q.groupId))];
+
+        const itemPool = [
+            { name: "🥾 등산스틱", desc: "튼튼한 지팡이! 획득 즉시 1칸 보너스 전진!", effect: "forward" },
+            { name: "💊 구급상자", desc: "안전 최우선! 윷을 한 번 더 던질 수 있습니다!", effect: "bonus" },
+            { name: "🔋 에너지", desc: "1 UP! 모든 조원과 하이파이브를 하세요!", effect: "none" }
+        ];
+
+        // --- 2. 정통 윷판 좌표 (29칸 완벽 지원) ---
+        const nodeCoords = {
+            // 바깥 테두리 20칸 (0:시작/도착, 5:우상, 10:좌상, 15:좌하)
+            0: [90, 90], 1: [90, 74], 2: [90, 58], 3: [90, 42], 4: [90, 26],
+            5: [90, 10], 6: [74, 10], 7: [58, 10], 8: [42, 10], 9: [26, 10],
+            10: [10, 10], 11: [10, 26], 12: [10, 42], 13: [10, 58], 14: [10, 74],
+            15: [10, 90], 16: [26, 90], 17: [42, 90], 18: [58, 90], 19: [74, 90],
+            // 대각선 1 (우상->좌하)
+            20: [76.6, 23.3], 21: [63.3, 36.6], 22: [50, 50], 23: [36.6, 63.3], 24: [23.3, 76.6],
+            // 대각선 2 (좌상->우하)
+            25: [23.3, 23.3], 26: [36.6, 36.6], 27: [63.3, 63.3], 28: [76.6, 76.6],
+            100: [100, 100] // 골인점
+        };
+
+        const eventNodes = [1, 3, 6, 8, 11, 13, 16, 21, 23, 25]; // 퀴즈 칸
+        const itemNodes = [2, 7, 12, 17, 26]; // 아이템 칸
+
+        // 기본 무조건 전진 경로 맵
+        const nextNodeMap = {
+            0:1, 1:2, 2:3, 3:4, 4:5, 5:6, 6:7, 7:8, 8:9, 9:10, 10:11, 11:12, 12:13, 13:14, 14:15, 15:16, 16:17, 17:18, 18:19, 19:100,
+            20:21, 21:22, 23:24, 24:15,
+            25:26, 26:22, 27:28, 28:100
+        };
+
+        // --- 3. 렌더링 ---
+        function showTutorial() {
+            playSound('click');
+            const input = document.getElementById('team-count-input');
+            let count = parseInt(input.value);
+            if (isNaN(count) || count < 2 || count > 6) { alert("2~6 사이의 숫자를 입력하세요."); input.value = 6; return; }
+            
+            selectedTeamCount = count;
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('tutorial-screen').style.display = 'flex';
+            
+            teams = allTeams.slice(0, selectedTeamCount);
+            pieces = [];
+            teams.forEach(t => {
+                pieces.push({ id: `t${t.id}_p1`, teamId: t.id, pos: -1, history: [] });
+                pieces.push({ id: `t${t.id}_p2`, teamId: t.id, pos: -1, history: [] });
+            });
+        }
+
+        function startGame() {
+            playSound('click');
+            document.getElementById('tutorial-screen').style.display = 'none';
+            document.getElementById('game-screen').classList.remove('hidden');
+            document.getElementById('game-screen').classList.add('flex');
+            initGame();
+        }
+
+        function initGame() {
+            drawBoard(); renderDashboard(); updateTurnUI(); updatePiecesOnBoard();
+            window.addEventListener('resize', () => updatePiecesOnBoard());
+        }
+
+        function drawBoard() {
+            const board = document.getElementById('yut-board');
+            const svg = document.getElementById('board-lines');
+            
+            svg.innerHTML += `<path d="M 90% 90% L 90% 10% L 10% 10% L 10% 90% Z" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
+            svg.innerHTML += `<path d="M 90% 10% L 10% 90%" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
+            svg.innerHTML += `<path d="M 10% 10% L 90% 90%" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
+
+            Object.keys(nodeCoords).forEach(key => {
+                const num = parseInt(key);
+                if(num === 100) return;
+
+                const [x, y] = nodeCoords[num];
+                const isCorner = [0, 5, 10, 15, 22].includes(num);
+                const isEvent = eventNodes.includes(num);
+                const isItem = itemNodes.includes(num);
+                
+                const nodeDiv = document.createElement('div');
+                nodeDiv.className = `yut-node ${isCorner ? 'corner' : ''} ${isEvent ? 'event-node' : ''} ${isItem ? 'item-node' : ''}`;
+                nodeDiv.style.left = `${x}%`; nodeDiv.style.top = `${y}%`;
+
+                if(num === 0) nodeDiv.innerHTML = "START";
+                else if(isEvent) nodeDiv.innerHTML = "?";
+                else if(isItem) nodeDiv.innerHTML = "🎁";
+
+                board.appendChild(nodeDiv);
+            });
+
+            pieces.forEach(p => {
+                const pDiv = document.createElement('div');
+                pDiv.id = `piece_${p.id}`; pDiv.className = `piece`;
+                pDiv.style.borderColor = teams[p.teamId].color;
+                pDiv.style.backgroundColor = "#111";
+                pDiv.style.display = "none"; 
+                pDiv.style.color = teams[p.teamId].color;
+
+                pDiv.innerHTML = `
+                    <div class="w-full h-full flex items-center justify-center">${teams[p.teamId].char}</div>
+                    <div id="badge_${p.id}" class="piggyback-badge hidden">x2</div>
+                `;
+                
+                const clickHandler = (e) => { e.preventDefault(); e.stopPropagation(); if(gameState === 'WAIT_PIECE' && p.teamId === currentTeamIdx) onPieceClicked(p.id); };
+                pDiv.addEventListener('click', clickHandler);
+                pDiv.addEventListener('touchend', clickHandler);
+                board.appendChild(pDiv);
+            });
+        }
+
+        function renderDashboard() {
+            const dashboard = document.getElementById('team-dashboard');
+            dashboard.innerHTML = '';
+            
+            teams.forEach(t => {
+                const teamPieces = pieces.filter(p => p.teamId === t.id);
+                let piecesHtml = teamPieces.map(p => {
+                    let status = "WAIT";
+                    if (p.pos === 100) status = "CLEAR";
+                    else if (p.pos > 0) status = "RUN";
+                    
+                    return `<button id="dash_btn_${p.id}" onclick="if(gameState==='WAIT_PIECE' && currentTeamIdx===${t.id}) onPieceClicked('${p.id}')" 
+                            class="flex-1 py-2 px-1 rounded font-bold text-xs md:text-sm transition-colors border-2 ${p.pos === 100 ? 'bg-gray-800 text-gray-500 border-gray-600' : 'bg-gray-700 active:bg-gray-600 border-gray-500 arcade-btn'} text-white">
+                            UNIT ${p.id.split('_p')[1]}<br><span class="text-[10px] md:text-xs font-normal" style="color:${t.color}">${status}</span>
+                        </button>`;
+                }).join('');
+
+                let itemsHtml = t.items.map(item => `<span class="text-xs bg-pink-900 text-pink-300 border border-pink-500 px-1 py-0.5 rounded shadow-sm whitespace-nowrap">${item.split(' ')[0]}</span>`).join(' ');
+
+                dashboard.innerHTML += `
+                    <div class="p-3 rounded border-4 transition-all ${currentTeamIdx === t.id ? 'border-cyan-400 bg-gray-800 shadow-[0_0_10px_#22d3ee]' : 'border-gray-600 bg-gray-900'}">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="text-sm md:text-base font-black flex items-center gap-2" style="color: ${t.color}">${t.name}</div>
+                            <div class="flex gap-1 overflow-x-auto">${itemsHtml}</div>
+                        </div>
+                        <div class="flex gap-2">${piecesHtml}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function updateTurnUI() {
+            const turnText = document.getElementById('turn-indicator');
+            const team = teams[currentTeamIdx];
+            turnText.innerHTML = `<span style="color:${team.color}">▶ ${team.name}</span> TURN`;
+            
+            const buttons = document.querySelectorAll('.yut-btn');
+            const rollBtn = document.getElementById('btn-digital-roll');
+            const resultDisplay = document.getElementById('roll-result');
+            
+            if(gameState === 'WAIT_ROLL') {
+                buttons.forEach(b => b.disabled = false); rollBtn.disabled = false;
+                resultDisplay.innerText = bonusRoll ? "ONE MORE TIME!" : "WAITING...";
+                resultDisplay.className = "mt-3 text-center text-sm md:text-lg font-black text-yellow-400 animate-pulse";
+            } else {
+                buttons.forEach(b => b.disabled = true); rollBtn.disabled = true;
+                resultDisplay.innerText = "SELECT UNIT!";
+                resultDisplay.className = "mt-3 text-center text-sm md:text-lg font-black text-cyan-400";
+            }
+            renderDashboard();
+        }
+
+        // --- 4. 윷 던지기 및 이동 안정성 로직 ---
+        let isRolling = false;
+        function rollDigitalYut() {
+            if (gameState !== 'WAIT_ROLL' || isRolling) return;
+            isRolling = true;
+            playSound('click');
+            
+            const modal = document.getElementById('yut-animation-modal');
+            const container = document.getElementById('yut-sticks-container');
+            const finalResultText = document.getElementById('yut-final-result');
+            
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            container.innerHTML = '';
+            for(let i=0; i<4; i++){
+                container.innerHTML += `<div class="yut-stick-wrapper"><div class="yut-stick rolling-anim" id="yut-obj-${i}"><div class="yut-face yut-back"></div><div class="yut-face yut-front"></div></div></div>`;
+            }
+
+            finalResultText.style.opacity = "0"; finalResultText.style.transform = "scale(0.5)"; finalResultText.innerText = "";
+
+            const rand = Math.random() * 16;
+            let steps, resName, sticksStatus; 
+            
+            if(rand < 1) { steps = -1; resName = '빽도'; sticksStatus = ['up', 'down', 'down', 'down']; } 
+            else if(rand < 4) { steps = 1; resName = '도'; sticksStatus = ['up', 'down', 'down', 'down']; } 
+            else if(rand < 10) { steps = 2; resName = '개'; sticksStatus = ['up', 'up', 'down', 'down']; } 
+            else if(rand < 14) { steps = 3; resName = '걸'; sticksStatus = ['up', 'up', 'up', 'down']; } 
+            else if(rand < 15) { steps = 4; resName = '윷'; sticksStatus = ['up', 'up', 'up', 'up']; } 
+            else { steps = 5; resName = '모'; sticksStatus = ['down', 'down', 'down', 'down']; } 
+
+            sticksStatus.sort(() => Math.random() - 0.5);
+
+            // 구르는 동안 효과음
+            let rollSoundCount = 0;
+            const rollSoundInterval = setInterval(() => {
+                playSound('roll');
+                rollSoundCount++;
+                if (rollSoundCount > 10) clearInterval(rollSoundInterval);
+            }, 100);
+
+            setTimeout(() => {
+                modal.classList.remove('flex'); modal.classList.add('hidden');
+                isRolling = false; inputYutResult(steps, resName);
+            }, 2800);
+        }
+
+        function inputYutResult(steps, resultName) {
+            if (gameState !== 'WAIT_ROLL') return;
+            playSound('click');
+            
+            currentRoll = steps;
+            bonusRoll = (steps === 4 || steps === 5);
+            document.getElementById('roll-result').innerText = `[${resultName}] !`;
+            
+            const teamPieces = pieces.filter(p => p.teamId === currentTeamIdx && p.pos !== -1 && p.pos !== 100);
+            if (currentRoll === -1 && teamPieces.length === 0) {
+                gameState = 'ANIMATING'; updateTurnUI();
+                showAlert("앗! 빽도!", "판에 움직일 말이 없어 턴을 넘깁니다.");
+                setTimeout(() => nextTurn(), 2000); return;
+            }
+
+            gameState = 'WAIT_PIECE';
+            updateTurnUI(); highlightSelectablePieces();
+        }
+
+        function highlightSelectablePieces() {
+            pieces.forEach(p => {
+                const el = document.getElementById(`piece_${p.id}`);
+                const dashBtn = document.getElementById(`dash_btn_${p.id}`);
+                if (p.teamId === currentTeamIdx && p.pos !== 100) {
+                    if(currentRoll === -1 && p.pos === -1) {
+                        el.classList.remove('clickable'); dashBtn.classList.remove('border-cyan-400', 'shadow-[0_0_10px_#22d3ee]'); return;
+                    }
+                    if (el.style.display !== 'none') el.classList.add('clickable');
+                    dashBtn.classList.add('border-cyan-400', 'shadow-[0_0_10px_#22d3ee]');
+                } else {
+                    el.classList.remove('clickable'); dashBtn.classList.remove('border-cyan-400', 'shadow-[0_0_10px_#22d3ee]');
+                }
+            });
+        }
+
+        // 안정적인 이동 알고리즘 (한국 윷놀이 지름길 룰 완벽 적용)
+        function calculateDestination(startPos, steps, historyArray) {
+            // 빽도 로직
+            if (steps === -1) {
+                if (historyArray.length > 0) {
+                    let newHistory = [...historyArray];
+                    newHistory.pop(); // 현재 위치 제거
+                    let dest = newHistory.length > 0 ? newHistory[newHistory.length - 1] : 0;
+                    return { dest: dest, path: [], newHistory: newHistory };
+                } else {
+                    return { dest: 19, path: [], newHistory: [19] }; // 출발선에서 빽도 시 19번으로
+                }
+            }
+
+            let newHistory = [...historyArray];
+            let current = startPos === -1 ? 0 : startPos;
+
+            for (let i = 0; i < steps; i++) {
+                if (current === 100) break;
+                
+                let isFirstStep = (i === 0);
+                
+                // 모서리 도착 후 방향 결정
+                if (current === 5 && isFirstStep) current = 20; // 1번 지름길
+                else if (current === 10 && isFirstStep) current = 25; // 2번 지름길
+                else if (current === 22 && isFirstStep) current = 27; // 가장 짧은 지름길
+                else if (current === 22 && !isFirstStep) {
+                    // 중앙을 지나칠 때: 직전 위치(prev)에 따라 방향 결정
+                    let prev = newHistory[newHistory.length - 1];
+                    if (prev === 21 || prev === 20 || prev === 5) current = 23; // 우상에서 내려오던 중이면 좌하로
+                    else if (prev === 26 || prev === 25 || prev === 10) current = 27; // 좌상에서 내려오던 중이면 우하로
+                    else current = 27;
+                } else {
+                    current = nextNodeMap[current]; // 일반 이동
+                }
+                newHistory.push(current);
+            }
+
+            return { dest: current, path: [], newHistory: newHistory };
+        }
+
+        let pendingMovingPieces = null; 
+
+        function onPieceClicked(pieceId) {
+            if (gameState !== 'WAIT_PIECE') return;
+            
+            const targetPiece = pieces.find(p => p.id === pieceId);
+            if (!targetPiece || targetPiece.teamId !== currentTeamIdx || targetPiece.pos === 100) return;
+            if (currentRoll === -1 && targetPiece.pos === -1) return;
+
+            gameState = 'ANIMATING'; 
+            playSound('move');
+            
+            let piggybackedPieces;
+            if (targetPiece.pos === -1) piggybackedPieces = [targetPiece];
+            else piggybackedPieces = pieces.filter(p => p.teamId === currentTeamIdx && p.pos === targetPiece.pos && p.pos !== 100);
+
+            const { dest, path, newHistory } = calculateDestination(targetPiece.pos, currentRoll, targetPiece.history);
+
+            piggybackedPieces.forEach(p => { p.pos = dest; p.history = newHistory; });
+            updatePiecesOnBoard();
+
+            setTimeout(() => { handleArrival(dest, piggybackedPieces); }, 500); 
+        }
+
+        function handleArrival(destPos, movingPieces) {
+            if (destPos === 100) {
+                playSound('win');
+                showAlert("🎉 CLEAR!", "안전하게 탐험을 마쳤습니다!");
+                checkWinCondition();
+                setTimeout(() => nextTurn(), 2000); return;
+            }
+
+            // 잡기 확인
+            const enemies = pieces.filter(p => p.pos === destPos && p.teamId !== currentTeamIdx && p.pos !== -1 && p.pos !== 100);
+            if (enemies.length > 0) {
+                enemies.forEach(e => { e.pos = -1; e.history = []; });
+                updatePiecesOnBoard(); bonusRoll = true;
+                playSound('catch');
+                showAlert("💥 HIT!", "적을 출발선으로 돌려보내고 보너스 턴 획득!");
+                setTimeout(() => nextTurn(), 2000); return;
+            }
+
+            // 아이템 확인
+            if (itemNodes.includes(destPos)) {
+                playSound('item');
+                const randomItem = itemPool[Math.floor(Math.random() * itemPool.length)];
+                teams[currentTeamIdx].items.push(randomItem.name);
+                
+                let effectDesc = `[${randomItem.name}] 획득!\n\n${randomItem.desc}`;
+                if (randomItem.effect === "bonus") bonusRoll = true;
+                else if (randomItem.effect === "forward") pendingMovingPieces = movingPieces; 
+
+                document.getElementById('alert-title').innerText = "🎁 ITEM GET!";
+                document.getElementById('alert-desc').innerText = effectDesc;
+                const modal = document.getElementById('alert-modal');
+                modal.classList.remove('hidden'); modal.classList.add('flex');
+                
+                const btn = modal.querySelector('button');
+                btn.onclick = () => {
+                    closeAlert();
+                    if(randomItem.effect === "forward" && pendingMovingPieces) applyForwardItemEffect(pendingMovingPieces);
+                    else nextTurn();
+                };
+                return;
+            }
+
+            // 퀴즈 확인
+            if (eventNodes.includes(destPos)) { gameState = 'QUIZ'; showQuiz(); return; }
+
+            nextTurn();
+        }
+
+        function applyForwardItemEffect(movingPieces) {
+            playSound('move');
+            const targetPos = movingPieces[0].pos;
+            if (targetPos === 100) { nextTurn(); return; }
+
+            const { dest, path, newHistory } = calculateDestination(targetPos, 1, movingPieces[0].history);
+            movingPieces.forEach(p => { p.pos = dest; p.history = newHistory; });
+            updatePiecesOnBoard();
+            
+            setTimeout(() => { handleArrival(dest, movingPieces); }, 500);
+        }
+
+        function nextTurn() {
+            if (bonusRoll) { bonusRoll = false; gameState = 'WAIT_ROLL'; updateTurnUI(); return; }
+
+            let loopCount = 0;
+            do {
+                currentTeamIdx = (currentTeamIdx + 1) % teams.length; loopCount++;
+                if (loopCount > teams.length) break; 
+            } while (teams[currentTeamIdx].finished && !isGameOver());
+
+            if (isGameOver()) {
+                gameState = 'ANIMATING'; 
+                playSound('win');
+                showAlert("🎊 ALL CLEAR!", "모든 탐험대가 무사히 도착했습니다! GAME OVER!"); return;
+            }
+
+            gameState = 'WAIT_ROLL'; updateTurnUI();
+        }
+
+        function checkWinCondition() {
+            const teamPieces = pieces.filter(p => p.teamId === currentTeamIdx);
+            if (teamPieces.every(p => p.pos === 100)) teams[currentTeamIdx].finished = true;
+        }
+        function isGameOver() { return teams.every(t => t.finished); }
+
+        function updatePiecesOnBoard() {
+            document.querySelectorAll('.piece').forEach(el => el.classList.remove('clickable'));
+
+            const posMap = {};
+            pieces.forEach(p => {
+                if(p.pos >= 0 && p.pos < 100) {
+                    if(!posMap[p.pos]) posMap[p.pos] = [];
+                    posMap[p.pos].push(p);
+                } else document.getElementById(`piece_${p.id}`).style.display = 'none';
+            });
+
+            const boardEl = document.getElementById('yut-board');
+            const offsetUnit = boardEl ? boardEl.offsetWidth * 0.02 : 10; 
+
+            Object.keys(posMap).forEach(posStr => {
+                const pos = parseInt(posStr);
+                const piecesAtPos = posMap[pos];
+                const [x, y] = nodeCoords[pos];
+
+                const teamGroups = {};
+                piecesAtPos.forEach(p => {
+                    if(!teamGroups[p.teamId]) teamGroups[p.teamId] = [];
+                    teamGroups[p.teamId].push(p);
+                });
+
+                const numTeams = Object.keys(teamGroups).length;
+                let teamIndex = 0;
+
+                Object.values(teamGroups).forEach(teamPieces => {
+                    teamPieces.forEach((p, idx) => {
+                        const el = document.getElementById(`piece_${p.id}`);
+                        if (idx === 0) {
+                            el.style.display = 'flex';
+                            const offsetX = numTeams > 1 ? (teamIndex * offsetUnit * 1.5 - (offsetUnit*numTeams/2)) : 0;
+                            const offsetY = numTeams > 1 ? (teamIndex * offsetUnit * 1.5 - (offsetUnit*numTeams/2)) : 0;
+                            
+                            el.style.left = `calc(${x}% + ${offsetX}px)`; el.style.top = `calc(${y}% + ${offsetY}px)`;
+                            
+                            const badge = document.getElementById(`badge_${p.id}`);
+                            if (teamPieces.length > 1) { badge.style.display = 'flex'; badge.innerText = `x${teamPieces.length}`; } 
+                            else badge.style.display = 'none';
+                            teamIndex++;
+                        } else el.style.display = 'none';
+                    });
+                });
+            });
+            renderDashboard();
+        }
+
+        // --- 5. 모달 조작 ---
+        function showQuiz() {
+            if (availableQuizGroups.length === 0) availableQuizGroups = [...new Set(quizBank.map(q => q.groupId))];
+            
+            const randomGroupId = availableQuizGroups.splice(Math.floor(Math.random() * availableQuizGroups.length), 1)[0];
+            const groupQuestions = quizBank.filter(q => q.groupId === randomGroupId);
+            const selectedQuiz = groupQuestions[Math.floor(Math.random() * groupQuestions.length)];
+
+            document.getElementById('quiz-question').innerText = selectedQuiz.question;
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            playSound('item'); // 퀴즈 등장 사운드
+            
+            // 모달창이 열릴 때마다 해설창 초기화
+            const rationaleBox = document.getElementById('quiz-rationale-box');
+            rationaleBox.className = 'hidden bg-gray-900 p-4 rounded border-2 border-gray-600 mb-2';
+            document.getElementById('btn-quiz-close').classList.add('hidden');
+
+            selectedQuiz.options.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 md:p-5 text-lg md:text-xl font-bold rounded border-4 border-gray-600 bg-gray-800 text-white hover:border-yellow-400 arcade-btn break-keep";
+                btn.innerText = opt.text;
+                btn.onclick = () => handleQuizAnswer(opt, btn, optionsContainer);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('quiz-modal').classList.remove('hidden'); document.getElementById('quiz-modal').classList.add('flex');
+        }
+
+        function handleQuizAnswer(selectedOption, clickedButton, container) {
+            const resultTitle = document.getElementById('quiz-result-title');
+            const rationaleBox = document.getElementById('quiz-rationale-box');
+            const rationaleText = document.getElementById('quiz-rationale-text');
+
+            rationaleText.innerText = selectedOption.rationale;
+
+            if (selectedOption.isCorrect) {
+                playSound('correct');
+                // 정답: 모든 버튼 비활성화, 다음으로 가기 버튼 표시
+                Array.from(container.children).forEach(btn => btn.disabled = true);
+                
+                clickedButton.classList.remove('border-gray-600', 'bg-gray-800'); 
+                clickedButton.classList.add('bg-green-500', 'text-black', 'border-white');
+                
+                resultTitle.innerText = "🎉 CORRECT!"; 
+                resultTitle.className = "text-2xl md:text-3xl font-black mb-2 text-green-400 neon-text-green break-keep";
+                rationaleBox.className = "bg-gray-900 p-4 rounded border-2 border-green-500 mb-2";
+                
+                document.getElementById('btn-quiz-close').classList.remove('hidden');
+            } else {
+                playSound('wrong');
+                // 오답: 누른 버튼만 비활성화 (다시 고를 수 있게 유지), 다음으로 가기 버튼 숨김 유지
+                clickedButton.disabled = true;
+                
+                clickedButton.classList.remove('border-gray-600', 'bg-gray-800'); 
+                clickedButton.classList.add('bg-red-900', 'text-gray-400', 'border-red-800', 'opacity-50');
+                
+                resultTitle.innerText = "🤔 MISS! 다른 보기를 선택하세요."; 
+                resultTitle.className = "text-2xl md:text-3xl font-black mb-2 text-red-500 break-keep";
+                rationaleBox.className = "bg-gray-900 p-4 rounded border-2 border-red-500 mb-2";
+                
+                document.getElementById('btn-quiz-close').classList.add('hidden');
+            }
+
+            const modalScroll = document.querySelector('.modal-scroll-area'); 
+            setTimeout(() => { modalScroll.scrollTop = modalScroll.scrollHeight; }, 100);
+        }
+
+        function closeQuiz() { playSound('click'); document.getElementById('quiz-modal').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('flex'); nextTurn(); }
+        function showAlert(title, desc) {
+            document.getElementById('alert-title').innerText = title; document.getElementById('alert-desc').innerText = desc;
+            const modal = document.getElementById('alert-modal'); modal.classList.remove('hidden'); modal.classList.add('flex');
+            const btn = modal.querySelector('button'); btn.onclick = () => { playSound('click'); closeAlert(); };
+        }
+        function closeAlert() { document.getElementById('alert-modal').classList.add('hidden'); document.getElementById('alert-modal').classList.remove('flex'); }
+        document.addEventListener('dblclick', function(event) { event.preventDefault(); }, { passive: false });
+    </script>
+</body>
+</html>
