@@ -514,9 +514,12 @@
                     <div id="badge_${p.id}" class="piggyback-badge hidden">x2</div>
                 `;
                 
-                const clickHandler = (e) => { e.preventDefault(); e.stopPropagation(); if(gameState === 'WAIT_PIECE' && p.teamId === currentTeamIdx) onPieceClicked(p.id); };
+                const clickHandler = (e) => { 
+                    e.preventDefault(); 
+                    e.stopPropagation(); 
+                    if(gameState === 'WAIT_PIECE' && p.teamId === currentTeamIdx) onPieceClicked(p.id); 
+                };
                 pDiv.addEventListener('click', clickHandler);
-                pDiv.addEventListener('touchend', clickHandler);
                 board.appendChild(pDiv);
             });
         }
@@ -580,17 +583,26 @@
             isRolling = true;
             playSound('click');
             
+            // 중복 조작 방지를 위해 버튼 비활성화
+            document.querySelectorAll('.yut-btn').forEach(b => b.disabled = true);
+            document.getElementById('btn-digital-roll').disabled = true;
+
             const modal = document.getElementById('yut-animation-modal');
             const container = document.getElementById('yut-sticks-container');
             const finalResultText = document.getElementById('yut-final-result');
             
             modal.classList.remove('hidden'); modal.classList.add('flex');
-            container.innerHTML = '';
+            
+            // 윷가락 DOM 요소 최적화 생성
+            let sticksHTML = '';
             for(let i=0; i<4; i++){
-                container.innerHTML += `<div class="yut-stick-wrapper"><div class="yut-stick rolling-anim" id="yut-obj-${i}"><div class="yut-face yut-back"></div><div class="yut-face yut-front"></div></div></div>`;
+                sticksHTML += `<div class="yut-stick-wrapper"><div class="yut-stick rolling-anim" id="yut-obj-${i}"><div class="yut-face yut-back"></div><div class="yut-face yut-front"></div></div></div>`;
             }
+            container.innerHTML = sticksHTML;
 
-            finalResultText.style.opacity = "0"; finalResultText.style.transform = "scale(0.5)"; finalResultText.innerText = "";
+            finalResultText.style.opacity = "0"; 
+            finalResultText.style.transform = "scale(0.5)"; 
+            finalResultText.innerText = "";
 
             const rand = Math.random() * 16;
             let steps, resName, sticksStatus; 
@@ -612,9 +624,33 @@
                 if (rollSoundCount > 10) clearInterval(rollSoundInterval);
             }, 100);
 
+            let isBbaekApplied = false;
+
+            setTimeout(() => {
+                for(let i=0; i<4; i++){
+                    const el = document.getElementById(`yut-obj-${i}`);
+                    if(!el) continue;
+                    
+                    el.classList.remove('rolling-anim');
+                    
+                    if(steps === -1 && sticksStatus[i] === 'up' && !isBbaekApplied) { 
+                        el.classList.add('yut-bbaek'); 
+                        isBbaekApplied = true;
+                    }
+                    
+                    const tilt = Math.random() > 0.5 ? 'tilt-1' : 'tilt-2';
+                    el.classList.add(sticksStatus[i] === 'up' ? 'result-up' : 'result-down');
+                }
+
+                finalResultText.innerText = `[ ${resName} ]`;
+                finalResultText.style.opacity = "1"; 
+                finalResultText.style.transform = "scale(1)";
+            }, 1200);
+
             setTimeout(() => {
                 modal.classList.remove('flex'); modal.classList.add('hidden');
-                isRolling = false; inputYutResult(steps, resName);
+                isRolling = false; 
+                inputYutResult(steps, resName);
             }, 2800);
         }
 
