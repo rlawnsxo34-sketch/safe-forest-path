@@ -48,7 +48,6 @@
             filter: grayscale(100%);
         }
 
-        /* 윷판 컨테이너: PC에서는 꽉 차게, 모바일에서는 스크롤 대응 */
         #board-container {
             position: relative; width: 100%; height: 100%;
             display: flex; align-items: center; justify-content: center;
@@ -164,8 +163,9 @@
         .animate-float { animation: float 3s ease-in-out infinite; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
 
+        /* 모달 스크롤 영역 안정성 확보 */
         .modal-content { max-height: 90vh; display: flex; flex-direction: column; background-color: #1f2937; border: 6px solid #fff; box-shadow: 10px 10px 0 #000; }
-        .modal-scroll-area { overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 10px; }
+        .modal-scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 10px; }
     </style>
 </head>
 <body class="flex flex-col h-screen w-screen">
@@ -173,6 +173,7 @@
     <!-- 1. 인트로 -->
     <div id="intro-screen" class="fixed inset-0 bg-gray-900 z-[100] flex flex-col items-center justify-center p-4 fade-in overflow-y-auto">
         
+        <!-- 문제은행 보관소 버튼 -->
         <button onclick="openQuizBank()" class="absolute top-4 right-4 md:top-8 md:right-8 bg-yellow-500 text-black px-4 py-2 font-bold rounded arcade-btn flex items-center gap-2">
             <span>📖 퀴즈 아카이브</span>
         </button>
@@ -183,6 +184,7 @@
             <h1 class="text-3xl md:text-5xl font-extrabold neon-text-green text-green-400 mb-2 break-keep">포이·마리의 숲길 탐험</h1>
             <p class="text-base md:text-xl text-cyan-300 mb-6 font-bold break-keep">노르딕워킹 안전 윷놀이</p>
             
+            <!-- 설정 패널 (조 수 & 말 수) -->
             <div class="mb-8 bg-gray-900 p-4 md:p-6 rounded-lg border-2 border-gray-600">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -202,50 +204,68 @@
                 </div>
             </div>
 
+            <!-- 시작 시 사전 교육 화면으로 이동 -->
             <button onclick="initAudio(); showEducation();" class="w-full px-6 py-4 md:py-5 bg-green-500 text-white text-xl md:text-3xl font-extrabold rounded-lg hover:bg-green-400 arcade-btn">
                 INSERT COIN (시작)
             </button>
         </div>
     </div>
 
-    <!-- 1-1. 사전 교육 화면 -->
+    <!-- 1-1. 사전 교육 화면 (20가지 핵심 지식) -->
     <div id="education-screen" class="fixed inset-0 bg-gray-900 z-[95] hidden flex-col items-center justify-center p-4 fade-in">
         <div class="bg-gray-800 p-6 md:p-10 rounded-xl shadow-2xl border-4 border-green-400 w-full max-w-5xl modal-content">
-            <h2 class="text-2xl md:text-4xl font-black text-green-400 mb-6 text-center break-keep shrink-0 neon-text-green">📚 탐험 전 필수 지식</h2>
-            <div class="modal-scroll-area space-y-6 text-sm md:text-lg font-bold text-gray-200 leading-beautiful break-keep mb-6 p-4 bg-gray-900 rounded border-2 border-gray-700">
+            <h2 class="text-2xl md:text-4xl font-black text-green-400 mb-4 text-center break-keep shrink-0 neon-text-green">📚 탐험 전 필수 지식 (20가지)</h2>
+            
+            <div class="modal-scroll-area flex-1 space-y-6 text-sm md:text-base font-bold text-gray-200 leading-beautiful break-keep p-4 bg-gray-900 rounded border-2 border-gray-700">
                 
                 <div>
-                    <h3 class="text-lg md:text-2xl text-yellow-400 mb-2 border-b-2 border-gray-700 pb-1">🐝 야생동물 & 해충 대처</h3>
-                    <ul class="list-disc list-inside pl-2 space-y-1">
-                        <li><span class="text-pink-400">말벌:</span> 엎드리면 안 됩니다! 머리를 감싸고 <span class="text-yellow-200">20m 밖으로 빠르게 대피</span>하세요. 밝은 옷 착용 권장.</li>
-                        <li><span class="text-pink-400">멧돼지:</span> 등을 보이며 뛰지 말고, 눈을 피하지 않은 채 <span class="text-yellow-200">바위/나무 뒤로 조용히</span> 숨으세요.</li>
-                        <li><span class="text-pink-400">뱀:</span> 물린 곳을 심장보다 낮게 유지하고 119 신고! <span class="text-red-400">입으로 독을 빼는 것은 절대 금지</span>입니다.</li>
-                        <li><span class="text-pink-400">진드기:</span> 풀밭에 앉지 말고, 긴 옷 착용 및 지정된 탐방로만 이용하세요.</li>
+                    <h3 class="text-lg md:text-xl text-yellow-400 mb-2 border-b-2 border-gray-700 pb-1">🐝 1. 야생동물 & 해충 대처 (5가지)</h3>
+                    <ul class="list-decimal list-inside pl-2 space-y-1">
+                        <li><span class="text-pink-400">말벌 대피:</span> 엎드리면 위험합니다! 머리를 감싸고 20m 밖으로 빠르게 대피하세요.</li>
+                        <li><span class="text-pink-400">말벌 예방:</span> 밝은 색(흰색/노란색) 옷을 입고, 냄새가 강한 향수나 화장품은 피하세요.</li>
+                        <li><span class="text-pink-400">멧돼지 조우:</span> 등을 보이며 뛰지 말고, 눈을 피하지 않은 채 조용히 바위나 나무 뒤로 숨으세요.</li>
+                        <li><span class="text-pink-400">독사 물림:</span> 입으로 독을 빼는 것은 금지! 상처를 씻고 심장보다 낮게 유지하며 119에 신고하세요.</li>
+                        <li><span class="text-pink-400">진드기 예방:</span> 풀밭에 앉지 말고, 긴 옷 착용 및 기피제를 사용하여 피부 노출을 막으세요.</li>
                     </ul>
                 </div>
                 
                 <div>
-                    <h3 class="text-lg md:text-2xl text-cyan-400 mb-2 border-b-2 border-gray-700 pb-1">🥾 안전 보행과 장비</h3>
-                    <ul class="list-disc list-inside pl-2 space-y-1">
-                        <li><span class="text-yellow-400">내리막길:</span> 무릎을 살짝 굽히고 보폭을 좁혀야 관절 충격을 흡수합니다.</li>
-                        <li><span class="text-yellow-400">등산 스틱:</span> 손목 스트랩(끈)을 반드시 <span class="text-yellow-200">아래에서 위로 감싸 쥐어</span> 체중을 분산시키세요. 오르막은 짧게, 내리막은 길게!</li>
-                        <li><span class="text-yellow-400">배낭:</span> 무거운 짐은 <span class="text-yellow-200">등 쪽에 밀착</span>시키고, 체중의 20~30% 이내로 가볍게 쌉니다.</li>
-                        <li><span class="text-yellow-400">응급처치:</span> 발목 염좌 시 신발을 벗지 말고 냉찜질! 다리에 쥐가 나면 <span class="text-yellow-200">반대 방향으로 천천히 스트레칭</span>하세요.</li>
+                    <h3 class="text-lg md:text-xl text-cyan-400 mb-2 border-b-2 border-gray-700 pb-1">🌿 2. 흔적 남기지 않기 (LNT) (5가지)</h3>
+                    <ul class="list-decimal list-inside pl-2 space-y-1" start="6">
+                        <li><span class="text-cyan-200">쓰레기 회수:</span> 과일 껍질도 썩기 어려우니 남김없이 배낭에 넣어 집으로 되가져가세요.</li>
+                        <li><span class="text-cyan-200">먹이 금지:</span> 야생동물에게 사람 음식을 주면 야생성을 잃고 질병에 걸립니다.</li>
+                        <li><span class="text-cyan-200">도토리 양보:</span> 숲에 떨어진 도토리 등 열매는 야생동물의 소중한 겨울 식량입니다.</li>
+                        <li><span class="text-cyan-200">산불 조심:</span> 산림 내 화기(가스버너 등) 사용 및 흡연은 엄격히 금지됩니다.</li>
+                        <li><span class="text-cyan-200">탐방로 이용:</span> 식생 파괴를 막기 위해 반드시 지정된 탐방로(등산로)만 이용하세요.</li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="text-lg md:text-2xl text-pink-400 mb-2 border-b-2 border-gray-700 pb-1">🌿 숲을 아끼는 에티켓 (LNT) & 관찰</h3>
-                    <ul class="list-disc list-inside pl-2 space-y-1">
-                        <li><span class="text-cyan-200">쓰레기:</span> 과일 껍질도 썩기 어려우니 반드시 집으로 되가져가세요.</li>
-                        <li><span class="text-cyan-200">먹이 금지:</span> 야생동물에게 사람 음식을 주면 야생성을 잃고 병에 걸립니다.</li>
-                        <li><span class="text-cyan-200">사진:</span> 곤충 사진은 <span class="text-yellow-200">인물 모드(배경 흐리게)</span>로! 시력을 해치는 플래시는 금지!</li>
-                        <li><span class="text-cyan-200">예절:</span> 좁은 길에선 <span class="text-yellow-200">내려가는 사람이 양보</span>, 조난 대비 위치 확인은 <span class="text-yellow-200">국가지점번호판</span>으로!</li>
+                    <h3 class="text-lg md:text-xl text-pink-400 mb-2 border-b-2 border-gray-700 pb-1">🥾 3. 안전 보행과 응급처치 (5가지)</h3>
+                    <ul class="list-decimal list-inside pl-2 space-y-1" start="11">
+                        <li><span class="text-yellow-400">보행법:</span> 오르막과 내리막 모두 보폭을 좁히고 무릎을 살짝 굽혀야 관절 충격을 줄일 수 있습니다.</li>
+                        <li><span class="text-yellow-400">휴식 원칙:</span> 완전히 지쳐버리기 전에 5분씩 짧게 자주 쉬는 것이 체력 유지에 좋습니다.</li>
+                        <li><span class="text-yellow-400">신발 끈 조절:</span> 올라갈 땐 약간 느슨하게, 내려갈 땐 발목 보호를 위해 단단히 묶으세요.</li>
+                        <li><span class="text-yellow-400">발목 염좌:</span> 신발을 벗지 말고(부종 방지) 찬물/얼음으로 냉찜질 후 휴식하세요.</li>
+                        <li><span class="text-yellow-400">근육 경련(쥐):</span> 아픈 근육의 반대 방향으로 천천히 늘려주며(스트레칭) 마사지하세요.</li>
                     </ul>
                 </div>
+
+                <div>
+                    <h3 class="text-lg md:text-xl text-green-400 mb-2 border-b-2 border-gray-700 pb-1">🎒 4. 장비 사용과 관찰 예절 (5가지)</h3>
+                    <ul class="list-decimal list-inside pl-2 space-y-1" start="16">
+                        <li><span class="text-green-200">배낭 꾸리기:</span> 무거운 짐은 등 쪽에 밀착시키고, 총 무게는 체중의 20~30% 이내로 가볍게 싸세요.</li>
+                        <li><span class="text-green-200">등산 스틱:</span> 손목 스트랩(끈)을 아래에서 위로 감싸 쥐어 체중을 분산시키세요.</li>
+                        <li><span class="text-green-200">사진 촬영:</span> 곤충 사진은 인물 모드(배경 흐리게)로 찍고, 시력을 해치는 플래시는 피하세요.</li>
+                        <li><span class="text-green-200">길 양보:</span> 좁은 산길에서 마주치면 시야가 넓은 '내려가는 사람'이 먼저 양보하세요.</li>
+                        <li><span class="text-green-200">조난 신고:</span> 길을 잃었을 때는 주변의 '국가지점번호판'을 찾아 119에 위치를 알리세요.</li>
+                    </ul>
+                </div>
+
             </div>
-            <button onclick="showTutorial()" class="shrink-0 w-full py-3 md:py-5 bg-green-500 text-black text-lg md:text-2xl font-extrabold rounded-lg hover:bg-green-400 arcade-btn">
-                NEXT (규칙 확인하기)
+            <!-- 다음: 튜토리얼(규칙)로 이동 -->
+            <button onclick="showTutorial()" class="shrink-0 mt-4 w-full py-3 md:py-5 bg-green-500 text-black text-lg md:text-2xl font-extrabold rounded-lg hover:bg-green-400 arcade-btn">
+                NEXT (게임 규칙 확인)
             </button>
         </div>
     </div>
@@ -424,8 +444,8 @@
             { groupId: "snake1", type: "OX", question: "뱀에 물렸을 때는 즉시 입으로 독을 빨아내야 한다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "구조자의 입 안에 상처가 있으면 독이 퍼지거나 환자의 상처에 2차 세균 감염이 일어날 수 있어 절대 금지입니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 물린 부위를 깨끗한 물로 씻고 심장보다 낮게 한 뒤 119에 신고해야 합니다." } ] },
             { groupId: "snake2", type: "객관식", question: "탐험대원이 독사에 물렸을 때 올바른 응급처치 방법은?", options: [ { text: "독이 퍼지지 않게 물린 곳 위를 밧줄로 꽉 묶는다.", isCorrect: false, rationale: "너무 꽉 묶으면 피부 조직이 괴사하여 위험해집니다. 손가락이 하나 들어갈 정도로만 가볍게 묶어야 합니다." }, { text: "환자를 눕혀 안정시키고 물린 부위를 심장보다 낮게 유지한다.", isCorrect: true, rationale: "정답! 혈액 순환을 늦추어 독이 심장으로 빨리 퍼지는 것을 막아주는 가장 중요한 조치입니다." }, { text: "상처 부위를 칼로 십자 모양으로 째고 피를 짜낸다.", isCorrect: false, rationale: "2차 감염과 과다 출혈 위험이 매우 큰 잘못된 민간요법입니다." }, { text: "빨리 해독하기 위해 소주를 마시게 하거나 상처에 된장을 바른다.", isCorrect: false, rationale: "민간요법은 상처를 심각하게 오염시켜 치료를 더 어렵게 만듭니다." } ] },
 
-            // 진드기 (3)
-            { groupId: "tick1", type: "OX", question: "진드기 물림을 예방하기 위해 숲길을 걸을 때는 반팔과 반바지를 입어 시원하게 하는 것이 좋다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "반팔이나 반바지를 입으면 풀잎에 있는 진드기에 쉽게 물려 중증 열성 혈소판 감소 증후군(SFTS)에 걸릴 수 있습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 진드기가 피부에 직접 닿지 않도록 긴 소매와 긴 바지를 입어 피부 노출을 최소화해야 합니다." } ] },
+            // 진드기 및 해충 (3)
+            { groupId: "tick1", type: "OX", question: "진드기 물림을 예방하기 위해 숲길을 걸을 때는 반팔과 반바지를 입어 시원하게 하는 것이 좋다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "반팔이나 반바지를 입으면 풀잎에 있는 진드기에 쉽게 물려 감염될 수 있습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 진드기가 피부에 직접 닿지 않도록 긴 소매와 긴 바지를 입어 피부 노출을 최소화해야 합니다." } ] },
             { groupId: "tick2", type: "객관식", question: "진드기 물림을 예방하기 위한 숲길 탐험 수칙으로 틀린 것은?", options: [ { text: "풀밭 위에 옷을 벗어두지 않는다.", isCorrect: false, rationale: "옷에 진드기가 붙을 수 있어 좋은 예방 수칙입니다." }, { text: "휴식할 때는 돗자리를 펴고 앉는다.", isCorrect: false, rationale: "풀밭에 직접 앉지 않으므로 좋은 수칙입니다." }, { text: "지정된 탐방로를 벗어나 깊은 풀숲을 헤치며 걷는다.", isCorrect: true, rationale: "정답(틀린 행동)! 진드기가 많은 깊은 풀숲에 들어가는 것은 피해야 합니다." }, { text: "귀가 후 즉시 옷을 털어 세탁하고 샤워를 한다.", isCorrect: false, rationale: "몸이나 옷에 묻어온 진드기를 제거하는 아주 훌륭한 방법입니다." } ] },
             { groupId: "tick3", type: "OX", question: "산행 전 피부나 옷에 진드기 기피제를 뿌리면 예방에 도움이 된다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 기피제를 사용하면 해충 접근을 막는 데 큰 도움이 됩니다." }, { text: "X (아니다)", isCorrect: false, rationale: "기피제는 진드기와 모기 등을 쫓아내는 효과가 있으므로 사용하는 것이 좋습니다." } ] },
 
@@ -473,7 +493,7 @@
             { groupId: "etiquette2", type: "OX", question: "정해진 등산로가 아닌 새 길을 개척해서 풀숲을 뚫고 걷는 것은 멋진 탐험가의 자세다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "지정되지 않은 샛길로 다니면 희귀 식물을 밟아 죽이고 산사태를 유발하는 등 자연을 심하게 파괴하게 됩니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 자연 보호와 내 자신의 안전을 위해 반드시 지정된 탐방로(등산로)로만 걸어야 합니다." } ] },
             { groupId: "etiquette3", type: "OX", question: "숲속에서 흥을 돋우기 위해 블루투스 스피커로 음악을 크게 틀고 걷는 것은 좋은 행동이다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "큰 소음은 짝짓기나 먹이 활동을 하는 야생동물들에게 엄청난 스트레스를 주고 생태계를 교란시킵니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 숲에서는 자연의 소리를 감상하고, 음악은 꼭 이어폰으로 혼자 들어야 합니다." } ] },
 
-            // 생태학 (3)
+            // 생태학 및 기상 (3)
             { groupId: "ecology1", type: "객관식", question: "산에서 베어진 나무 밑동의 '나이테'에 대한 설명으로 틀린 것은?", options: [ { text: "나이테의 간격이 넓으면 그해에 비가 많이 오고 나무가 살기 좋은 날씨였다는 뜻이다.", isCorrect: false, rationale: "성장 환경이 좋을 때 나무는 더 빠르게 자라 나이테 간격이 넓어집니다." }, { text: "나이테의 숫자를 세어보면 이 나무가 대략 몇 살인지 알 수 있다.", isCorrect: false, rationale: "1년에 보통 한 개의 나이테가 생기므로 나이를 짐작할 수 있습니다." }, { text: "나무의 나이테는 컴퍼스로 그린 것처럼 항상 정중앙을 중심으로 완벽한 원형을 이룬다.", isCorrect: true, rationale: "정답(틀린 설명)! 경사면이나 햇빛이 비치는 방향, 바람에 따라 한쪽으로 치우치거나 모양이 찌그러지게 자랍니다." }, { text: "나이테를 연구하면 과거의 기상 이변이나 가뭄 기록을 짐작할 수 있다.", isCorrect: false, rationale: "이를 연륜연대학이라 부르며 과거의 기후를 아는 훌륭한 지표가 됩니다." } ] },
             { groupId: "ecology2", type: "OX", question: "숲길에서 발견한 예쁜 야생화 꽃이나 신기한 도토리는 마음껏 꺾거나 주워서 집에 가져와도 된다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "도토리는 짐승들의 겨울 식량이며, 야생화를 무단 채취하는 것은 산림보호법 위반입니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 자연물은 숲에 있을 때 가장 아름답습니다. 오직 눈으로 보고 사진으로만 담아가세요." } ] },
             { groupId: "ecology3", type: "객관식", question: "여름철 산행 중 갑자기 하늘이 까매지고 번개를 동반한 소나기(낙뢰)가 쏟아집니다. 가장 안전한 대피 장소는?", options: [ { text: "비를 피하기 위해 숲에서 가장 잎이 무성하고 키가 큰 나무 아래로 피한다.", isCorrect: false, rationale: "키가 큰 나무는 벼락(낙뢰)이 떨어질 확률이 가장 높은 곳이므로 절대 피해야 할 장소입니다." }, { text: "능선(산마루) 정상의 탁 트인 바위 위에서 비가 그치길 기다린다.", isCorrect: false, rationale: "높은 지대와 탁 트인 바위는 낙뢰의 표적이 되기 쉽습니다." }, { text: "주변보다 지형이 낮고 움푹 파인 곳을 찾아 몸을 둥글게 말고 웅크려 대피한다.", isCorrect: true, rationale: "정답! 낙뢰 발생 시에는 키 큰 물체에서 멀리 떨어져 낮은 지대에서 몸을 최대한 낮추는 것이 가장 안전합니다." }, { text: "계곡물 속이나 큰 바위 밑 동굴로 신속하게 대피한다.", isCorrect: false, rationale: "계곡물은 순식간에 불어나 휩쓸릴 수 있고, 동굴 입구는 벼락이 칠 수 있어 위험합니다." } ] }
@@ -669,7 +689,6 @@
             isRolling = true;
             playSound('click');
             
-            // 굴러가는 동안 다른 버튼 차단 (안정성)
             document.querySelectorAll('.yut-btn').forEach(b => b.disabled = true);
             document.getElementById('btn-digital-roll').disabled = true;
 
@@ -831,7 +850,7 @@
         function handleArrival(destPos, movingPieces) {
             if (destPos === 100) {
                 playSound('win');
-                showAlert("🎉 CLEAR!", "이 말이 안전하게 결승선을 통과했습니다!");
+                showAlert("🎉 CLEAR!", "안전하게 탐험을 마쳤습니다!");
                 checkWinCondition();
                 setTimeout(() => nextTurn(), 2000); return;
             }
@@ -959,10 +978,8 @@
 
         // --- 6. 강력한 스마트 중복 방지 퀴즈 로직 ---
         function showQuiz() {
-            // 최근 15개의 문제를 기억하여 출제에서 배제함 (전체 40문항이므로 충분히 회전됨)
             let availableGroups = [...new Set(quizBank.map(q => q.groupId))].filter(g => !recentQuizGroups.includes(g));
             
-            // 거의 모든 문제를 다 풀었으면 최근 기록 리셋
             if (availableGroups.length === 0) {
                 recentQuizGroups = [];
                 availableGroups = [...new Set(quizBank.map(q => q.groupId))];
@@ -972,7 +989,7 @@
             const randomGroupId = availableGroups[randIdx];
             
             recentQuizGroups.push(randomGroupId);
-            if (recentQuizGroups.length > 15) recentQuizGroups.shift(); // 15개 초과시 오래된 것 삭제
+            if (recentQuizGroups.length > 15) recentQuizGroups.shift(); 
 
             const groupQuestions = quizBank.filter(q => q.groupId === randomGroupId);
             const selectedQuiz = groupQuestions[Math.floor(Math.random() * groupQuestions.length)];
@@ -1069,7 +1086,6 @@
             document.getElementById('quiz-bank-screen').classList.remove('flex');
         }
 
-        // 터치 기기 줌 방지용 보조 스크립트
         document.addEventListener('dblclick', function(event) { event.preventDefault(); }, { passive: false });
     </script>
 </body>
