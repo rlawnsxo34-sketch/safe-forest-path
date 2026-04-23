@@ -211,10 +211,10 @@
         </div>
     </div>
 
-    <!-- 1-1. 사전 교육 화면 (20가지 핵심 지식) -->
+    <!-- 1-1. 사전 교육 화면 -->
     <div id="education-screen" class="fixed inset-0 bg-gray-900 z-[95] hidden flex-col items-center justify-center p-4 fade-in">
         <div class="bg-gray-800 p-6 md:p-10 rounded-xl shadow-2xl border-4 border-green-400 w-full max-w-5xl modal-content">
-            <h2 class="text-2xl md:text-4xl font-black text-green-400 mb-4 text-center break-keep shrink-0 neon-text-green">📚 탐험 전 필수 지식 (20가지)</h2>
+            <h2 class="text-2xl md:text-4xl font-black text-green-400 mb-6 text-center break-keep shrink-0 neon-text-green">📚 탐험 전 필수 지식 (20가지)</h2>
             
             <div class="modal-scroll-area flex-1 space-y-6 text-sm md:text-base font-bold text-gray-200 leading-beautiful break-keep p-4 bg-gray-900 rounded border-2 border-gray-700">
                 
@@ -263,8 +263,7 @@
                 </div>
 
             </div>
-            <!-- 다음: 튜토리얼(규칙)로 이동 -->
-            <button onclick="showTutorial()" class="shrink-0 mt-4 w-full py-3 md:py-5 bg-green-500 text-black text-lg md:text-2xl font-extrabold rounded-lg hover:bg-green-400 arcade-btn">
+            <button onclick="showTutorial()" class="shrink-0 w-full py-3 md:py-5 bg-green-500 text-black text-lg md:text-2xl font-extrabold rounded-lg hover:bg-green-400 arcade-btn">
                 NEXT (게임 규칙 확인)
             </button>
         </div>
@@ -278,7 +277,7 @@
                 <div class="flex items-start"><span class="text-2xl text-yellow-400 mr-3 shrink-0">🎲</span><p>화면의 <span class="text-cyan-400">[디지털 윷]</span>을 누르거나 직접 던져 결과를 입력하세요.</p></div>
                 <div class="flex items-start"><span class="text-2xl text-green-400 mr-3 shrink-0">📍</span><p>모서리나 중앙 칸에 <span class="text-green-400">정확히</span> 도착하면 대각선 지름길로 꺾어 갑니다!</p></div>
                 <div class="flex items-start"><span class="text-2xl text-yellow-400 mr-3 shrink-0">❓</span><p><span class="text-yellow-400">노란 칸(?)</span>에서는 퀴즈를, <span class="text-pink-400">분홍 칸(🎁)</span>에서는 아이템 획득!</p></div>
-                <div class="flex items-start"><span class="text-2xl text-pink-400 mr-3 shrink-0">🏆</span><p>선택한 조의 <span class="text-pink-400">모든 말</span>이 결승선을 통과하면 GAME CLEAR!</p></div>
+                <div class="flex items-start"><span class="text-2xl text-pink-400 mr-3 shrink-0">🏆</span><p>말이 <span class="text-pink-400">출발점(왼쪽 아래)</span>에 다시 도착하면, 한 번 더 이동하여 출발점을 <span class="text-pink-400">완전히 통과</span>해야 골인입니다!</p></div>
             </div>
             <button onclick="startGame()" class="shrink-0 w-full py-4 md:py-5 bg-cyan-500 text-black text-xl md:text-3xl font-extrabold rounded-lg hover:bg-cyan-400 arcade-btn">
                 READY! (윷판으로)
@@ -428,7 +427,7 @@
         let teams = []; let pieces = []; let currentTeamIdx = 0;
         let gameState = 'WAIT_ROLL'; let currentRoll = 0; let bonusRoll = false;
 
-        // --- 풍부해진 문제 은행 (총 40문항 완벽 구성) ---
+        // --- 풍부해진 문제 은행 (총 40문항) ---
         const quizBank = [
             // 말벌 (4)
             { groupId: "wasp1", type: "객관식", question: "탐험 중 큰 말벌을 만났습니다! 가장 안전한 대피 방법은?", options: [ { text: "제자리에 엎드려 움직이지 않는다.", isCorrect: false, rationale: "벌은 가장 높은 곳, 즉 사람의 머리를 공격하므로 엎드리면 매우 위험합니다." }, { text: "옷이나 가방을 크게 휘둘러서 쫓아낸다.", isCorrect: false, rationale: "크게 움직이면 벌이 화가 나서 더 많이 공격하게 됩니다." }, { text: "머리를 감싸고 20m 이상 빠르게 도망친다.", isCorrect: true, rationale: "정답! 말벌은 집에서 20m 이상 멀어지면 추격을 포기하는 습성이 있습니다." }, { text: "벌이 놀라지 않게 아주 천천히 뒷걸음질 친다.", isCorrect: false, rationale: "이미 화가 난 벌 앞에서는 천천히 움직이다가 오히려 더 많이 쏘이게 됩니다." } ] },
@@ -456,7 +455,7 @@
 
             // 내리막/오르막 보행 (4)
             { groupId: "walking1", type: "객관식", question: "가파른 내리막길을 내려갈 때, 무릎이 아프지 않게 걷는 올바른 방법은?", options: [ { text: "빨리 내려가기 위해 가볍게 통통 뛰면서 내려간다.", isCorrect: false, rationale: "뛰어서 내려가면 무릎에 자기 몸무게의 3~4배나 되는 강한 충격이 가해져 연골이 크게 다칩니다." }, { text: "무릎을 쫙 펴고 씩씩하게 뒤꿈치부터 쿵쿵 디딘다.", isCorrect: false, rationale: "무릎을 쫙 펴고 걸으면 발을 디딜 때의 충격이 척추와 머리까지 찌릿하게 전달됩니다." }, { text: "무릎을 살짝 굽히고 보폭을 좁게 해서 사뿐사뿐 걷는다.", isCorrect: true, rationale: "정답! 무릎을 살짝 굽혀야 다리 근육이 자동차의 스프링처럼 충격을 스르륵 흡수해 줍니다." }, { text: "신발 앞꿈치만 땅에 닿게 까치발로 조심조심 내려간다.", isCorrect: false, rationale: "앞꿈치만 사용하면 종아리에 쥐가 나거나 쉽게 미끄러져 엉덩방아를 찧게 됩니다." } ] },
-            { groupId: "walking2", type: "OX", question: "오르막길에서는 한 걸음을 아주 넓게(크게) 딛고 빨리 올라가는 것이 덜 지친다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "보폭을 넓게 하면 허벅지 근육이 무리하게 쓰여 금방 지치고 숨이 찹니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 보폭을 평소 걷기보다 약간 좁게 하고, 천천히 일정한 리듬으로 걷는 것이 가장 좋습니다." } ] },
+            { groupId: "walking2", type: "OX", question: "오르막길에서는 한 걸음을 아주 넓게(크게) 딛고 빨리 올라가는 것이 덜 지친다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "보폭을 넓게 하면 허벅지 근육이 무리하게 쓰여 금방 지치고 숨이 찹니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 보폭을 평소 걷기보다 약간 좁게 하고, 천천히 일정한 리듬으로 걷는 가장 좋습니다." } ] },
             { groupId: "walking3", type: "OX", question: "등산을 할 때는 지치기 전에 짧게 자주 쉬어주는 것이 원칙이다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 완전히 지쳐버리면 체력을 회복하기 어렵기 때문에, 지치기 전에 짧게 쉬는 것이 좋습니다." }, { text: "X (아니다)", isCorrect: false, rationale: "끝까지 참고 올라가다 한 번에 길게 쉬면 오히려 체온이 떨어지고 쥐가 나기 쉽습니다." } ] },
             { groupId: "walking4", type: "OX", question: "올바른 산행을 위해 등산화 끈은 올라갈 때와 내려갈 때 항상 똑같은 세기로 꽉 묶어야 한다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "올라갈 때는 발목이 편하게 살짝 느슨하게 묶고, 내려올 때는 발가락 쏠림 방지를 위해 단단하게 묶는 것이 좋습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 내려갈 때는 발목 부분을 더 단단하게 조여매어 발가락 끝이 신발 앞코에 닿아 아픈 것을 막아야 합니다." } ] },
 
@@ -500,7 +499,7 @@
         ];
         
         let availableQuizGroups = [];
-        let recentQuizGroups = []; // 스마트 중복 출제 방지 배열 (최근 15문제의 주제를 기억)
+        let recentQuizGroups = []; // 스마트 중복 출제 방지 배열
 
         const itemPool = [
             { name: "🥾 등산스틱", desc: "튼튼한 지팡이! 획득 즉시 1칸 보너스 전진!", effect: "forward" },
@@ -508,23 +507,28 @@
             { name: "🔋 에너지", desc: "1 UP! 모든 조원과 하이파이브를 하세요!", effect: "none" }
         ];
 
-        // --- 2. 정통 윷판 좌표 (29칸) ---
+        // --- 2. 정통 윷판 좌표 (출발점=10,90 / 도착지=30번 노드 적용) ---
         const nodeCoords = {
-            0: [90, 90], 1: [90, 74], 2: [90, 58], 3: [90, 42], 4: [90, 26],
-            5: [90, 10], 6: [74, 10], 7: [58, 10], 8: [42, 10], 9: [26, 10],
-            10: [10, 10], 11: [10, 26], 12: [10, 42], 13: [10, 58], 14: [10, 74],
-            15: [10, 90], 16: [26, 90], 17: [42, 90], 18: [58, 90], 19: [74, 90],
-            20: [76.6, 23.3], 21: [63.3, 36.6], 22: [50, 50], 23: [36.6, 63.3], 24: [23.3, 76.6],
-            25: [23.3, 23.3], 26: [36.6, 36.6], 27: [63.3, 63.3], 28: [76.6, 76.6],
+            0: [10, 90], 1: [10, 74], 2: [10, 58], 3: [10, 42], 4: [10, 26],
+            5: [10, 10], 6: [26, 10], 7: [42, 10], 8: [58, 10], 9: [74, 10],
+            10: [90, 10], 11: [90, 26], 12: [90, 42], 13: [90, 58], 14: [90, 74],
+            15: [90, 90], 16: [74, 90], 17: [58, 90], 18: [42, 90], 19: [26, 90],
+            20: [23.3, 23.3], 21: [36.6, 36.6], 22: [50, 50], 23: [63.3, 63.3], 24: [76.6, 76.6],
+            25: [76.6, 23.3], 26: [63.3, 36.6], 27: [36.6, 63.3], 28: [23.3, 76.6],
+            30: [10, 90], // 한 바퀴 돌고 도착한 출발점 (여기서 1칸 이상 전진해야 100 골인)
             100: [100, 100]
         };
 
-        const eventNodes = [1, 3, 6, 8, 11, 13, 16, 21, 23, 25]; 
+        const eventNodes = [1, 3, 6, 8, 11, 13, 16, 18, 21, 27]; 
         const itemNodes = [2, 7, 12, 17, 26]; 
         const nextNodeMap = {
-            0:1, 1:2, 2:3, 3:4, 4:5, 5:6, 6:7, 7:8, 8:9, 9:10, 10:11, 11:12, 12:13, 13:14, 14:15, 15:16, 16:17, 17:18, 18:19, 19:100,
+            0:1, 1:2, 2:3, 3:4, 4:5, 
+            5:6, 6:7, 7:8, 8:9, 9:10, 
+            10:11, 11:12, 12:13, 13:14, 14:15, 
+            15:16, 16:17, 17:18, 18:19, 19:30,
             20:21, 21:22, 23:24, 24:15,
-            25:26, 26:22, 27:28, 28:100
+            25:26, 26:22, 27:28, 28:30,
+            30:100 // 출발점 통과 시 골인
         };
 
         // --- 3. 화면 전환 함수 ---
@@ -580,13 +584,13 @@
             board.innerHTML = `<svg id="board-lines" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none;"></svg>`;
             const svgEl = document.getElementById('board-lines');
 
-            svgEl.innerHTML += `<path d="M 90% 90% L 90% 10% L 10% 10% L 10% 90% Z" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
-            svgEl.innerHTML += `<path d="M 90% 10% L 10% 90%" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
+            svgEl.innerHTML += `<path d="M 10% 90% L 10% 10% L 90% 10% L 90% 90% Z" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
             svgEl.innerHTML += `<path d="M 10% 10% L 90% 90%" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
+            svgEl.innerHTML += `<path d="M 90% 10% L 10% 90%" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
 
             Object.keys(nodeCoords).forEach(key => {
                 const num = parseInt(key);
-                if(num === 100) return;
+                if(num === 100 || num === 30) return; // 30(도착출발점)은 0과 겹치므로 그리지 않음
 
                 const [x, y] = nodeCoords[num];
                 const isCorner = [0, 5, 10, 15, 22].includes(num);
@@ -805,7 +809,8 @@
                 let isFirstStep = (i === 0);
                 let nextNode;
                 
-                if (current === 5 && isFirstStep) nextNode = 20; 
+                if (current === 30) nextNode = 100;
+                else if (current === 5 && isFirstStep) nextNode = 20; 
                 else if (current === 10 && isFirstStep) nextNode = 25; 
                 else if (current === 22 && isFirstStep) nextNode = 27; 
                 else if (current === 22 && !isFirstStep) {
@@ -850,7 +855,7 @@
         function handleArrival(destPos, movingPieces) {
             if (destPos === 100) {
                 playSound('win');
-                showAlert("🎉 CLEAR!", "안전하게 탐험을 마쳤습니다!");
+                showAlert("🎉 CLEAR!", "이 말이 결승선을 통과했습니다!");
                 checkWinCondition();
                 setTimeout(() => nextTurn(), 2000); return;
             }
