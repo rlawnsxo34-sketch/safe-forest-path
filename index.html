@@ -55,7 +55,6 @@
 
         #yut-board {
             position: relative;
-            /* PC 최적화: 가용 높이/너비의 최대치 사용 */
             width: min(95%, 85vh); height: min(95%, 85vh);
             background-color: #1f2937;
             border-radius: 1rem;
@@ -65,7 +64,6 @@
 
         @media (max-width: 768px) {
             #yut-board {
-                /* 모바일 세로 모드 대응 */
                 width: min(95vw, 50vh); height: min(95vw, 50vh);
                 border-width: 4px; border-radius: 0.5rem;
             }
@@ -86,6 +84,12 @@
             background-color: #22d3ee; color: #111;
             font-size: clamp(0.8rem, 2.5vw, 1.5rem);
             border: 3px solid #fff; box-shadow: 0 0 15px #22d3ee;
+        }
+        .yut-node.center-node {
+            background-color: #fbbf24 !important; color: #fff !important;
+            border-color: #fff !important; box-shadow: 0 0 20px #fbbf24 !important;
+            width: 15%; height: 15%; font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+            z-index: 15;
         }
         .yut-node.event-node {
             background-color: #facc15 !important; color: #111 !important;
@@ -163,7 +167,6 @@
         .animate-float { animation: float 3s ease-in-out infinite; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
 
-        /* 모달 스크롤 영역 안정성 확보 */
         .modal-content { max-height: 90vh; display: flex; flex-direction: column; background-color: #1f2937; border: 6px solid #fff; box-shadow: 10px 10px 0 #000; }
         .modal-scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 10px; }
     </style>
@@ -173,7 +176,6 @@
     <!-- 1. 인트로 -->
     <div id="intro-screen" class="fixed inset-0 bg-gray-900 z-[100] flex flex-col items-center justify-center p-4 fade-in overflow-y-auto">
         
-        <!-- 문제은행 보관소 버튼 -->
         <button onclick="openQuizBank()" class="absolute top-4 right-4 md:top-8 md:right-8 bg-yellow-500 text-black px-4 py-2 font-bold rounded arcade-btn flex items-center gap-2">
             <span>📖 퀴즈 아카이브</span>
         </button>
@@ -184,7 +186,6 @@
             <h1 class="text-3xl md:text-5xl font-extrabold neon-text-green text-green-400 mb-2 break-keep">포이·마리의 숲길 탐험</h1>
             <p class="text-base md:text-xl text-cyan-300 mb-6 font-bold break-keep">노르딕워킹 안전 윷놀이</p>
             
-            <!-- 설정 패널 (조 수 & 말 수) -->
             <div class="mb-8 bg-gray-900 p-4 md:p-6 rounded-lg border-2 border-gray-600">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -204,7 +205,6 @@
                 </div>
             </div>
 
-            <!-- 시작 시 사전 교육 화면으로 이동 -->
             <button onclick="initAudio(); showEducation();" class="w-full px-6 py-4 md:py-5 bg-green-500 text-white text-xl md:text-3xl font-extrabold rounded-lg hover:bg-green-400 arcade-btn">
                 INSERT COIN (시작)
             </button>
@@ -277,7 +277,7 @@
                 <div class="flex items-start"><span class="text-2xl text-yellow-400 mr-3 shrink-0">🎲</span><p>화면의 <span class="text-cyan-400">[디지털 윷]</span>을 누르거나 직접 던져 결과를 입력하세요.</p></div>
                 <div class="flex items-start"><span class="text-2xl text-green-400 mr-3 shrink-0">📍</span><p>모서리나 중앙 칸에 <span class="text-green-400">정확히</span> 도착하면 대각선 지름길로 꺾어 갑니다!</p></div>
                 <div class="flex items-start"><span class="text-2xl text-yellow-400 mr-3 shrink-0">❓</span><p><span class="text-yellow-400">노란 칸(?)</span>에서는 퀴즈를, <span class="text-pink-400">분홍 칸(🎁)</span>에서는 아이템 획득!</p></div>
-                <div class="flex items-start"><span class="text-2xl text-pink-400 mr-3 shrink-0">🏆</span><p>말이 <span class="text-pink-400">출발점(왼쪽 아래)</span>에 다시 도착하면, 한 번 더 이동하여 출발점을 <span class="text-pink-400">완전히 통과</span>해야 골인입니다!</p></div>
+                <div class="flex items-start"><span class="text-2xl text-pink-400 mr-3 shrink-0">🏆</span><p>말이 한 바퀴를 돌아 <span class="text-pink-400">출발점(왼쪽 아래)</span>에 다시 도착하면, 한 번 더 이동하여 출발점을 <span class="text-pink-400">완전히 통과</span>해야 골인입니다!</p></div>
             </div>
             <button onclick="startGame()" class="shrink-0 w-full py-4 md:py-5 bg-cyan-500 text-black text-xl md:text-3xl font-extrabold rounded-lg hover:bg-cyan-400 arcade-btn">
                 READY! (윷판으로)
@@ -308,7 +308,7 @@
             </div>
         </header>
 
-        <!-- 메인 영역 (모바일 스크롤 완벽 대응) -->
+        <!-- 메인 영역 -->
         <main class="flex-1 flex flex-col md:flex-row min-h-0">
             <!-- 윷판 -->
             <div class="relative p-2 md:p-6 flex items-center justify-center shrink-0 border-b-4 md:border-b-0 md:border-r-4 border-gray-700 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-800 to-gray-900 h-[50vh] md:h-auto md:flex-[3]">
@@ -429,77 +429,63 @@
 
         // --- 풍부해진 문제 은행 (총 40문항) ---
         const quizBank = [
-            // 말벌 (4)
             { groupId: "wasp1", type: "객관식", question: "탐험 중 큰 말벌을 만났습니다! 가장 안전한 대피 방법은?", options: [ { text: "제자리에 엎드려 움직이지 않는다.", isCorrect: false, rationale: "벌은 가장 높은 곳, 즉 사람의 머리를 공격하므로 엎드리면 매우 위험합니다." }, { text: "옷이나 가방을 크게 휘둘러서 쫓아낸다.", isCorrect: false, rationale: "크게 움직이면 벌이 화가 나서 더 많이 공격하게 됩니다." }, { text: "머리를 감싸고 20m 이상 빠르게 도망친다.", isCorrect: true, rationale: "정답! 말벌은 집에서 20m 이상 멀어지면 추격을 포기하는 습성이 있습니다." }, { text: "벌이 놀라지 않게 아주 천천히 뒷걸음질 친다.", isCorrect: false, rationale: "이미 화가 난 벌 앞에서는 천천히 움직이다가 오히려 더 많이 쏘이게 됩니다." } ] },
             { groupId: "wasp2", type: "OX", question: "말벌을 만나면 가만히 서서 벌이 지나갈 때까지 기다려야 한다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "가만히 서 있으면 말벌의 표적이 되어 계속 공격을 받습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 말벌을 만나면 옷으로 머리를 감싸고 무조건 빠르게 뛰어서 도망쳐야 합니다." } ] },
             { groupId: "wasp3", type: "객관식", question: "숲에 갈 때 말벌의 공격을 피하기 위해 입으면 좋은 옷 색깔은?", options: [ { text: "검은색, 어두운 갈색", isCorrect: false, rationale: "말벌의 천적인 곰, 오소리와 색이 비슷해 오히려 공격성을 자극합니다." }, { text: "빨간색", isCorrect: false, rationale: "어두운 계열에 속해 벌이 천적으로 오해할 수 있습니다." }, { text: "흰색, 밝은 노란색", isCorrect: true, rationale: "정답! 말벌은 밝은 색에는 공격성을 덜 보입니다." }, { text: "꽃무늬가 화려한 옷", isCorrect: false, rationale: "벌을 유인할 수 있어 피하는 것이 좋습니다." } ] },
             { groupId: "wasp4", type: "OX", question: "달콤한 향수나 화장품 냄새는 숲속 벌들을 유인할 수 있다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 강한 향기는 곤충을 유인하므로 산행 전에는 향수 사용을 자제해야 합니다." }, { text: "X (아니다)", isCorrect: false, rationale: "벌들은 냄새에 아주 민감하여 샴푸나 향수 냄새에 쉽게 유인됩니다." } ] },
             
-            // 멧돼지 (2)
             { groupId: "boar1", type: "객관식", question: "숲길에서 멧돼지를 마주쳤을 때 올바른 행동은?", options: [ { text: "등을 보이고 큰 소리를 지르며 도망친다.", isCorrect: false, rationale: "등을 보이고 뛰면 멧돼지가 자신보다 약하다고 판단해 쫓아옵니다." }, { text: "돌이나 나뭇가지를 던져서 겁을 주어 쫓아낸다.", isCorrect: false, rationale: "멧돼지를 자극하여 무서운 공격을 받게 됩니다." }, { text: "눈을 똑바로 쳐다보며 바위나 나무 뒤로 조용히 숨는다.", isCorrect: true, rationale: "정답! 멧돼지의 시야에서 자연스럽게 벗어나는 것이 가장 안전한 대처법입니다." }, { text: "신기하므로 가까이 다가가 스마트폰으로 사진을 찍는다.", isCorrect: false, rationale: "매우 위험한 행동으로 큰 사고로 이어질 수 있습니다." } ] },
             { groupId: "boar2", type: "OX", question: "멧돼지는 등을 보이고 뛰어가면 겁을 먹고 도망간다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "등을 보이고 뛰면 자신보다 약하다고 생각하여 오히려 맹렬히 쫓아와 공격합니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 절대 등을 보이지 말고 천천히 뒷걸음질 치며 숨어야 합니다." } ] },
 
-            // 뱀 (2)
             { groupId: "snake1", type: "OX", question: "뱀에 물렸을 때는 즉시 입으로 독을 빨아내야 한다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "구조자의 입 안에 상처가 있으면 독이 퍼지거나 환자의 상처에 2차 세균 감염이 일어날 수 있어 절대 금지입니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 물린 부위를 깨끗한 물로 씻고 심장보다 낮게 한 뒤 119에 신고해야 합니다." } ] },
             { groupId: "snake2", type: "객관식", question: "탐험대원이 독사에 물렸을 때 올바른 응급처치 방법은?", options: [ { text: "독이 퍼지지 않게 물린 곳 위를 밧줄로 꽉 묶는다.", isCorrect: false, rationale: "너무 꽉 묶으면 피부 조직이 괴사하여 위험해집니다. 손가락이 하나 들어갈 정도로만 가볍게 묶어야 합니다." }, { text: "환자를 눕혀 안정시키고 물린 부위를 심장보다 낮게 유지한다.", isCorrect: true, rationale: "정답! 혈액 순환을 늦추어 독이 심장으로 빨리 퍼지는 것을 막아주는 가장 중요한 조치입니다." }, { text: "상처 부위를 칼로 십자 모양으로 째고 피를 짜낸다.", isCorrect: false, rationale: "2차 감염과 과다 출혈 위험이 매우 큰 잘못된 민간요법입니다." }, { text: "빨리 해독하기 위해 소주를 마시게 하거나 상처에 된장을 바른다.", isCorrect: false, rationale: "민간요법은 상처를 심각하게 오염시켜 치료를 더 어렵게 만듭니다." } ] },
 
-            // 진드기 및 해충 (3)
             { groupId: "tick1", type: "OX", question: "진드기 물림을 예방하기 위해 숲길을 걸을 때는 반팔과 반바지를 입어 시원하게 하는 것이 좋다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "반팔이나 반바지를 입으면 풀잎에 있는 진드기에 쉽게 물려 감염될 수 있습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 진드기가 피부에 직접 닿지 않도록 긴 소매와 긴 바지를 입어 피부 노출을 최소화해야 합니다." } ] },
             { groupId: "tick2", type: "객관식", question: "진드기 물림을 예방하기 위한 숲길 탐험 수칙으로 틀린 것은?", options: [ { text: "풀밭 위에 옷을 벗어두지 않는다.", isCorrect: false, rationale: "옷에 진드기가 붙을 수 있어 좋은 예방 수칙입니다." }, { text: "휴식할 때는 돗자리를 펴고 앉는다.", isCorrect: false, rationale: "풀밭에 직접 앉지 않으므로 좋은 수칙입니다." }, { text: "지정된 탐방로를 벗어나 깊은 풀숲을 헤치며 걷는다.", isCorrect: true, rationale: "정답(틀린 행동)! 진드기가 많은 깊은 풀숲에 들어가는 것은 피해야 합니다." }, { text: "귀가 후 즉시 옷을 털어 세탁하고 샤워를 한다.", isCorrect: false, rationale: "몸이나 옷에 묻어온 진드기를 제거하는 아주 훌륭한 방법입니다." } ] },
             { groupId: "tick3", type: "OX", question: "산행 전 피부나 옷에 진드기 기피제를 뿌리면 예방에 도움이 된다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 기피제를 사용하면 해충 접근을 막는 데 큰 도움이 됩니다." }, { text: "X (아니다)", isCorrect: false, rationale: "기피제는 진드기와 모기 등을 쫓아내는 효과가 있으므로 사용하는 것이 좋습니다." } ] },
 
-            // 사진 촬영 및 관찰 (3)
             { groupId: "photo1", type: "객관식", question: "나뭇잎에 앉은 신기한 곤충을 스마트폰으로 예쁘게 잘 찍으려면 어떻게 할까요?", options: [ { text: "곤충이 잘 보이게 화면을 10배 이상 아주 크게 확대(줌)해서 찍는다.", isCorrect: false, rationale: "스마트폰 화면을 너무 많이 확대하면 디지털 픽셀이 깨져서 곤충인지 알아보기 힘듭니다." }, { text: "곤충 코앞에 닿을 만큼 렌즈를 아주 바짝 들이대서 찍는다.", isCorrect: false, rationale: "너무 가까이 다가가면 스마트폰 그림자가 곤충을 덮어서 까맣게 찍힙니다." }, { text: "인물 사진 모드(아웃포커싱)로 배경을 흐릿하게 지워준다.", isCorrect: true, rationale: "정답! 배경을 흐리게 찍으면 복잡한 나뭇잎 사이에서도 우리가 찍고 싶은 곤충만 선명하게 돋보입니다." }, { text: "어둡지 않도록 손전등(플래시)을 번쩍 터뜨려서 밝게 찍는다.", isCorrect: false, rationale: "갑작스럽고 강한 빛은 곤충의 시력을 다치게 하거나 놀라게 만들 수 있어요." } ] },
             { groupId: "photo2", type: "OX", question: "생태 사진을 찍을 때 플래시를 강하게 터뜨리면 곤충이나 야생동물이 좋아한다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "강한 빛은 동식물의 시력을 손상시키거나 심한 스트레스를 주어 생존을 위협합니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 생태 사진은 자연의 빛만 이용해서 조심스럽게 찍는 것이 기본 매너입니다." } ] },
             { groupId: "photo3", type: "객관식", question: "숲의 소리를 기록하는 '사운드스케이프' 활동이 우리에게 주는 이점은?", options: [ { text: "새들의 노랫소리를 통해 숲이 얼마나 건강한지 알 수 있다.", isCorrect: true, rationale: "정답! 다양한 생물의 소리(사운드스케이프)는 숲의 생태적 건강성을 측정하는 훌륭한 지표가 됩니다." }, { text: "큰 소리를 녹음해 두었다가 야생동물을 쫓아내는 데 쓴다.", isCorrect: false, rationale: "숲에서는 큰 소리를 내지 않는 것이 기본 에티켓입니다." }, { text: "소리를 크게 틀어놓고 신나게 춤을 출 수 있다.", isCorrect: false, rationale: "숲의 평화를 깨뜨리는 행동입니다." }, { text: "친구들끼리 멀리서 소리치며 대화할 때 편리하다.", isCorrect: false, rationale: "조용히 자연의 소리를 감상하는 것이 목적입니다." } ] },
 
-            // 내리막/오르막 보행 (4)
             { groupId: "walking1", type: "객관식", question: "가파른 내리막길을 내려갈 때, 무릎이 아프지 않게 걷는 올바른 방법은?", options: [ { text: "빨리 내려가기 위해 가볍게 통통 뛰면서 내려간다.", isCorrect: false, rationale: "뛰어서 내려가면 무릎에 자기 몸무게의 3~4배나 되는 강한 충격이 가해져 연골이 크게 다칩니다." }, { text: "무릎을 쫙 펴고 씩씩하게 뒤꿈치부터 쿵쿵 디딘다.", isCorrect: false, rationale: "무릎을 쫙 펴고 걸으면 발을 디딜 때의 충격이 척추와 머리까지 찌릿하게 전달됩니다." }, { text: "무릎을 살짝 굽히고 보폭을 좁게 해서 사뿐사뿐 걷는다.", isCorrect: true, rationale: "정답! 무릎을 살짝 굽혀야 다리 근육이 자동차의 스프링처럼 충격을 스르륵 흡수해 줍니다." }, { text: "신발 앞꿈치만 땅에 닿게 까치발로 조심조심 내려간다.", isCorrect: false, rationale: "앞꿈치만 사용하면 종아리에 쥐가 나거나 쉽게 미끄러져 엉덩방아를 찧게 됩니다." } ] },
             { groupId: "walking2", type: "OX", question: "오르막길에서는 한 걸음을 아주 넓게(크게) 딛고 빨리 올라가는 것이 덜 지친다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "보폭을 넓게 하면 허벅지 근육이 무리하게 쓰여 금방 지치고 숨이 찹니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 보폭을 평소 걷기보다 약간 좁게 하고, 천천히 일정한 리듬으로 걷는 가장 좋습니다." } ] },
             { groupId: "walking3", type: "OX", question: "등산을 할 때는 지치기 전에 짧게 자주 쉬어주는 것이 원칙이다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 완전히 지쳐버리면 체력을 회복하기 어렵기 때문에, 지치기 전에 짧게 쉬는 것이 좋습니다." }, { text: "X (아니다)", isCorrect: false, rationale: "끝까지 참고 올라가다 한 번에 길게 쉬면 오히려 체온이 떨어지고 쥐가 나기 쉽습니다." } ] },
             { groupId: "walking4", type: "OX", question: "올바른 산행을 위해 등산화 끈은 올라갈 때와 내려갈 때 항상 똑같은 세기로 꽉 묶어야 한다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "올라갈 때는 발목이 편하게 살짝 느슨하게 묶고, 내려올 때는 발가락 쏠림 방지를 위해 단단하게 묶는 것이 좋습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 내려갈 때는 발목 부분을 더 단단하게 조여매어 발가락 끝이 신발 앞코에 닿아 아픈 것을 막아야 합니다." } ] },
 
-            // 등산 스틱 (2)
             { groupId: "stick1", type: "객관식", question: "노르딕워킹이나 안전 산행을 위한 '등산 스틱'의 올바른 사용법은 무엇일까요?", options: [ { text: "가방이 무거우니 한 손에만 스틱 1개를 쥐고 체중을 싣는다.", isCorrect: false, rationale: "스틱은 반드시 양손에 하나씩 총 2개를 쥐어야 신체 균형이 맞고 체중이 효과적으로 분산됩니다." }, { text: "오르막에서는 스틱을 길게 빼고, 내리막에서는 짧게 줄인다.", isCorrect: false, rationale: "반대입니다. 오르막은 짚기 편하게 약간 짧게, 내리막은 상체를 지탱하기 위해 길게 조절해야 합니다." }, { text: "손목 스트랩(끈) 안으로 손을 아래에서 위로 끼워 손잡이를 감싸 쥔다.", isCorrect: true, rationale: "정답! 스트랩을 제대로 활용해야 손아귀 힘이 풀리는 것을 막고 체중을 스틱으로 온전히 분산시킬 수 있습니다." }, { text: "평지에서는 팔꿈치가 완전히 쫙 펴지도록 스틱을 아주 길게 세팅한다.", isCorrect: false, rationale: "평지에서는 스틱을 짚었을 때 팔꿈치가 90도 직각이 되는 길이가 가장 걷기 편안합니다." } ] },
             { groupId: "stick2", type: "OX", question: "등산 스틱의 손목 끈(스트랩)은 귀찮으면 손을 끼우지 않고 손잡이만 꽉 쥐고 걸어도 된다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "손잡이만 쥐고 걸으면 악력이 금방 떨어져 피로해지며, 넘어질 때 크게 다칠 수 있습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 체중 분산과 부상 방지를 위해 손목 끈은 반드시 올바르게 착용해야 합니다." } ] },
 
-            // 배낭 및 장비 (3)
             { groupId: "backpack1", type: "객관식", question: "안전한 숲길 탐험을 위해 배낭을 꾸리는 올바른 방법은?", options: [ { text: "운동 효과를 높이기 위해 배낭 무게를 내 몸무게의 절반(50%) 이상으로 무겁게 싼다.", isCorrect: false, rationale: "너무 무거운 배낭은 무릎 관절에 심각한 무리를 주고 중심을 잃게 만들어 낙상 사고의 원인이 됩니다." }, { text: "배낭의 총 무게는 체중의 20~30%를 넘지 않게 하고, 무거운 물건은 등판 쪽에 넣는다.", isCorrect: true, rationale: "정답! 배낭은 가벼울수록 좋으며, 무거운 짐이 등에 바짝 붙어야 무게중심이 흔들리지 않습니다." }, { text: "땀이 차지 않도록 한쪽 어깨로만 가볍게 메는 에코백이나 크로스백을 사용한다.", isCorrect: false, rationale: "한쪽 어깨로만 메면 신체 균형이 깨져 비탈진 숲길에서 척추에 무리가 가고 매우 위험합니다." }, { text: "무거운 물건은 배낭 맨 아래에 깔고, 가벼운 옷가지를 맨 위에 넣는다.", isCorrect: false, rationale: "보행 시 무거운 물건은 배낭의 중간~위쪽, 그리고 등 쪽에 밀착되도록 넣는 것이 정석입니다." } ] },
             { groupId: "backpack2", type: "OX", question: "등산화는 평소 신는 운동화 사이즈보다 5~10mm 정도 넉넉한 것을 신는 것이 좋다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 두꺼운 등산 양말을 신고, 하산할 때 발가락이 신발 끝에 닿아 멍드는 것을 막기 위해 약간 여유가 있어야 합니다." }, { text: "X (아니다)", isCorrect: false, rationale: "딱 맞는 신발을 신으면 내리막길에서 발톱이 빠지거나 심한 통증을 느낄 수 있습니다." } ] },
             { groupId: "backpack3", type: "OX", question: "등산 배낭의 허리 벨트와 가슴 벨트는 숨쉬기 편하게 항상 풀어두고 걷는 것이 좋다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "벨트를 매지 않으면 배낭이 좌우로 흔들려 체력 소모가 커지고 중심을 잃기 쉽습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 허리와 가슴 벨트를 몸에 맞게 체결해야 배낭의 무게가 분산되고 흔들림을 막아줍니다." } ] },
 
-            // 쓰레기 (2)
             { groupId: "trash1", type: "OX", question: "귤이나 바나나 껍질은 산에서 잘 썩기 때문에, 나무 밑 흙에 버려도 좋은 거름이 된다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "과일 껍질은 산에서 생각보다 아주 늦게 썩고, 나쁜 냄새를 풍겨 숲을 병들게 합니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 흔적을 남기지 않기 위해 과일 껍질 등 작은 쓰레기 하나도 배낭에 넣어 집으로 모두 챙겨가야 합니다." } ] },
             { groupId: "trash2", type: "객관식", question: "숲길 탐험 중 쓰레기 처리에 대한 LNT(흔적 남기지 않기) 수칙으로 가장 올바른 행동은?", options: [ { text: "잘 보이지 않도록 큰 바위 틈이나 낙엽 밑에 깊숙이 숨겨둔다.", isCorrect: false, rationale: "결국 환경을 오염시키고 악취로 인해 다른 사람에게 피해를 줍니다." }, { text: "음식물 쓰레기는 산새나 들쥐가 먹도록 길가에 뿌려둔다.", isCorrect: false, rationale: "동물의 건강을 해치고 야생성을 잃게 만드는 나쁜 행동입니다." }, { text: "가져온 비닐, 과일 껍질 등 모든 쓰레기는 밀봉하여 집으로 되가져간다.", isCorrect: true, rationale: "정답! 산에 가져간 것은 무엇이든 집으로 가져오는 것이 숲을 사랑하는 첫걸음입니다." }, { text: "산 정상의 쓰레기통이 이미 넘쳐 흐르고 있어도 그 위에 잘 쌓아두고 온다.", isCorrect: false, rationale: "바람에 날려 산을 오염시킵니다. 자신의 쓰레기는 가져가야 합니다." } ] },
 
-            // 응급처치 (4)
             { groupId: "emergency1", type: "객관식", question: "탐험대원 한 명이 걷다가 발목을 심하게 삐었습니다. 가장 먼저 해야 할 일은?", options: [ { text: "피가 잘 통하게 등산화 끈을 완전히 풀어준다.", isCorrect: false, rationale: "신발을 벗으면 발목이 풍선처럼 부어오르고 다시 신발을 신기 어려워져 구조 시 매우 힘듭니다." }, { text: "빨리 낫도록 아픈 곳을 손으로 세게 주물러준다.", isCorrect: false, rationale: "다친 곳을 마사지하듯 주무르면 오히려 염증이 심해져서 훨씬 더 아프게 됩니다." }, { text: "발목을 고정하고, 얼음이나 찬물로 차갑게 해준다.", isCorrect: true, rationale: "정답! 다친 직후에는 차갑게 냉찜질을 해주어야 붓기와 통증이 가라앉습니다. 절대 무리해서 걷지 마세요." }, { text: "조금 아파도 참으라고 응원하며 부축해서 빠르게 산을 내려간다.", isCorrect: false, rationale: "무리하게 걸으면 다친 곳의 뼈나 인대가 더 크게 파열될 수 있으니 제자리에 앉아 119를 부르세요." } ] },
             { groupId: "emergency2", type: "OX", question: "산행 중 다리에 쥐(근육 경련)가 났을 때는 아픈 쪽 근육을 강하게 수축시켜야 낫는다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "쥐가 났을 때 근육을 수축시키면 통증이 더 심해집니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 쥐가 난 근육의 반대 방향으로 천천히 늘려주는 스트레칭과 가벼운 마사지를 해야 합니다." } ] },
             { groupId: "emergency3", type: "OX", question: "여름철 일사병으로 쓰러진 사람을 발견하면 그늘로 옮기고 겉옷을 느슨하게 풀어주어야 한다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 체온을 낮추고 호흡을 편안하게 돕기 위해 서늘한 곳으로 옮겨 옷을 헐렁하게 해주는 것이 최우선 조치입니다." }, { text: "X (아니다)", isCorrect: false, rationale: "뜨거운 햇볕 아래 계속 두면 열사병으로 악화되어 생명이 위험할 수 있습니다." } ] },
             { groupId: "emergency4", type: "객관식", question: "숲길 탐험 도중 깊은 산속에서 길을 잃었습니다. 119에 나의 위치를 가장 정확하게 알릴 수 있는 것은?", options: [ { text: "근처에 있는 특이하게 생긴 바위 모양 설명하기", isCorrect: false, rationale: "산에는 비슷한 바위가 너무 많아 구조대가 찾기 어렵습니다." }, { text: "휴대폰의 고도계(높이) 숫자 알려주기", isCorrect: false, rationale: "고도만으로는 정확한 평면 위치를 알 수 없습니다." }, { text: "등산로 곳곳에 설치된 '국가지점번호판' 번호 불러주기", isCorrect: true, rationale: "정답! 국가지점번호(한글 2자리+숫자 8자리)는 산이나 들의 정확한 좌표를 알려주는 가장 확실한 구조 표지판입니다." }, { text: "내가 걸어온 시간과 걸음 수 알려주기", isCorrect: false, rationale: "사람마다 걷는 속도가 달라 위치 파악에 전혀 도움이 되지 않습니다." } ] },
 
-            // 산불 (2)
             { groupId: "fire1", type: "OX", question: "숲에서는 담배를 피우거나 가스버너로 요리를 해도 된다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "작은 불씨가 대형 산불로 번질 수 있어 산림 내 화기 사용은 법으로 엄격히 금지되어 있습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 산불 예방을 위해 불을 피우는 행위는 절대 해서는 안 됩니다." } ] },
             { groupId: "fire2", type: "객관식", question: "산행 중 초기에 산불을 발견했을 때 가장 올바른 행동은?", options: [ { text: "불씨가 작더라도 혼자 끄려 하지 말고 즉시 119에 신고하고 바람을 등지고 대피한다.", isCorrect: true, rationale: "정답! 산불은 순식간에 번지므로 신고 후 안전한 곳으로 대피하는 것이 가장 중요합니다." }, { text: "배낭에 있는 생수를 부어 불을 확실히 다 끌 때까지 머무른다.", isCorrect: false, rationale: "생수만으로는 끄기 어렵고 질식의 위험이 있습니다." }, { text: "나뭇가지를 꺾어 불을 때려서 끈다.", isCorrect: false, rationale: "마른 나뭇가지로 불을 때리면 오히려 불씨를 퍼뜨릴 수 있습니다." }, { text: "누가 불을 냈는지 범인을 찾기 위해 주변을 수색한다.", isCorrect: false, rationale: "대피가 최우선입니다." } ] },
 
-            // 먹이주기 (3)
             { groupId: "feed1", type: "OX", question: "귀여운 다람쥐에게 사람이 먹는 초코바나 빵 쪼가리를 주어도 괜찮다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "사람의 음식은 염분과 당분이 너무 많아 야생동물이 피부병이나 소화 불량에 걸리게 만듭니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 야생동물은 도토리 등 자연에서 스스로 먹이를 구해야 가장 건강합니다." } ] },
             { groupId: "feed2", type: "객관식", question: "야생동물에게 사람이 먹이를 지속적으로 주게 되면 어떤 일이 벌어질까요?", options: [ { text: "동물들이 사람을 친구로 생각하여 애완동물이 된다.", isCorrect: false, rationale: "야생동물은 애완동물이 아니며 본능적으로 야생에서 살아야 합니다." }, { text: "야생에서 스스로 먹이를 찾는 능력을 잃어버리고 사람의 음식 때문에 병에 걸린다.", isCorrect: true, rationale: "정답! 야생성을 잃어 사람 주변만 맴돌게 되며, 심각한 질병에 걸리게 됩니다." }, { text: "숲의 생태계가 더욱 건강하고 다양해진다.", isCorrect: false, rationale: "생태계 균형이 완전히 깨지게 됩니다." }, { text: "겨울잠을 자지 않고 일년 내내 활발하게 활동하게 된다.", isCorrect: false, rationale: "겨울잠은 생체 리듬이므로 먹이와 상관없이 파괴되면 생존이 위험해집니다." } ] },
             { groupId: "feed3", type: "OX", question: "야생동물이 불쌍해 보여도 도토리는 숲에 양보하고 주워오지 말아야 한다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 숲에 떨어진 도토리와 열매는 겨울을 나는 야생동물들의 소중한 생명줄입니다." }, { text: "X (아니다)", isCorrect: false, rationale: "도토리를 주워가면 다람쥐나 청설모가 겨울에 굶어 죽을 수 있습니다." } ] },
 
-            // 에티켓 (3)
             { groupId: "etiquette1", type: "객관식", question: "좁은 숲길(오르막/내리막)에서 올라오는 탐험대와 내려가는 탐험대가 마주쳤습니다. 누가 먼저 길을 양보하는 것이 기본 예절일까요?", options: [ { text: "배낭이 더 무거워 보이는 사람이 먼저 지나간다.", isCorrect: false, rationale: "배낭 무게로 판단하기엔 무리가 있습니다." }, { text: "내려가는 사람이 길 바깥쪽에서 기다리며 올라오는 사람에게 양보한다.", isCorrect: true, rationale: "정답! 올라오는 사람은 호흡 조절과 리듬 유지가 힘들기 때문에 시야가 넓은 하산자가 양보하는 것이 산행의 에티켓입니다." }, { text: "올라오는 사람이 얼른 비켜서서 내려가는 사람에게 양보한다.", isCorrect: false, rationale: "올라가는 사람이 리듬을 잃으면 다시 오르기 힘들고 낙상 위험도 큽니다." }, { text: "무조건 인원수가 더 많은 팀이 먼저 뚫고 지나간다.", isCorrect: false, rationale: "산에서는 힘의 논리가 아닌 서로에 대한 배려의 원칙을 따라야 합니다." } ] },
             { groupId: "etiquette2", type: "OX", question: "정해진 등산로가 아닌 새 길을 개척해서 풀숲을 뚫고 걷는 것은 멋진 탐험가의 자세다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "지정되지 않은 샛길로 다니면 희귀 식물을 밟아 죽이고 산사태를 유발하는 등 자연을 심하게 파괴하게 됩니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 자연 보호와 내 자신의 안전을 위해 반드시 지정된 탐방로(등산로)로만 걸어야 합니다." } ] },
             { groupId: "etiquette3", type: "OX", question: "숲속에서 흥을 돋우기 위해 블루투스 스피커로 음악을 크게 틀고 걷는 것은 좋은 행동이다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "큰 소음은 짝짓기나 먹이 활동을 하는 야생동물들에게 엄청난 스트레스를 주고 생태계를 교란시킵니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 숲에서는 자연의 소리를 감상하고, 음악은 꼭 이어폰으로 혼자 들어야 합니다." } ] },
 
-            // 생태학 및 기상 (3)
             { groupId: "ecology1", type: "객관식", question: "산에서 베어진 나무 밑동의 '나이테'에 대한 설명으로 틀린 것은?", options: [ { text: "나이테의 간격이 넓으면 그해에 비가 많이 오고 나무가 살기 좋은 날씨였다는 뜻이다.", isCorrect: false, rationale: "성장 환경이 좋을 때 나무는 더 빠르게 자라 나이테 간격이 넓어집니다." }, { text: "나이테의 숫자를 세어보면 이 나무가 대략 몇 살인지 알 수 있다.", isCorrect: false, rationale: "1년에 보통 한 개의 나이테가 생기므로 나이를 짐작할 수 있습니다." }, { text: "나무의 나이테는 컴퍼스로 그린 것처럼 항상 정중앙을 중심으로 완벽한 원형을 이룬다.", isCorrect: true, rationale: "정답(틀린 설명)! 경사면이나 햇빛이 비치는 방향, 바람에 따라 한쪽으로 치우치거나 모양이 찌그러지게 자랍니다." }, { text: "나이테를 연구하면 과거의 기상 이변이나 가뭄 기록을 짐작할 수 있다.", isCorrect: false, rationale: "이를 연륜연대학이라 부르며 과거의 기후를 아는 훌륭한 지표가 됩니다." } ] },
             { groupId: "ecology2", type: "OX", question: "숲길에서 발견한 예쁜 야생화 꽃이나 신기한 도토리는 마음껏 꺾거나 주워서 집에 가져와도 된다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "도토리는 짐승들의 겨울 식량이며, 야생화를 무단 채취하는 것은 산림보호법 위반입니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 자연물은 숲에 있을 때 가장 아름답습니다. 오직 눈으로 보고 사진으로만 담아가세요." } ] },
             { groupId: "ecology3", type: "객관식", question: "여름철 산행 중 갑자기 하늘이 까매지고 번개를 동반한 소나기(낙뢰)가 쏟아집니다. 가장 안전한 대피 장소는?", options: [ { text: "비를 피하기 위해 숲에서 가장 잎이 무성하고 키가 큰 나무 아래로 피한다.", isCorrect: false, rationale: "키가 큰 나무는 벼락(낙뢰)이 떨어질 확률이 가장 높은 곳이므로 절대 피해야 할 장소입니다." }, { text: "능선(산마루) 정상의 탁 트인 바위 위에서 비가 그치길 기다린다.", isCorrect: false, rationale: "높은 지대와 탁 트인 바위는 낙뢰의 표적이 되기 쉽습니다." }, { text: "주변보다 지형이 낮고 움푹 파인 곳을 찾아 몸을 둥글게 말고 웅크려 대피한다.", isCorrect: true, rationale: "정답! 낙뢰 발생 시에는 키 큰 물체에서 멀리 떨어져 낮은 지대에서 몸을 최대한 낮추는 것이 가장 안전합니다." }, { text: "계곡물 속이나 큰 바위 밑 동굴로 신속하게 대피한다.", isCorrect: false, rationale: "계곡물은 순식간에 불어나 휩쓸릴 수 있고, 동굴 입구는 벼락이 칠 수 있어 위험합니다." } ] }
         ];
         
         let availableQuizGroups = [];
-        let recentQuizGroups = []; // 스마트 중복 출제 방지 배열
+        let recentQuizGroups = [];
 
         const itemPool = [
             { name: "🥾 등산스틱", desc: "튼튼한 지팡이! 획득 즉시 1칸 보너스 전진!", effect: "forward" },
@@ -507,16 +493,18 @@
             { name: "🔋 에너지", desc: "1 UP! 모든 조원과 하이파이브를 하세요!", effect: "none" }
         ];
 
-        // --- 2. 정통 윷판 좌표 (출발점=10,90 / 도착지=30번 노드 적용) ---
+        // --- 2. 정통 윷판 좌표 (출발점: 좌하단 10,90) ---
         const nodeCoords = {
-            0: [10, 90], 1: [10, 74], 2: [10, 58], 3: [10, 42], 4: [10, 26],
-            5: [10, 10], 6: [26, 10], 7: [42, 10], 8: [58, 10], 9: [74, 10],
-            10: [90, 10], 11: [90, 26], 12: [90, 42], 13: [90, 58], 14: [90, 74],
-            15: [90, 90], 16: [74, 90], 17: [58, 90], 18: [42, 90], 19: [26, 90],
-            20: [23.3, 23.3], 21: [36.6, 36.6], 22: [50, 50], 23: [63.3, 63.3], 24: [76.6, 76.6],
-            25: [76.6, 23.3], 26: [63.3, 36.6], 27: [36.6, 63.3], 28: [23.3, 76.6],
-            30: [10, 90], // 한 바퀴 돌고 도착한 출발점 (여기서 1칸 이상 전진해야 100 골인)
-            100: [100, 100]
+            0: [10, 90], 1: [26, 90], 2: [42, 90], 3: [58, 90], 4: [74, 90],
+            5: [90, 90], 6: [90, 74], 7: [90, 58], 8: [90, 42], 9: [90, 26],
+            10: [90, 10], 11: [74, 10], 12: [58, 10], 13: [42, 10], 14: [26, 10],
+            15: [10, 10], 16: [10, 26], 17: [10, 42], 18: [10, 58], 19: [10, 74],
+            // 대각선 TR(10)->BL(30)
+            20: [76.6, 23.3], 21: [63.3, 36.6], 22: [50, 50], 23: [36.6, 63.3], 24: [23.3, 76.6],
+            // 대각선 TL(15)->BR(5)
+            25: [23.3, 23.3], 26: [36.6, 36.6], 27: [63.3, 63.3], 28: [76.6, 76.6],
+            30: [10, 90], // 한 바퀴 돌고 도착한 출발점 (여기서 더 가야 통과)
+            100: [100, 100] // 골인
         };
 
         const eventNodes = [1, 3, 6, 8, 11, 13, 16, 18, 21, 27]; 
@@ -526,9 +514,9 @@
             5:6, 6:7, 7:8, 8:9, 9:10, 
             10:11, 11:12, 12:13, 13:14, 14:15, 
             15:16, 16:17, 17:18, 18:19, 19:30,
-            20:21, 21:22, 23:24, 24:15,
-            25:26, 26:22, 27:28, 28:30,
-            30:100 // 출발점 통과 시 골인
+            20:21, 21:22, 23:24, 24:30,
+            25:26, 26:22, 27:28, 28:5,
+            30:100 
         };
 
         // --- 3. 화면 전환 함수 ---
@@ -584,13 +572,13 @@
             board.innerHTML = `<svg id="board-lines" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none;"></svg>`;
             const svgEl = document.getElementById('board-lines');
 
-            svgEl.innerHTML += `<path d="M 10% 90% L 10% 10% L 90% 10% L 90% 90% Z" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
+            svgEl.innerHTML += `<path d="M 10% 90% L 90% 90% L 90% 10% L 10% 10% Z" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
             svgEl.innerHTML += `<path d="M 10% 10% L 90% 90%" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
             svgEl.innerHTML += `<path d="M 90% 10% L 10% 90%" fill="none" stroke="#22d3ee" stroke-width="4px" opacity="0.6"/>`;
 
             Object.keys(nodeCoords).forEach(key => {
                 const num = parseInt(key);
-                if(num === 100 || num === 30) return; // 30(도착출발점)은 0과 겹치므로 그리지 않음
+                if(num === 100 || num === 30) return; 
 
                 const [x, y] = nodeCoords[num];
                 const isCorner = [0, 5, 10, 15, 22].includes(num);
@@ -602,6 +590,7 @@
                 nodeDiv.style.left = `${x}%`; nodeDiv.style.top = `${y}%`;
 
                 if(num === 0) nodeDiv.innerHTML = "START";
+                else if(num === 22) { nodeDiv.innerHTML = "✨"; nodeDiv.classList.add('center-node'); }
                 else if(isEvent) nodeDiv.innerHTML = "?";
                 else if(isItem) nodeDiv.innerHTML = "🎁";
 
@@ -636,13 +625,13 @@
             
             teams.forEach(t => {
                 const teamPieces = pieces.filter(p => p.teamId === t.id);
-                // 모바일/PC 모두 말의 개수에 따라 그리드 비율 최적화
                 let gridCols = selectedPieceCount > 2 ? 'grid-cols-4' : 'grid-cols-2';
                 if(window.innerWidth < 768 && selectedPieceCount > 2) gridCols = 'grid-cols-2'; 
 
                 let piecesHtml = teamPieces.map(p => {
                     let status = "WAIT";
                     if (p.pos === 100) status = "CLEAR";
+                    else if (p.pos === 30) status = "GOAL";
                     else if (p.pos > 0) status = "RUN";
                     
                     return `<button id="dash_btn_${p.id}" onclick="if(gameState==='WAIT_PIECE' && currentTeamIdx===${t.id}) onPieceClicked('${p.id}')" 
@@ -790,6 +779,7 @@
             });
         }
 
+        // 안정적인 이동 알고리즘
         function calculateDestination(startPos, steps, historyArray) {
             if (steps === -1) {
                 if (historyArray.length > 0) {
@@ -810,13 +800,13 @@
                 let nextNode;
                 
                 if (current === 30) nextNode = 100;
-                else if (current === 5 && isFirstStep) nextNode = 20; 
-                else if (current === 10 && isFirstStep) nextNode = 25; 
-                else if (current === 22 && isFirstStep) nextNode = 27; 
+                else if (current === 10 && isFirstStep) nextNode = 20; 
+                else if (current === 15 && isFirstStep) nextNode = 25; 
+                else if (current === 22 && isFirstStep) nextNode = 23; 
                 else if (current === 22 && !isFirstStep) {
-                    if (prevNode === 21 || prevNode === 20 || prevNode === 5) nextNode = 23; 
-                    else if (prevNode === 26 || prevNode === 25 || prevNode === 10) nextNode = 27; 
-                    else nextNode = 27; 
+                    if (prevNode === 21 || prevNode === 20 || prevNode === 10) nextNode = 23; 
+                    else if (prevNode === 26 || prevNode === 25 || prevNode === 15) nextNode = 27; 
+                    else nextNode = 23; 
                 } else {
                     nextNode = nextNodeMap[current]; 
                 }
@@ -855,17 +845,32 @@
         function handleArrival(destPos, movingPieces) {
             if (destPos === 100) {
                 playSound('win');
-                showAlert("🎉 CLEAR!", "이 말이 결승선을 통과했습니다!");
+                showAlert("🎉 CLEAR!", "이 말이 안전하게 결승선을 통과했습니다!");
                 checkWinCondition();
                 setTimeout(() => nextTurn(), 2000); return;
             }
 
+            // 잡기 로직 (0과 30은 다른 상태이므로 같은 pos일때만 잡힘)
             const enemies = pieces.filter(p => p.pos === destPos && p.teamId !== currentTeamIdx && p.pos !== -1 && p.pos !== 100);
             if (enemies.length > 0) {
                 enemies.forEach(e => { e.pos = -1; e.history = []; });
                 updatePiecesOnBoard(); bonusRoll = true;
-                playSound('catch');
-                showAlert("💥 HIT!", "적을 출발선으로 돌려보내고 보너스 턴 획득!");
+                
+                if (destPos === 22) {
+                    playSound('catch');
+                    showAlert("💥 잡았습니다! & ✨ 방건 도착!", "적을 돌려보내고 방건의 축복까지! 보너스 턴 획득!");
+                } else {
+                    playSound('catch');
+                    showAlert("💥 HIT!", "적을 출발선으로 돌려보내고 보너스 턴 획득!");
+                }
+                setTimeout(() => nextTurn(), 2000); return;
+            }
+
+            // 정중앙 방건 이벤트
+            if (destPos === 22) {
+                playSound('item');
+                bonusRoll = true;
+                showAlert("✨ 방건(정중앙) 도착!", "특별 이벤트! 숲의 기운을 받아 윷을 한 번 더 던집니다!");
                 setTimeout(() => nextTurn(), 2000); return;
             }
 
@@ -949,7 +954,10 @@
             Object.keys(posMap).forEach(posStr => {
                 const pos = parseInt(posStr);
                 const piecesAtPos = posMap[pos];
-                const [x, y] = nodeCoords[pos];
+                let [x, y] = nodeCoords[pos];
+
+                // 30번(도착 대기) 말은 0번(출발 대기) 말과 구분을 위해 아주 살짝 엇갈리게 시각적 처리
+                if (pos === 30) { x += 3; y -= 3; }
 
                 const teamGroups = {};
                 piecesAtPos.forEach(p => {
