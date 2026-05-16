@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>숲길 마스터: 포이·마리의 안전 워킹 윷놀이</title>
+    <!-- 프리미엄 가독성 폰트: 프리텐다드 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -16,7 +17,6 @@
 
         body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-            /* 깊고 고급스러운 숲/밤하늘 그라데이션 */
             background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);
             color: #f8fafc;
             overflow: hidden; 
@@ -31,70 +31,38 @@
         .leading-beautiful { line-height: 1.6; }
         .break-keep { word-break: keep-all; }
 
-        /* 부드러운 네온/글로우 텍스트 효과 */
         .glow-text-green { text-shadow: 0 0 10px rgba(74, 222, 128, 0.6); }
         .glow-text-yellow { text-shadow: 0 0 10px rgba(250, 204, 21, 0.6); }
-        .glow-text-cyan { text-shadow: 0 0 10px rgba(34, 211, 238, 0.6); }
 
-        /* 세련된 글래스모피즘 버튼 */
         .glass-btn {
-            background: var(--glass-bg);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid var(--glass-border);
-            border-radius: 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            color: white;
-            font-weight: 700;
+            background: var(--glass-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border); border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white; font-weight: 700;
         }
         .glass-btn:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2); border-color: rgba(255, 255, 255, 0.3);
         }
-        .glass-btn:active:not(:disabled) {
-            transform: translateY(1px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .glass-btn:disabled {
-            opacity: 0.4;
-            pointer-events: none;
-            background: rgba(0, 0, 0, 0.2);
-        }
+        .glass-btn:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .glass-btn:disabled { opacity: 0.4; pointer-events: none; background: rgba(0, 0, 0, 0.2); }
 
-        /* 프리미엄 글래스 패널 */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 1.5rem;
-            box-shadow: var(--glass-shadow);
+            background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: var(--glass-shadow);
         }
 
-        /* 윷판 컨테이너 */
-        #board-container {
-            position: relative; width: 100%; height: 100%;
-            display: flex; align-items: center; justify-content: center;
-        }
+        #board-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 
         #yut-board {
-            position: relative;
-            width: min(95%, 85vh); height: min(95%, 85vh);
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(10px);
-            border-radius: 2rem;
-            border: 2px solid rgba(52, 211, 153, 0.3); 
+            position: relative; width: min(95%, 85vh); height: min(95%, 85vh);
+            background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(10px);
+            border-radius: 2rem; border: 2px solid rgba(52, 211, 153, 0.3); 
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(52, 211, 153, 0.1);
         }
 
         @media (max-width: 768px) {
-            #yut-board {
-                width: min(95vw, 55vh); height: min(95vw, 55vh);
-                border-width: 2px; border-radius: 1.5rem;
-            }
+            #yut-board { width: min(95vw, 55vh); height: min(95vw, 55vh); border-width: 2px; border-radius: 1.5rem; }
             .glass-panel { border-radius: 1rem; }
             .glass-btn { border-radius: 0.75rem; }
         }
@@ -103,37 +71,21 @@
 
         .yut-node {
             position: absolute; transform: translate(-50%, -50%); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; z-index: 10;
-            background-color: #0f172a; width: 7.5%; height: 7.5%;
-            font-size: clamp(0.6rem, 2vw, 1.1rem);
-            border: 2px solid rgba(52, 211, 153, 0.5); 
-            color: #6ee7b7; 
-            box-shadow: 0 0 10px rgba(52, 211, 153, 0.2);
+            display: flex; align-items: center; justify-content: center; font-weight: 800; z-index: 10;
+            background-color: #0f172a; width: 7.5%; height: 7.5%; font-size: clamp(0.6rem, 2vw, 1.1rem);
+            border: 2px solid rgba(52, 211, 153, 0.5); color: #6ee7b7; box-shadow: 0 0 10px rgba(52, 211, 153, 0.2);
             transition: all 0.3s;
         }
         .yut-node.corner {
-            width: 12%; height: 12%;
-            background: linear-gradient(135deg, #10b981, #047857);
-            color: white; border: none;
-            font-size: clamp(0.8rem, 2.5vw, 1.4rem);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+            width: 12%; height: 12%; background: linear-gradient(135deg, #10b981, #047857);
+            color: white; border: none; font-size: clamp(0.8rem, 2.5vw, 1.4rem); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
         }
         .yut-node.center-node {
-            background: linear-gradient(135deg, #fbbf24, #d97706);
-            color: white; border: none;
-            width: 14%; height: 14%; font-size: clamp(1.2rem, 3vw, 2rem);
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-            z-index: 15;
+            background: linear-gradient(135deg, #fbbf24, #d97706); color: white; border: none;
+            width: 14%; height: 14%; font-size: clamp(1.2rem, 3vw, 2rem); box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); z-index: 15;
         }
-        .yut-node.event-node {
-            background-color: rgba(250, 204, 21, 0.2);
-            border-color: #facc15; color: #facc15;
-        }
-        .yut-node.item-node {
-            background-color: rgba(244, 114, 182, 0.2);
-            border-color: #f472b6; color: #f472b6;
-        }
+        .yut-node.event-node { background-color: rgba(250, 204, 21, 0.2); border-color: #facc15; color: #facc15; }
+        .yut-node.item-node { background-color: rgba(244, 114, 182, 0.2); border-color: #f472b6; color: #f472b6; }
 
         .piece {
             position: absolute; width: 10%; height: 10%; border-radius: 50%;
@@ -142,7 +94,6 @@
             border: 2px solid rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center;
             font-weight: 800; color: white; font-size: clamp(0.7rem, 2.5vw, 1.3rem);
         }
-
         .piece.clickable { animation: float-glow 1.5s ease-in-out infinite alternate; cursor: pointer; }
 
         @keyframes float-glow {
@@ -158,12 +109,10 @@
             border: 1px solid rgba(255,255,255,0.5); z-index: 25; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        /* 윷 던지기 3D 효과 유지하되 세련되게 다듬기 */
         .yut-stick-wrapper { perspective: 800px; margin: 0 5px; }
         .yut-stick {
             width: clamp(30px, 6vw, 45px); height: clamp(100px, 18vw, 140px);
-            position: relative; transform-style: preserve-3d;
-            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            position: relative; transform-style: preserve-3d; transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
         .yut-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; }
         .yut-back { background: linear-gradient(to right, #78350f, #92400e, #78350f); border: 1px solid rgba(255,255,255,0.1); transform: rotateY(0deg); box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
@@ -175,31 +124,19 @@
         .yut-bbaek .yut-front::after { content: "빽도"; color: #dc2626; opacity: 0.9; font-weight: 800; font-size: 18px; }
 
         .rolling-anim .yut-stick { animation: roll3D 0.4s infinite linear; }
-        @keyframes roll3D {
-            0% { transform: rotateY(0deg) rotateX(0deg) translateY(0); }
-            25% { transform: rotateY(180deg) rotateX(90deg) translateY(-30px); }
-            50% { transform: rotateY(360deg) rotateX(180deg) translateY(-50px); }
-            75% { transform: rotateY(540deg) rotateX(270deg) translateY(-30px); }
-            100% { transform: rotateY(720deg) rotateX(360deg) translateY(0); }
-        }
+        @keyframes roll3D { 0% { transform: rotateY(0deg) rotateX(0deg) translateY(0); } 25% { transform: rotateY(180deg) rotateX(90deg) translateY(-30px); } 50% { transform: rotateY(360deg) rotateX(180deg) translateY(-50px); } 75% { transform: rotateY(540deg) rotateX(270deg) translateY(-30px); } 100% { transform: rotateY(720deg) rotateX(360deg) translateY(0); } }
 
         .result-up { transform: rotateY(180deg) rotateZ(0deg); } 
         .result-down { transform: rotateY(0deg) rotateZ(0deg); } 
         .tilt-1 { transform: rotateY(180deg) rotateZ(12deg); }
         .tilt-2 { transform: rotateY(0deg) rotateZ(-8deg); }
 
-        .dashboard-scroll {
-            overflow-y: auto; -webkit-overflow-scrolling: touch; 
-            scrollbar-width: thin; scrollbar-color: rgba(52, 211, 153, 0.5) transparent;
-        }
+        .dashboard-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: rgba(52, 211, 153, 0.5) transparent; }
         .dashboard-scroll::-webkit-scrollbar { width: 4px; }
         .dashboard-scroll::-webkit-scrollbar-thumb { background: rgba(52, 211, 153, 0.5); border-radius: 4px; }
         
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         .animate-float { animation: float 4s ease-in-out infinite; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
@@ -208,29 +145,20 @@
         .modal-scroll-area::-webkit-scrollbar { width: 6px; }
         .modal-scroll-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
         
-        /* 커스텀 인풋 스타일 */
-        input[type="number"] {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            border-radius: 0.75rem;
-            text-align: center;
-            transition: all 0.2s;
-        }
-        input[type="number"]:focus {
-            outline: none;
-            border-color: #34d399;
-            box-shadow: 0 0 10px rgba(52,211,153,0.3);
-        }
+        input[type="number"] { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 0.75rem; text-align: center; transition: all 0.2s; }
+        input[type="number"]:focus { outline: none; border-color: #34d399; box-shadow: 0 0 10px rgba(52,211,153,0.3); }
     </style>
 </head>
 <body class="flex flex-col h-screen w-screen relative">
 
+    <!-- 배경 장식 -->
     <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-emerald-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 pointer-events-none"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 pointer-events-none"></div>
 
+    <!-- ========================================== -->
+    <!-- 1. INTRO SCREEN                            -->
+    <!-- ========================================== -->
     <div id="intro-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 fade-in overflow-y-auto">
-        
         <button onclick="openQuizBank()" class="absolute top-4 right-4 md:top-8 md:right-8 bg-white/10 hover:bg-white/20 text-yellow-300 px-5 py-2.5 rounded-full border border-yellow-300/30 font-bold transition-all shadow-lg backdrop-blur-md mt-12 md:mt-0 text-sm md:text-base flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             <span>퀴즈 아카이브</span>
@@ -267,15 +195,17 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 2. EDUCATION SCREEN                        -->
+    <!-- ========================================== -->
     <div id="education-screen" class="fixed inset-0 z-[95] hidden flex-col items-center justify-center p-4 fade-in">
-        <div class="glass-panel p-6 md:p-10 w-full max-w-5xl h-[90vh] flex flex-col">
+        <div class="glass-panel p-6 md:p-10 w-full max-w-5xl h-[90vh] flex flex-col border-emerald-500/30">
             <div class="flex items-center justify-center gap-3 mb-6 pb-4 border-b border-white/10 shrink-0">
                 <span class="text-3xl">📚</span>
                 <h2 class="text-2xl md:text-3xl font-bold text-white break-keep tracking-tight">탐험 전 필수 지식</h2>
             </div>
             
             <div class="modal-scroll-area space-y-6 text-sm md:text-base font-medium text-gray-300 leading-relaxed break-keep p-2 md:p-4">
-                
                 <div class="bg-black/20 p-5 rounded-2xl border border-white/5 hover:bg-black/30 transition-colors">
                     <h3 class="text-lg md:text-xl font-bold text-yellow-300 mb-3 flex items-center gap-2"><span>🐝</span> 1. 야생동물 & 해충 대처</h3>
                     <ul class="list-decimal list-inside pl-1 space-y-1.5 marker:text-gray-500">
@@ -329,22 +259,24 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 3. TUTORIAL SCREEN                         -->
+    <!-- ========================================== -->
     <div id="tutorial-screen" class="fixed inset-0 z-[90] hidden flex-col items-center justify-center p-4 fade-in">
-        <div class="glass-panel p-6 md:p-10 w-full max-w-4xl">
+        <div class="glass-panel p-6 md:p-10 w-full max-w-4xl border-cyan-500/30">
             <h2 class="text-2xl md:text-4xl font-bold text-white mb-8 text-center break-keep tracking-tight">탐험 규칙 안내</h2>
             
             <div class="space-y-4 text-base md:text-lg text-gray-200 mb-8 font-medium">
-                
                 <div class="flex items-start bg-red-900/40 p-4 rounded-xl border border-red-500/50 backdrop-blur-sm">
                     <span class="text-2xl mr-3 shrink-0">⚠️</span>
-                    <p class="leading-relaxed"><span class="text-red-300 font-bold">[특별 수칙]</span> 원활한 탐험을 위해 윷/모를 던지거나 상대를 잡아도 보너스 기회는 <span class="text-white font-bold">1번만 중첩</span>되며, 결과는 모아두지 않고 <span class="text-white font-bold">즉시 이동</span>에 사용합니다.</p>
+                    <p class="leading-relaxed"><span class="text-red-300 font-bold">[현장 특별 수칙]</span> 원활한 탐험을 위해 윷/모를 던지거나 상대를 잡아도 보너스 기회는 <span class="text-white font-bold">1번만 중첩</span>되며, 윷 결과는 모아두지 않고 <span class="text-white font-bold">즉시 이동</span>에 사용합니다.</p>
                 </div>
 
                 <div class="bg-black/20 p-5 rounded-xl border border-white/5 space-y-4">
                     <div class="flex items-start"><span class="text-xl mr-3 shrink-0">📍</span><p class="leading-relaxed">시작점은 <span class="text-emerald-300 font-bold">왼쪽 아래(START)</span>이며, 반시계 방향(오른쪽)으로 돕니다.</p></div>
                     <div class="flex items-start"><span class="text-xl mr-3 shrink-0">✂️</span><p class="leading-relaxed"><span class="text-emerald-300 font-bold">우측 하단/우측 상단 모서리</span>에 정확히 도착하면 중앙 지름길로 꺾어갑니다.</p></div>
                     <div class="flex items-start"><span class="text-xl mr-3 shrink-0">🎁</span><p class="leading-relaxed"><span class="text-yellow-300 font-bold">노란 칸(?)</span>은 퀴즈, <span class="text-pink-300 font-bold">분홍 칸(🎁)</span>은 예측불허 아이템 획득, <span class="text-yellow-500 font-bold">중앙(✨)</span>은 한 번 더!</p></div>
-                    <div class="flex items-start"><span class="text-xl mr-3 shrink-0">🏆</span><p class="leading-relaxed">말이 한 바퀴를 돌아 출발점에 도착 후, <span class="text-white font-bold">한 번 더 전진하여 완전히 통과</span>해야 성공입니다!</p></div>
+                    <div class="flex items-start"><span class="text-xl mr-3 shrink-0">🏆</span><p class="leading-relaxed">말이 한 바퀴를 돌아 출발점에 도착 후, <span class="text-white font-bold">한 번 더 전진하여 완전히 통과</span>해야 성공입니다! (출발선에서 빽도로 후퇴해도 완주 궤도 진입!)</p></div>
                 </div>
             </div>
             
@@ -354,17 +286,24 @@
         </div>
     </div>
 
-    <div id="quiz-bank-screen" class="fixed inset-0 z-[150] hidden flex-col items-center justify-center p-4 fade-in">
+    <!-- ========================================== -->
+    <!-- 4. QUIZ BANK SCREEN                        -->
+    <!-- ========================================== -->
+    <div id="quiz-bank-screen" class="fixed inset-0 z-[150] hidden flex-col items-center justify-center p-4 fade-in bg-slate-900/95 backdrop-blur-xl">
         <div class="glass-panel p-6 md:p-10 w-full max-w-5xl h-[90vh] flex flex-col border-yellow-500/30">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-white/10 shrink-0">
                 <h2 class="text-xl md:text-3xl font-bold text-yellow-300 break-keep flex items-center gap-2"><span>📖</span> 지식 아카이브 <span class="text-sm md:text-lg text-gray-400 font-normal">(총 40문항)</span></h2>
-                <button onclick="closeQuizBank()" class="glass-btn px-4 py-2 text-sm bg-white/5 hover:bg-red-500/50 hover:border-red-500/50">닫기 X</button>
+                <button onclick="closeQuizBank()" class="glass-btn px-4 py-2 text-sm bg-white/5 hover:bg-red-500/50 hover:border-red-500/50 border-white/20">닫기 X</button>
             </div>
             <div id="quiz-bank-list" class="modal-scroll-area flex-1 space-y-4 pr-2">
-                </div>
+                <!-- JS 렌더링 -->
+            </div>
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 5. MAIN GAME SCREEN                        -->
+    <!-- ========================================== -->
     <div id="game-screen" class="hidden w-full h-full flex-col z-[80] relative">
         <header class="bg-black/30 backdrop-blur-md border-b border-white/10 p-3 md:p-4 flex justify-between items-center shrink-0 z-50">
             <h1 class="text-lg md:text-2xl font-bold text-white truncate mr-2 tracking-tight flex items-center gap-2">
@@ -379,7 +318,8 @@
             </div>
         </header>
 
-        <main class="flex-1 flex flex-col md:flex-row min-h-0 relative z-40">
+        <main class="flex-1 flex flex-col md:flex-row min-h-0 relative z-40 overflow-hidden">
+            <!-- 윷판 (스크롤 방지, 고정) -->
             <div class="relative p-3 md:p-8 flex items-center justify-center shrink-0 h-[50vh] md:h-auto md:flex-[3]">
                 <div id="board-container">
                     <div id="yut-board">
@@ -388,11 +328,11 @@
                 </div>
             </div>
 
-            <div class="flex flex-col p-3 md:p-6 shrink-0 h-[50vh] md:h-auto md:flex-[1] lg:flex-[1.5] border-t md:border-t-0 md:border-l border-white/10 bg-black/20 backdrop-blur-sm">
-                
+            <!-- 컨트롤 패널 (모바일에서 자체 스크롤) -->
+            <div class="flex flex-col p-3 md:p-6 shrink-0 h-[45vh] md:h-auto md:flex-[1] lg:flex-[1.5] border-t md:border-t-0 md:border-l border-white/10 bg-black/20 backdrop-blur-sm overflow-hidden">
                 <div class="shrink-0 mb-4 bg-white/5 p-4 md:p-5 rounded-2xl border border-white/10 shadow-lg">
                     <h2 class="text-xs md:text-sm font-bold text-gray-400 mb-3 tracking-widest uppercase">Action</h2>
-                    <button onclick="rollDigitalYut()" id="btn-digital-roll" class="mb-3 w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-base md:text-lg rounded-xl hover:from-emerald-400 hover:to-teal-400 shadow-lg transition-transform active:scale-[0.98] flex items-center justify-center gap-2">
+                    <button onclick="rollDigitalYut()" id="btn-digital-roll" class="mb-3 w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-base md:text-lg rounded-xl hover:from-emerald-400 hover:to-teal-400 shadow-lg transition-transform active:scale-[0.98] flex items-center justify-center gap-2 border-0">
                         <span>🎲 화면에서 윷 던지기</span>
                     </button>
                     
@@ -407,15 +347,19 @@
                     <div id="roll-result" class="mt-3 text-center text-sm md:text-lg font-bold text-emerald-300 h-6">대기 중...</div>
                 </div>
 
-                <div class="flex-1 flex flex-col min-h-0">
+                <div class="flex-1 flex flex-col min-h-0 bg-white/5 p-3 md:p-4 rounded-2xl border border-white/10">
                     <h2 class="shrink-0 text-xs md:text-sm font-bold text-gray-400 mb-2 tracking-widest uppercase">Team Status</h2>
                     <div id="team-dashboard" class="flex-1 dashboard-scroll space-y-3 pb-2 pr-2 overflow-y-auto">
-                        </div>
+                        <!-- JS 렌더링 -->
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 6. MODALS                                  -->
+    <!-- ========================================== -->
     <div id="yut-animation-modal" class="fixed inset-0 z-[120] hidden flex-col items-center justify-center p-4 bg-slate-900/90 backdrop-blur-sm transition-opacity">
         <h2 class="text-2xl md:text-4xl font-bold text-emerald-400 mb-12 animate-pulse tracking-widest">결과 확인 중...</h2>
         <div id="yut-sticks-container" class="flex justify-center items-center gap-3 md:gap-5 perspective-[800px]"></div>
@@ -426,7 +370,7 @@
         <div class="glass-panel p-8 md:p-10 w-full max-w-sm md:max-w-md text-center fade-in border-t border-l border-white/20">
             <h2 id="alert-title" class="text-xl md:text-2xl font-bold text-white mb-4 break-keep"></h2>
             <p id="alert-desc" class="text-base md:text-lg text-gray-300 mb-8 font-medium break-keep leading-relaxed"></p>
-            <button onclick="closeAlert()" class="glass-btn w-full py-3 md:py-4 bg-white/10 hover:bg-white/20 text-white text-lg font-bold">확인</button>
+            <button onclick="closeAlert()" class="glass-btn w-full py-3 md:py-4 bg-white/10 hover:bg-white/20 text-white text-lg font-bold border border-white/20">확인</button>
         </div>
     </div>
 
@@ -450,13 +394,15 @@
         </div>
     </div>
 
+    <!-- 명예의 전당 -->
     <div id="hall-of-fame-modal" class="fixed inset-0 z-[130] hidden flex-col items-center justify-center p-4 bg-slate-900/95 backdrop-blur-xl fade-in">
         <div class="glass-panel p-8 md:p-14 w-full max-w-2xl text-center border-yellow-500/30 shadow-[0_0_50px_rgba(234,179,8,0.2)]">
             <h2 class="text-3xl md:text-5xl font-black text-yellow-400 mb-6 break-keep tracking-tight glow-text-yellow">🏆 명예의 전당</h2>
             <p class="text-base md:text-xl text-gray-300 mb-10 break-keep font-medium">모든 탐험대가 에코 숲길을 무사히 통과했습니다!</p>
             
             <div id="ranking-list" class="space-y-4 mb-12 flex flex-col items-center w-full max-w-md mx-auto">
-                </div>
+                <!-- JS 렌더링 -->
+            </div>
 
             <button onclick="resetGame()" class="glass-btn w-full py-4 md:py-5 bg-white/10 hover:bg-white/20 text-white text-lg md:text-xl font-bold rounded-xl border border-white/20">
                 새로운 탐험 시작하기
@@ -464,54 +410,10 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- LOGIC SCRIPTS                              -->
+    <!-- ========================================== -->
     <script>
-        // --- 0. 웹 오디오 사운드 시스템 ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
-        let isMuted = false;
-
-        function toggleMute() {
-            isMuted = !isMuted;
-            const btn = document.getElementById('mute-btn');
-            if (isMuted) {
-                btn.innerText = "🔇 소리 OFF";
-                btn.classList.add('text-gray-500');
-                btn.classList.remove('text-gray-300');
-            } else {
-                btn.innerText = "🔊 소리 ON";
-                btn.classList.remove('text-gray-500');
-                btn.classList.add('text-gray-300');
-                playSound('click'); 
-            }
-        }
-
-        function initAudio() {
-            if (!audioCtx) audioCtx = new AudioContext();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            playSound('click');
-        }
-
-        function playSound(type) {
-            if (!audioCtx || isMuted) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            const t = audioCtx.currentTime;
-
-            // 소리를 약간 부드럽게(모던하게) 다듬음
-            switch (type) {
-                case 'click': osc.type = 'sine'; osc.frequency.setValueAtTime(600, t); gain.gain.setValueAtTime(0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1); osc.start(t); osc.stop(t + 0.1); break;
-                case 'roll': osc.type = 'triangle'; osc.frequency.setValueAtTime(200, t); osc.frequency.exponentialRampToValueAtTime(100, t + 0.05); gain.gain.setValueAtTime(0.15, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05); osc.start(t); osc.stop(t + 0.05); break;
-                case 'move': osc.type = 'sine'; osc.frequency.setValueAtTime(500, t); gain.gain.setValueAtTime(0.15, t); gain.gain.linearRampToValueAtTime(0.01, t + 0.1); osc.start(t); osc.stop(t + 0.1); break;
-                case 'catch': osc.type = 'square'; osc.frequency.setValueAtTime(300, t); osc.frequency.exponentialRampToValueAtTime(150, t + 0.2); gain.gain.setValueAtTime(0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2); osc.start(t); osc.stop(t + 0.2); break;
-                case 'correct': osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, t); osc.frequency.setValueAtTime(659.25, t + 0.1); osc.frequency.setValueAtTime(783.99, t + 0.2); osc.frequency.setValueAtTime(1046.50, t + 0.3); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.5); osc.start(t); osc.stop(t + 0.5); break;
-                case 'wrong': osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, t); osc.frequency.linearRampToValueAtTime(150, t + 0.3); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.3); osc.start(t); osc.stop(t + 0.3); break;
-                case 'item': osc.type = 'sine'; osc.frequency.setValueAtTime(880, t); osc.frequency.setValueAtTime(1760, t + 0.1); gain.gain.setValueAtTime(0.15, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.4); osc.start(t); osc.stop(t + 0.4); break;
-                case 'penalty': osc.type = 'sawtooth'; osc.frequency.setValueAtTime(250, t); osc.frequency.setValueAtTime(200, t + 0.2); osc.frequency.setValueAtTime(150, t + 0.4); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.6); osc.start(t); osc.stop(t + 0.6); break;
-                case 'win': osc.type = 'triangle'; osc.frequency.setValueAtTime(440, t); osc.frequency.setValueAtTime(554.37, t + 0.2); osc.frequency.setValueAtTime(659.25, t + 0.4); osc.frequency.setValueAtTime(880, t + 0.6); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 1.5); osc.start(t); osc.stop(t + 1.5); break;
-            }
-        }
-
         // --- 1. 기초 설정 ---
         let selectedTeamCount = 6; 
         let selectedPieceCount = 2; 
@@ -529,6 +431,7 @@
         let gameState = 'WAIT_ROLL'; let currentRoll = 0; let bonusRoll = false;
         let rankings = [];
 
+        // 40문항 퀴즈 뱅크
         const quizBank = [
             { groupId: "wasp1", type: "객관식", question: "탐험 중 큰 말벌을 만났습니다! 가장 안전한 대피 방법은?", options: [ { text: "제자리에 엎드려 움직이지 않는다.", isCorrect: false, rationale: "벌은 사람의 머리를 공격하므로 엎드리면 매우 위험합니다." }, { text: "옷이나 가방을 크게 휘둘러서 쫓아낸다.", isCorrect: false, rationale: "크게 움직이면 벌이 화가 나서 더 많이 공격하게 됩니다." }, { text: "머리를 감싸고 20m 이상 빠르게 도망친다.", isCorrect: true, rationale: "정답! 말벌은 집에서 20m 이상 멀어지면 추격을 포기하는 습성이 있습니다." }, { text: "벌이 놀라지 않게 아주 천천히 뒷걸음질 친다.", isCorrect: false, rationale: "천천히 움직이다가 오히려 더 많이 쏘이게 됩니다." } ] },
             { groupId: "wasp2", type: "OX", question: "말벌을 만나면 가만히 서서 벌이 지나갈 때까지 기다려야 한다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "가만히 서 있으면 말벌의 표적이 되어 계속 공격을 받습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 말벌을 만나면 옷으로 머리를 감싸고 무조건 빠르게 뛰어서 도망쳐야 합니다." } ] },
@@ -583,14 +486,14 @@
             { type: 'bad', name: "🐝 말벌 떼 조우", desc: "놀라서 뒷걸음질! 2칸 뒤로 물러납니다.", effect: "backward_2" }
         ];
 
-        // --- 2. 정통 윷판 좌표 (출발: 좌하단 0) ---
+        // --- 2. 정통 윷판 좌표 (출발점: 좌하단 0) ---
         const nodeCoords = {
             0: [10, 90], 1: [26, 90], 2: [42, 90], 3: [58, 90], 4: [74, 90], 
             5: [90, 90], 6: [90, 74], 7: [90, 58], 8: [90, 42], 9: [90, 26], 
             10: [90, 10], 11: [74, 10], 12: [58, 10], 13: [42, 10], 14: [26, 10], 
             15: [10, 10], 16: [10, 26], 17: [10, 42], 18: [10, 58], 19: [10, 74], 
-            20: [76.6, 23.3], 21: [63.3, 36.6], 22: [50, 50], 23: [36.6, 63.3], 24: [23.3, 76.6],
-            25: [23.3, 23.3], 26: [36.6, 36.6], 27: [63.3, 63.3], 28: [76.6, 76.6],
+            20: [76.6, 76.6], 21: [63.3, 63.3], 22: [50, 50], 23: [36.6, 36.6], 24: [23.3, 23.3],
+            25: [76.6, 23.3], 26: [63.3, 36.6], 27: [36.6, 63.3], 28: [23.3, 76.6],
             30: [10, 90], 
             100: [100, 100] 
         };
@@ -602,12 +505,12 @@
             5:6, 6:7, 7:8, 8:9, 9:10, 
             10:11, 11:12, 12:13, 13:14, 14:15, 
             15:16, 16:17, 17:18, 18:19, 19:30,
-            20:21, 21:22, 23:24, 24:30,
-            25:26, 26:22, 27:28, 28:5,
+            20:21, 21:22, 23:24, 24:15, 
+            25:26, 26:22, 27:28, 28:30, 
             30:100 
         };
 
-        // --- 3. 화면 전환 함수 ---
+        // --- 3. 화면 전환 로직 ---
         function showEducation() {
             playSound('click');
             const teamInput = document.getElementById('team-count-input');
@@ -629,7 +532,6 @@
                     pieces.push({ id: `t${t.id}_p${i}`, teamId: t.id, pos: -1, history: [] });
                 }
             });
-            renderQuizBankList();
 
             document.getElementById('intro-screen').style.display = 'none';
             document.getElementById('education-screen').style.display = 'flex';
@@ -657,16 +559,11 @@
             document.getElementById('game-screen').classList.remove('flex');
             document.getElementById('intro-screen').style.display = 'flex';
             
-            rankings = [];
-            currentTeamIdx = 0;
-            gameState = 'WAIT_ROLL';
-            currentRoll = 0;
-            bonusRoll = false;
-            
+            rankings = []; currentTeamIdx = 0; gameState = 'WAIT_ROLL'; currentRoll = 0; bonusRoll = false;
             teams.forEach(t => { t.finished = false; t.items = []; });
         }
 
-        // --- 4. 윷판 렌더링 로직 ---
+        // --- 4. 윷판 렌더링 ---
         function initGame() {
             drawBoard(); renderDashboard(); updateTurnUI(); updatePiecesOnBoard();
             window.addEventListener('resize', () => updatePiecesOnBoard());
@@ -734,14 +631,14 @@
                 let piecesHtml = teamPieces.map(p => {
                     let status = "대기";
                     if (p.pos === 100) status = "완주";
-                    else if (p.pos === 30) status = "도착";
+                    else if (p.pos === 30) status = "도착대기";
                     else if (p.pos > 0) status = "탐험중";
                     
                     const isClickable = gameState === 'WAIT_PIECE' && currentTeamIdx === t.id && p.pos !== 100;
                     
                     return `<button id="dash_btn_${p.id}" onclick="if(gameState==='WAIT_PIECE' && currentTeamIdx===${t.id}) onPieceClicked('${p.id}')" 
                             class="w-full py-1.5 md:py-2.5 px-1 rounded-xl font-bold text-xs md:text-sm transition-all border ${p.pos === 100 ? 'bg-white/5 text-gray-500 border-white/5' : 'bg-white/10 hover:bg-white/20 border-white/20 text-white shadow-sm'} break-keep flex flex-col items-center justify-center ${isClickable ? 'ring-2 ring-emerald-400/50' : ''}">
-                            <span>U${p.id.split('_p')[1]}</span><span class="text-[10px] font-medium opacity-80" style="color:${p.pos === 100 ? '#6b7280' : t.color}">${status}</span>
+                            <span>U${p.id.split('_p')[1]}</span><span class="text-[10px] font-medium opacity-80 mt-0.5" style="color:${p.pos === 100 ? '#6b7280' : t.color}">${status}</span>
                         </button>`;
                 }).join('');
 
@@ -895,24 +792,33 @@
             });
         }
 
+        // [핵심 안정성] 지름길 및 빽도 완주 처리 알고리즘
         function calculateDestination(startPos, steps, historyArray) {
-            if (steps < 0) { 
-                if (historyArray.length > 0) {
-                    let newHistory = [...historyArray];
-                    for(let i=0; i < Math.abs(steps); i++) {
-                        if(newHistory.length > 0) newHistory.pop();
-                    }
-                    let dest;
-                    if (newHistory.length > 0) {
-                        dest = newHistory[newHistory.length - 1];
+            if (steps < 0) { // 빽도 및 아이템 후퇴
+                let newHistory = [...historyArray];
+                let absSteps = Math.abs(steps);
+                let dest = startPos;
+                
+                for(let i=0; i < absSteps; i++) {
+                    if(newHistory.length > 0) {
+                        newHistory.pop();
+                        dest = newHistory.length > 0 ? newHistory[newHistory.length - 1] : 0;
                     } else {
-                        dest = 30; 
-                        newHistory = [30];
+                        // 뒤로 더 밀려날 경우 (출발선 이전)
+                        if (dest === 0 || dest === -1) { dest = 19; newHistory = [19]; } 
+                        else if (dest === 30) { dest = 19; newHistory = [19]; }
+                        else {
+                            let prevKeys = Object.keys(nextNodeMap).find(k => nextNodeMap[k] === dest);
+                            if (prevKeys !== undefined) dest = parseInt(prevKeys);
+                            newHistory = [dest];
+                        }
                     }
-                    return { dest: dest, path: [], newHistory: newHistory };
-                } else {
-                    return { dest: 19, path: [], newHistory: [19] }; 
                 }
+                
+                // 출발선(0)으로 밀려오게 되면 완주 궤도(30)로 인정 (쾌속 완주 룰)
+                if (dest === 0) { dest = 30; newHistory = [30]; }
+                
+                return { dest: dest, path: [], newHistory: newHistory };
             }
 
             let newHistory = [...historyArray];
@@ -925,12 +831,13 @@
                 let nextNode;
                 
                 if (current === 30) nextNode = 100;
-                else if (current === 5 && isFirstStep) nextNode = 20; 
-                else if (current === 10 && isFirstStep) nextNode = 25; 
-                else if (current === 22 && isFirstStep) nextNode = 27; 
+                else if (current === 5 && isFirstStep) nextNode = 20; // 우하단 -> 중앙
+                else if (current === 10 && isFirstStep) nextNode = 25; // 우상단 -> 중앙
+                else if (current === 22 && isFirstStep) nextNode = 27; // 중앙 -> 출발점 방향(좌하단)
                 else if (current === 22 && !isFirstStep) {
-                    if (prevNode === 21 || prevNode === 20 || prevNode === 5) nextNode = 23; 
-                    else if (prevNode === 26 || prevNode === 25 || prevNode === 10) nextNode = 27; 
+                    // 중앙 통과 시 들어온 반대편 방향으로 직진
+                    if (prevNode === 21 || prevNode === 20 || prevNode === 5) nextNode = 23; // 우하->좌상
+                    else if (prevNode === 26 || prevNode === 25 || prevNode === 10) nextNode = 27; // 우상->좌하
                     else nextNode = 27; 
                 } else {
                     nextNode = nextNodeMap[current]; 
@@ -942,8 +849,6 @@
             }
             return { dest: current, path: [], newHistory: newHistory };
         }
-
-        let pendingMovingPieces = null; 
 
         function onPieceClicked(pieceId) {
             if (gameState !== 'WAIT_PIECE') return;
@@ -1143,7 +1048,7 @@
             renderDashboard();
         }
 
-        // --- 6. 강력한 스마트 중복 방지 퀴즈 로직 ---
+        // --- 6. 퀴즈 아카이브 & 출제 로직 ---
         function showQuiz() {
             let availableGroups = [...new Set(quizBank.map(q => q.groupId))].filter(g => !recentQuizGroups.includes(g));
             
@@ -1224,10 +1129,10 @@
         }
         function closeAlert() { document.getElementById('alert-modal').classList.add('hidden'); document.getElementById('alert-modal').classList.remove('flex'); }
 
-        // --- 7. 퀴즈 아카이브 ---
+        // --- 7. 퀴즈 아카이브 호출 및 렌더링 ---
         function renderQuizBankList() {
             const listContainer = document.getElementById('quiz-bank-list');
-            listContainer.innerHTML = '';
+            listContainer.innerHTML = ''; // 초기화
             
             quizBank.forEach((quiz, index) => {
                 const correctOpt = quiz.options.find(o => o.isCorrect);
@@ -1243,7 +1148,7 @@
         
         function openQuizBank() {
             playSound('click');
-            renderQuizBankList(); 
+            renderQuizBankList(); // 열 때마다 항상 DOM에 리스트를 그림
             document.getElementById('quiz-bank-screen').classList.remove('hidden');
             document.getElementById('quiz-bank-screen').classList.add('flex');
         }
