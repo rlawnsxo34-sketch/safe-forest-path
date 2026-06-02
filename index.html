@@ -151,13 +151,10 @@
 </head>
 <body class="flex flex-col h-screen w-screen relative">
 
-    <!-- 배경 장식 -->
     <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-emerald-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 pointer-events-none"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 pointer-events-none"></div>
 
-    <!-- ========================================== -->
-    <!-- 1. INTRO SCREEN                            -->
-    <!-- ========================================== -->
+    <!-- 1. 인트로 -->
     <div id="intro-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 fade-in overflow-y-auto">
         <button onclick="openQuizBank()" class="absolute top-4 right-4 md:top-8 md:right-8 bg-white/10 hover:bg-white/20 text-yellow-300 px-5 py-2.5 rounded-full border border-yellow-300/30 font-bold transition-all shadow-lg backdrop-blur-md mt-12 md:mt-0 text-sm md:text-base flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
@@ -195,11 +192,9 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 2. EDUCATION SCREEN                        -->
-    <!-- ========================================== -->
+    <!-- 1-1. 사전 교육 화면 -->
     <div id="education-screen" class="fixed inset-0 z-[95] hidden flex-col items-center justify-center p-4 fade-in">
-        <div class="glass-panel p-6 md:p-10 w-full max-w-5xl h-[90vh] flex flex-col border-emerald-500/30">
+        <div class="glass-panel p-6 md:p-10 w-full max-w-5xl h-[90vh] flex flex-col">
             <div class="flex items-center justify-center gap-3 mb-6 pb-4 border-b border-white/10 shrink-0">
                 <span class="text-3xl">📚</span>
                 <h2 class="text-2xl md:text-3xl font-bold text-white break-keep tracking-tight">탐험 전 필수 지식</h2>
@@ -216,7 +211,6 @@
                         <li><span class="text-pink-300 font-semibold">진드기 예방:</span> 풀밭에 앉지 말고, 긴 옷 착용 및 기피제를 사용하여 피부를 보호하세요.</li>
                     </ul>
                 </div>
-                
                 <div class="bg-black/20 p-5 rounded-2xl border border-white/5 hover:bg-black/30 transition-colors">
                     <h3 class="text-lg md:text-xl font-bold text-emerald-300 mb-3 flex items-center gap-2"><span>🌿</span> 2. 흔적 남기지 않기 (LNT)</h3>
                     <ul class="list-decimal list-inside pl-1 space-y-1.5 marker:text-gray-500" start="6">
@@ -227,7 +221,6 @@
                         <li><span class="text-emerald-200 font-semibold">탐방로 이용:</span> 식생 파괴를 막기 위해 반드시 지정된 탐방로만 이용하세요.</li>
                     </ul>
                 </div>
-
                 <div class="bg-black/20 p-5 rounded-2xl border border-white/5 hover:bg-black/30 transition-colors">
                     <h3 class="text-lg md:text-xl font-bold text-blue-300 mb-3 flex items-center gap-2"><span>🥾</span> 3. 안전 보행과 응급처치</h3>
                     <ul class="list-decimal list-inside pl-1 space-y-1.5 marker:text-gray-500" start="11">
@@ -238,7 +231,6 @@
                         <li><span class="text-blue-200 font-semibold">근육 경련(쥐):</span> 아픈 근육의 반대 방향으로 천천히 스트레칭하며 마사지하세요.</li>
                     </ul>
                 </div>
-
                 <div class="bg-black/20 p-5 rounded-2xl border border-white/5 hover:bg-black/30 transition-colors">
                     <h3 class="text-lg md:text-xl font-bold text-purple-300 mb-3 flex items-center gap-2"><span>🎒</span> 4. 장비 사용과 관찰 예절</h3>
                     <ul class="list-decimal list-inside pl-1 space-y-1.5 marker:text-gray-500" start="16">
@@ -259,24 +251,21 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 3. TUTORIAL SCREEN                         -->
-    <!-- ========================================== -->
+    <!-- 1-2. 튜토리얼 (규칙) -->
     <div id="tutorial-screen" class="fixed inset-0 z-[90] hidden flex-col items-center justify-center p-4 fade-in">
-        <div class="glass-panel p-6 md:p-10 w-full max-w-4xl border-cyan-500/30">
+        <div class="glass-panel p-6 md:p-10 w-full max-w-4xl">
             <h2 class="text-2xl md:text-4xl font-bold text-white mb-8 text-center break-keep tracking-tight">탐험 규칙 안내</h2>
             
             <div class="space-y-4 text-base md:text-lg text-gray-200 mb-8 font-medium">
                 <div class="flex items-start bg-red-900/40 p-4 rounded-xl border border-red-500/50 backdrop-blur-sm">
                     <span class="text-2xl mr-3 shrink-0">⚠️</span>
-                    <p class="leading-relaxed"><span class="text-red-300 font-bold">[현장 특별 수칙]</span> 원활한 탐험을 위해 윷/모를 던지거나 상대를 잡아도 보너스 기회는 <span class="text-white font-bold">1번만 중첩</span>되며, 윷 결과는 모아두지 않고 <span class="text-white font-bold">즉시 이동</span>에 사용합니다.</p>
+                    <p class="leading-relaxed"><span class="text-red-300 font-bold">[현장 특별 수칙]</span> 원활한 교육을 위해 윷/모를 던지거나 상대를 잡아도 <span class="text-white font-bold">보너스 기회는 1번만</span> 중첩되며, 결과는 모아두지 않고 <span class="text-white font-bold">즉시 이동</span>에 사용합니다.</p>
                 </div>
-
                 <div class="bg-black/20 p-5 rounded-xl border border-white/5 space-y-4">
                     <div class="flex items-start"><span class="text-xl mr-3 shrink-0">📍</span><p class="leading-relaxed">시작점은 <span class="text-emerald-300 font-bold">왼쪽 아래(START)</span>이며, 반시계 방향(오른쪽)으로 돕니다.</p></div>
-                    <div class="flex items-start"><span class="text-xl mr-3 shrink-0">✂️</span><p class="leading-relaxed"><span class="text-emerald-300 font-bold">우측 하단/우측 상단 모서리</span>에 정확히 도착하면 중앙 지름길로 꺾어갑니다.</p></div>
-                    <div class="flex items-start"><span class="text-xl mr-3 shrink-0">🎁</span><p class="leading-relaxed"><span class="text-yellow-300 font-bold">노란 칸(?)</span>은 퀴즈, <span class="text-pink-300 font-bold">분홍 칸(🎁)</span>은 예측불허 아이템 획득, <span class="text-yellow-500 font-bold">중앙(✨)</span>은 한 번 더!</p></div>
-                    <div class="flex items-start"><span class="text-xl mr-3 shrink-0">🏆</span><p class="leading-relaxed">말이 한 바퀴를 돌아 출발점에 도착 후, <span class="text-white font-bold">한 번 더 전진하여 완전히 통과</span>해야 성공입니다! (출발선에서 빽도로 후퇴해도 완주 궤도 진입!)</p></div>
+                    <div class="flex items-start"><span class="text-xl mr-3 shrink-0">✂️</span><p class="leading-relaxed"><span class="text-emerald-300 font-bold">우측 하단/우측 상단 모서리</span>에 <span class="text-white font-bold">정확히</span> 도착해야 중앙 지름길로 꺾어갑니다.</p></div>
+                    <div class="flex items-start"><span class="text-xl mr-3 shrink-0">🎁</span><p class="leading-relaxed"><span class="text-yellow-300 font-bold">노란 칸(?)</span>은 퀴즈, <span class="text-pink-300 font-bold">분홍 칸(🎁)</span>은 예측불허 아이템 획득, <span class="text-yellow-500 font-bold">중앙(✨)</span>은 보너스 턴!</p></div>
+                    <div class="flex items-start"><span class="text-xl mr-3 shrink-0">🏆</span><p class="leading-relaxed">말이 한 바퀴를 돌아 출발점에 도착 후, <span class="text-white font-bold">한 번 더 전진하여 완전히 통과</span>해야 성공입니다! (초반에 빽도로 후퇴해도 완주 궤도로 즉시 인정!)</p></div>
                 </div>
             </div>
             
@@ -286,14 +275,12 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 4. QUIZ BANK SCREEN                        -->
-    <!-- ========================================== -->
-    <div id="quiz-bank-screen" class="fixed inset-0 z-[150] hidden flex-col items-center justify-center p-4 fade-in bg-slate-900/95 backdrop-blur-xl">
+    <!-- 1-3. 퀴즈 아카이브 -->
+    <div id="quiz-bank-screen" class="fixed inset-0 z-[150] hidden flex-col items-center justify-center p-4 fade-in">
         <div class="glass-panel p-6 md:p-10 w-full max-w-5xl h-[90vh] flex flex-col border-yellow-500/30">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-white/10 shrink-0">
                 <h2 class="text-xl md:text-3xl font-bold text-yellow-300 break-keep flex items-center gap-2"><span>📖</span> 지식 아카이브 <span class="text-sm md:text-lg text-gray-400 font-normal">(총 40문항)</span></h2>
-                <button onclick="closeQuizBank()" class="glass-btn px-4 py-2 text-sm bg-white/5 hover:bg-red-500/50 hover:border-red-500/50 border-white/20">닫기 X</button>
+                <button onclick="closeQuizBank()" class="glass-btn px-4 py-2 text-sm bg-white/5 hover:bg-red-500/50 hover:border-red-500/50">닫기 X</button>
             </div>
             <div id="quiz-bank-list" class="modal-scroll-area flex-1 space-y-4 pr-2">
                 <!-- JS 렌더링 -->
@@ -301,9 +288,7 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 5. MAIN GAME SCREEN                        -->
-    <!-- ========================================== -->
+    <!-- 2. 메인 게임 -->
     <div id="game-screen" class="hidden w-full h-full flex-col z-[80] relative">
         <header class="bg-black/30 backdrop-blur-md border-b border-white/10 p-3 md:p-4 flex justify-between items-center shrink-0 z-50">
             <h1 class="text-lg md:text-2xl font-bold text-white truncate mr-2 tracking-tight flex items-center gap-2">
@@ -318,8 +303,7 @@
             </div>
         </header>
 
-        <main class="flex-1 flex flex-col md:flex-row min-h-0 relative z-40 overflow-hidden">
-            <!-- 윷판 (스크롤 방지, 고정) -->
+        <main class="flex-1 flex flex-col md:flex-row min-h-0 relative z-40">
             <div class="relative p-3 md:p-8 flex items-center justify-center shrink-0 h-[50vh] md:h-auto md:flex-[3]">
                 <div id="board-container">
                     <div id="yut-board">
@@ -328,11 +312,10 @@
                 </div>
             </div>
 
-            <!-- 컨트롤 패널 (모바일에서 자체 스크롤) -->
-            <div class="flex flex-col p-3 md:p-6 shrink-0 h-[45vh] md:h-auto md:flex-[1] lg:flex-[1.5] border-t md:border-t-0 md:border-l border-white/10 bg-black/20 backdrop-blur-sm overflow-hidden">
+            <div class="flex flex-col p-3 md:p-6 shrink-0 h-[50vh] md:h-auto md:flex-[1] lg:flex-[1.5] border-t md:border-t-0 md:border-l border-white/10 bg-black/20 backdrop-blur-sm min-h-0">
                 <div class="shrink-0 mb-4 bg-white/5 p-4 md:p-5 rounded-2xl border border-white/10 shadow-lg">
                     <h2 class="text-xs md:text-sm font-bold text-gray-400 mb-3 tracking-widest uppercase">Action</h2>
-                    <button onclick="rollDigitalYut()" id="btn-digital-roll" class="mb-3 w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-base md:text-lg rounded-xl hover:from-emerald-400 hover:to-teal-400 shadow-lg transition-transform active:scale-[0.98] flex items-center justify-center gap-2 border-0">
+                    <button onclick="rollDigitalYut()" id="btn-digital-roll" class="mb-3 w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-base md:text-lg rounded-xl hover:from-emerald-400 hover:to-teal-400 shadow-lg transition-transform active:scale-[0.98] flex items-center justify-center gap-2">
                         <span>🎲 화면에서 윷 던지기</span>
                     </button>
                     
@@ -347,7 +330,7 @@
                     <div id="roll-result" class="mt-3 text-center text-sm md:text-lg font-bold text-emerald-300 h-6">대기 중...</div>
                 </div>
 
-                <div class="flex-1 flex flex-col min-h-0 bg-white/5 p-3 md:p-4 rounded-2xl border border-white/10">
+                <div class="flex-1 flex flex-col min-h-0">
                     <h2 class="shrink-0 text-xs md:text-sm font-bold text-gray-400 mb-2 tracking-widest uppercase">Team Status</h2>
                     <div id="team-dashboard" class="flex-1 dashboard-scroll space-y-3 pb-2 pr-2 overflow-y-auto">
                         <!-- JS 렌더링 -->
@@ -357,9 +340,7 @@
         </main>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 6. MODALS                                  -->
-    <!-- ========================================== -->
+    <!-- 3. 모달창들 -->
     <div id="yut-animation-modal" class="fixed inset-0 z-[120] hidden flex-col items-center justify-center p-4 bg-slate-900/90 backdrop-blur-sm transition-opacity">
         <h2 class="text-2xl md:text-4xl font-bold text-emerald-400 mb-12 animate-pulse tracking-widest">결과 확인 중...</h2>
         <div id="yut-sticks-container" class="flex justify-center items-center gap-3 md:gap-5 perspective-[800px]"></div>
@@ -369,8 +350,8 @@
     <div id="alert-modal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
         <div class="glass-panel p-8 md:p-10 w-full max-w-sm md:max-w-md text-center fade-in border-t border-l border-white/20">
             <h2 id="alert-title" class="text-xl md:text-2xl font-bold text-white mb-4 break-keep"></h2>
-            <p id="alert-desc" class="text-base md:text-lg text-gray-300 mb-8 font-medium break-keep leading-relaxed"></p>
-            <button onclick="closeAlert()" class="glass-btn w-full py-3 md:py-4 bg-white/10 hover:bg-white/20 text-white text-lg font-bold border border-white/20">확인</button>
+            <p id="alert-desc" class="text-base md:text-lg text-gray-300 mb-8 font-medium break-keep leading-relaxed whitespace-pre-wrap"></p>
+            <button onclick="closeAlert()" class="glass-btn w-full py-3 md:py-4 bg-white/10 hover:bg-white/20 text-white text-lg font-bold">확인</button>
         </div>
     </div>
 
@@ -378,7 +359,7 @@
         <div class="glass-panel p-6 md:p-10 w-full max-w-3xl fade-in flex flex-col h-[85vh] md:h-auto max-h-[90vh]">
             <div class="flex items-center mb-6 shrink-0 border-b border-white/10 pb-4">
                 <span class="text-3xl md:text-4xl mr-4">💡</span>
-                <h2 class="text-xl md:text-2xl font-bold text-yellow-300 break-keep">지식 탐구 스페이지</h2>
+                <h2 class="text-xl md:text-2xl font-bold text-yellow-300 break-keep">지식 탐구 스테이지</h2>
             </div>
             
             <div class="modal-scroll-area flex-1 pr-2">
@@ -394,7 +375,7 @@
         </div>
     </div>
 
-    <!-- 명예의 전당 -->
+    <!-- 4. 명예의 전당 -->
     <div id="hall-of-fame-modal" class="fixed inset-0 z-[130] hidden flex-col items-center justify-center p-4 bg-slate-900/95 backdrop-blur-xl fade-in">
         <div class="glass-panel p-8 md:p-14 w-full max-w-2xl text-center border-yellow-500/30 shadow-[0_0_50px_rgba(234,179,8,0.2)]">
             <h2 class="text-3xl md:text-5xl font-black text-yellow-400 mb-6 break-keep tracking-tight glow-text-yellow">🏆 명예의 전당</h2>
@@ -414,11 +395,56 @@
     <!-- LOGIC SCRIPTS                              -->
     <!-- ========================================== -->
     <script>
+        // --- 0. 웹 오디오 사운드 시스템 ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        let isMuted = false;
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('mute-btn');
+            if (isMuted) {
+                btn.innerText = "🔇 소리 OFF";
+                btn.classList.add('text-gray-500');
+                btn.classList.remove('text-gray-300');
+            } else {
+                btn.innerText = "🔊 소리 ON";
+                btn.classList.remove('text-gray-500');
+                btn.classList.add('text-gray-300');
+                playSound('click'); 
+            }
+        }
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            playSound('click');
+        }
+
+        function playSound(type) {
+            if (!audioCtx || isMuted) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            const t = audioCtx.currentTime;
+
+            switch (type) {
+                case 'click': osc.type = 'sine'; osc.frequency.setValueAtTime(600, t); gain.gain.setValueAtTime(0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1); osc.start(t); osc.stop(t + 0.1); break;
+                case 'roll': osc.type = 'triangle'; osc.frequency.setValueAtTime(200, t); osc.frequency.exponentialRampToValueAtTime(100, t + 0.05); gain.gain.setValueAtTime(0.15, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05); osc.start(t); osc.stop(t + 0.05); break;
+                case 'move': osc.type = 'sine'; osc.frequency.setValueAtTime(500, t); gain.gain.setValueAtTime(0.15, t); gain.gain.linearRampToValueAtTime(0.01, t + 0.1); osc.start(t); osc.stop(t + 0.1); break;
+                case 'catch': osc.type = 'square'; osc.frequency.setValueAtTime(300, t); osc.frequency.exponentialRampToValueAtTime(150, t + 0.2); gain.gain.setValueAtTime(0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2); osc.start(t); osc.stop(t + 0.2); break;
+                case 'correct': osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, t); osc.frequency.setValueAtTime(659.25, t + 0.1); osc.frequency.setValueAtTime(783.99, t + 0.2); osc.frequency.setValueAtTime(1046.50, t + 0.3); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.5); osc.start(t); osc.stop(t + 0.5); break;
+                case 'wrong': osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, t); osc.frequency.linearRampToValueAtTime(150, t + 0.3); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.3); osc.start(t); osc.stop(t + 0.3); break;
+                case 'item': osc.type = 'sine'; osc.frequency.setValueAtTime(880, t); osc.frequency.setValueAtTime(1760, t + 0.1); gain.gain.setValueAtTime(0.15, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.4); osc.start(t); osc.stop(t + 0.4); break;
+                case 'penalty': osc.type = 'sawtooth'; osc.frequency.setValueAtTime(250, t); osc.frequency.setValueAtTime(200, t + 0.2); osc.frequency.setValueAtTime(150, t + 0.4); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.6); osc.start(t); osc.stop(t + 0.6); break;
+                case 'win': osc.type = 'triangle'; osc.frequency.setValueAtTime(440, t); osc.frequency.setValueAtTime(554.37, t + 0.2); osc.frequency.setValueAtTime(659.25, t + 0.4); osc.frequency.setValueAtTime(880, t + 0.6); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 1.5); osc.start(t); osc.stop(t + 1.5); break;
+            }
+        }
+
         // --- 1. 기초 설정 ---
         let selectedTeamCount = 6; 
         let selectedPieceCount = 2; 
         
-        // 세련된 파스텔 톤 팀 색상
         const allTeams = [
             { id: 0, name: "1조", color: "#f87171", char: "1", finished: false, items: [] },
             { id: 1, name: "2조", color: "#60a5fa", char: "2", finished: false, items: [] },
@@ -486,7 +512,7 @@
             { type: 'bad', name: "🐝 말벌 떼 조우", desc: "놀라서 뒷걸음질! 2칸 뒤로 물러납니다.", effect: "backward_2" }
         ];
 
-        // --- 2. 정통 윷판 좌표 (출발점: 좌하단 0) ---
+        // --- 2. 정통 윷판 좌표 (출발: 좌하단 0) ---
         const nodeCoords = {
             0: [10, 90], 1: [26, 90], 2: [42, 90], 3: [58, 90], 4: [74, 90], 
             5: [90, 90], 6: [90, 74], 7: [90, 58], 8: [90, 42], 9: [90, 26], 
@@ -792,31 +818,39 @@
             });
         }
 
-        // [핵심 안정성] 지름길 및 빽도 완주 처리 알고리즘
+        // --- [핵심 안정화] 윷판 이동 로직 (후퇴/빽도 예외 처리 완벽 적용) ---
         function calculateDestination(startPos, steps, historyArray) {
-            if (steps < 0) { // 빽도 및 아이템 후퇴
+            if (steps < 0) { 
                 let newHistory = [...historyArray];
                 let absSteps = Math.abs(steps);
                 let dest = startPos;
                 
                 for(let i=0; i < absSteps; i++) {
-                    if(newHistory.length > 0) {
+                    if(newHistory.length > 1) {
                         newHistory.pop();
-                        dest = newHistory.length > 0 ? newHistory[newHistory.length - 1] : 0;
+                        dest = newHistory[newHistory.length - 1];
+                    } else if(newHistory.length === 1) {
+                        // 딱 1칸 나간 상태에서 뒤로 감 -> 출발선 모서리(0)
+                        newHistory.pop();
+                        dest = 0;
                     } else {
                         // 뒤로 더 밀려날 경우 (출발선 이전)
-                        if (dest === 0 || dest === -1) { dest = 19; newHistory = [19]; } 
-                        else if (dest === 30) { dest = 19; newHistory = [19]; }
-                        else {
+                        if (dest === 0 || dest === -1 || dest === 30) { 
+                            dest = 19; 
+                        } else {
                             let prevKeys = Object.keys(nextNodeMap).find(k => nextNodeMap[k] === dest);
                             if (prevKeys !== undefined) dest = parseInt(prevKeys);
-                            newHistory = [dest];
+                            else dest = 0;
                         }
+                        newHistory = [dest];
                     }
                 }
                 
-                // 출발선(0)으로 밀려오게 되면 완주 궤도(30)로 인정 (쾌속 완주 룰)
-                if (dest === 0) { dest = 30; newHistory = [30]; }
+                // 출발선(0)으로 밀려오게 되면 완주 궤도(30)로 즉시 인정 (쾌속 완주 룰)
+                if (dest === 0 && startPos !== -1) { 
+                    dest = 30; 
+                    newHistory = [30]; 
+                }
                 
                 return { dest: dest, path: [], newHistory: newHistory };
             }
@@ -831,13 +865,12 @@
                 let nextNode;
                 
                 if (current === 30) nextNode = 100;
-                else if (current === 5 && isFirstStep) nextNode = 20; // 우하단 -> 중앙
-                else if (current === 10 && isFirstStep) nextNode = 25; // 우상단 -> 중앙
-                else if (current === 22 && isFirstStep) nextNode = 27; // 중앙 -> 출발점 방향(좌하단)
+                else if (current === 5 && isFirstStep) nextNode = 20; 
+                else if (current === 10 && isFirstStep) nextNode = 25; 
+                else if (current === 22 && isFirstStep) nextNode = 27; 
                 else if (current === 22 && !isFirstStep) {
-                    // 중앙 통과 시 들어온 반대편 방향으로 직진
-                    if (prevNode === 21 || prevNode === 20 || prevNode === 5) nextNode = 23; // 우하->좌상
-                    else if (prevNode === 26 || prevNode === 25 || prevNode === 10) nextNode = 27; // 우상->좌하
+                    if (prevNode === 21 || prevNode === 20 || prevNode === 5) nextNode = 23; 
+                    else if (prevNode === 26 || prevNode === 25 || prevNode === 10) nextNode = 27; 
                     else nextNode = 27; 
                 } else {
                     nextNode = nextNodeMap[current]; 
@@ -880,7 +913,8 @@
                 setTimeout(() => nextTurn(), 2000); return;
             }
 
-            const enemies = pieces.filter(p => p.pos === destPos && p.teamId !== currentTeamIdx && p.pos !== -1 && p.pos !== 100 && p.pos !== 30 && p.pos !== 0);
+            // 상대편 잡기 (0, 30은 예외 없이 보드 위에 있으면 모두 잡을 수 있게 수정)
+            const enemies = pieces.filter(p => p.pos === destPos && p.teamId !== currentTeamIdx && p.pos !== -1 && p.pos !== 100);
             if (enemies.length > 0) {
                 enemies.forEach(e => { e.pos = -1; e.history = []; });
                 updatePiecesOnBoard(); bonusRoll = true;
@@ -1121,18 +1155,20 @@
         }
 
         function closeQuiz() { playSound('click'); document.getElementById('quiz-modal').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('flex'); nextTurn(); }
+        
         function showAlert(title, desc) {
             document.getElementById('alert-title').innerText = title; document.getElementById('alert-desc').innerText = desc;
             
+            document.getElementById('alert-title').className = "text-2xl md:text-3xl font-black text-pink-400 mb-4 break-keep";
             const modal = document.getElementById('alert-modal'); modal.classList.remove('hidden'); modal.classList.add('flex');
             const btn = modal.querySelector('button'); btn.onclick = () => { playSound('click'); closeAlert(); };
         }
         function closeAlert() { document.getElementById('alert-modal').classList.add('hidden'); document.getElementById('alert-modal').classList.remove('flex'); }
 
-        // --- 7. 퀴즈 아카이브 호출 및 렌더링 ---
+        // --- 7. 퀴즈 아카이브 로드 ---
         function renderQuizBankList() {
             const listContainer = document.getElementById('quiz-bank-list');
-            listContainer.innerHTML = ''; // 초기화
+            listContainer.innerHTML = ''; 
             
             quizBank.forEach((quiz, index) => {
                 const correctOpt = quiz.options.find(o => o.isCorrect);
@@ -1148,7 +1184,7 @@
         
         function openQuizBank() {
             playSound('click');
-            renderQuizBankList(); // 열 때마다 항상 DOM에 리스트를 그림
+            renderQuizBankList(); 
             document.getElementById('quiz-bank-screen').classList.remove('hidden');
             document.getElementById('quiz-bank-screen').classList.add('flex');
         }
