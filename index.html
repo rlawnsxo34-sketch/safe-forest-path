@@ -23,7 +23,7 @@
             height: 100vh;
             margin: 0;
             padding: 0;
-            word-break: keep-all; /* 단어 단위 줄바꿈 유지 (프로젝터 가독성 핵심) */
+            word-break: keep-all; 
             -webkit-tap-highlight-color: transparent;
         }
         
@@ -344,6 +344,7 @@
             </h1>
             <div class="flex items-center gap-3 md:gap-5">
                 <button onclick="confirmReset()" class="glass-btn px-3 py-2 md:px-5 md:py-2.5 text-sm md:text-lg font-bold bg-red-500/20 border-red-500/30 text-red-200 hover:bg-red-500/40 flex items-center gap-1">🏠 <span class="hidden md:inline">처음으로</span></button>
+                <button onclick="confirmEndGame()" class="glass-btn px-3 py-2 md:px-5 md:py-2.5 text-sm md:text-lg font-bold bg-purple-500/20 border-purple-500/30 text-purple-200 hover:bg-purple-500/40 flex items-center gap-1">🛑 <span class="hidden md:inline">조기종료</span></button>
                 <button onclick="showInGameTutorial()" class="glass-btn px-3 py-2 md:px-5 md:py-2.5 text-sm md:text-lg font-bold bg-blue-500/20 border-blue-500/30 text-blue-200 hover:bg-blue-500/40 flex items-center gap-1">📖 규칙</button>
                 <button id="mute-btn" onclick="toggleMute()" class="glass-btn px-3 py-2 md:px-5 md:py-2.5 text-sm md:text-lg font-bold bg-white/10 border-white/20 text-gray-200 hover:text-white">🔊 소리 ON</button>
                 <div id="turn-indicator" class="text-lg md:text-2xl font-black bg-white/10 px-6 py-2 md:px-8 md:py-3 rounded-full border-2 border-white/20 shadow-inner text-white whitespace-nowrap">
@@ -394,11 +395,11 @@
     <!-- ========================================== -->
     <div id="confirm-modal" class="fixed inset-0 z-[200] hidden flex-col items-center justify-center p-6 bg-slate-900/90 backdrop-blur-md fade-in">
         <div class="glass-panel p-8 md:p-12 w-full max-w-lg text-center border-red-500/40 shadow-2xl">
-            <h2 class="text-2xl md:text-4xl font-bold text-white mb-6 break-keep tracking-tight">진행 상황 초기화</h2>
-            <p class="text-lg md:text-xl text-gray-300 mb-10 font-medium break-keep leading-relaxed">현재 진행 중인 게임을 완전히 종료하고 초기 화면으로 돌아가시겠습니까? (복구 불가)</p>
+            <h2 id="confirm-title" class="text-2xl md:text-4xl font-bold text-white mb-6 break-keep tracking-tight">확인</h2>
+            <p id="confirm-desc" class="text-lg md:text-xl text-gray-300 mb-10 font-medium break-keep leading-relaxed"></p>
             <div class="flex gap-4">
                 <button onclick="closeConfirm()" class="flex-1 glass-btn py-4 text-xl bg-white/10 hover:bg-white/20 text-gray-200">취소</button>
-                <button onclick="executeReset()" class="flex-1 glass-btn py-4 text-xl bg-red-500/40 hover:bg-red-500/60 text-white border-red-500/50">돌아가기</button>
+                <button id="confirm-action-btn" class="flex-1 glass-btn py-4 text-xl bg-red-500/40 hover:bg-red-500/60 text-white border-red-500/50">확인</button>
             </div>
         </div>
     </div>
@@ -486,6 +487,7 @@
             if (!audioCtx || isMuted) return;
             const t = audioCtx.currentTime;
             
+            // 신디사이저 기반 프리미엄 사운드 팩
             const playTone = (freq, type, attack, decay, sustain, release, vol) => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
@@ -534,7 +536,7 @@
         const quizBank = [
             { groupId: "wasp1", type: "객관식", question: "탐험 중 큰 말벌을 만났습니다! 가장 안전한 대피 방법은?", options: [ { text: "제자리에 엎드려 움직이지 않는다.", isCorrect: false, rationale: "벌은 사람의 머리를 공격하므로 엎드리면 매우 위험합니다." }, { text: "옷이나 가방을 크게 휘둘러서 쫓아낸다.", isCorrect: false, rationale: "크게 움직이면 벌이 화가 나서 더 많이 공격하게 됩니다." }, { text: "머리를 감싸고 20m 이상 빠르게 도망친다.", isCorrect: true, rationale: "정답! 말벌은 집에서 20m 이상 멀어지면 추격을 포기하는 습성이 있습니다." }, { text: "벌이 놀라지 않게 아주 천천히 뒷걸음질 친다.", isCorrect: false, rationale: "천천히 움직이다가 오히려 더 많이 쏘이게 됩니다." } ] },
             { groupId: "wasp2", type: "OX", question: "말벌을 만나면 가만히 서서 벌이 지나갈 때까지 기다려야 한다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "가만히 서 있으면 말벌의 표적이 되어 계속 공격을 받습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 말벌을 만나면 옷으로 머리를 감싸고 무조건 빠르게 뛰어서 도망쳐야 합니다." } ] },
-            { groupId: "wasp3", type: "객관식", question: "숲에 갈 때 말벌의 공격을 피하기 위해 입으면 좋은 옷 색깔은?", options: [ { text: "검은색, 어두운 갈색", isCorrect: false, rationale: "말벌의 천적인 곰, 오소리와 색이 비슷해 오히려 공격성을 자극합니다." }, { text: "빨간색", isCorrect: false, rationale: "어두운 계열에 속해 벌이 천적으로 오해할 수 있습니다." }, { text: "흰색, 밝은 노란색", isCorrect: true, rationale: "정답! 말벌은 밝은 색에는 공격성을 덜 보입니다." }, { text: "꽃무늬가 화려한 옷", isCorrect: false, rationale: "벌을 유인할 수 있어 피하는 것이 좋습니다." } ] },
+            { groupId: "wasp3", type: "객관식", question: "숲에 갈 때 말벌의 공격을 피하기 위해 입으면 좋은 옷 색깔은?", options: [ { text: "검은색, 어두운 갈색", isCorrect: false, rationale: "말벌의 천적인 곰, 오소리와 색이 비슷해 오히려 공격성을 자극합니다." }, { text: "빨간색", isCorrect: false, rationale: "어두운 계열에 속해 벌이 천적으로 오해할 수 있습니다." }, { text: "흰색, 밝은 노란색", isCorrect: true, rationale: "정답! 말벌은 밝은 색에는 공격성을 덜 보입니다." }, { text: "꽃무늬가 화려한 옷", isCorrect: false, rationale: "벌을 유인할 수 있어 피하는 정답입니다." } ] },
             { groupId: "wasp4", type: "OX", question: "달콤한 향수나 화장품 냄새는 숲속 벌들을 유인할 수 있다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 강한 향기는 곤충을 유인하므로 산행 전에는 향수 사용을 자제해야 합니다." }, { text: "X (아니다)", isCorrect: false, rationale: "벌들은 냄새에 아주 민감하여 샴푸나 향수 냄새에 쉽게 유인됩니다." } ] },
             { groupId: "boar1", type: "객관식", question: "숲길에서 멧돼지를 마주쳤을 때 올바른 행동은?", options: [ { text: "등을 보이고 큰 소리를 지르며 도망친다.", isCorrect: false, rationale: "등을 보이고 뛰면 멧돼지가 자신보다 약하다고 판단해 쫓아옵니다." }, { text: "돌이나 나뭇가지를 던져서 겁을 주어 쫓아낸다.", isCorrect: false, rationale: "멧돼지를 자극하여 무서운 공격을 받게 됩니다." }, { text: "눈을 똑바로 쳐다보며 바위나 나무 뒤로 조용히 숨는다.", isCorrect: true, rationale: "정답! 멧돼지의 시야에서 자연스럽게 벗어나는 것이 가장 안전한 대처법입니다." }, { text: "신기하므로 가까이 다가가 스마트폰으로 사진을 찍는다.", isCorrect: false, rationale: "매우 위험한 행동으로 큰 사고로 이어질 수 있습니다." } ] },
             { groupId: "boar2", type: "OX", question: "멧돼지는 등을 보이고 뛰어가면 겁을 먹고 도망간다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "등을 보이고 뛰면 자신보다 약하다고 생각하여 오히려 맹렬히 쫓아와 공격합니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 절대 등을 보이지 말고 천천히 뒷걸음질 치며 숨어야 합니다." } ] },
@@ -642,54 +644,6 @@
             document.getElementById('tutorial-screen').style.display = 'flex';
         }
 
-        function startGame() {
-            playSound('click');
-            document.getElementById('tutorial-screen').style.display = 'none';
-            document.getElementById('game-screen').classList.remove('hidden');
-            document.getElementById('game-screen').classList.add('flex');
-            initGame();
-            
-            // 게임 시작 시 1조 팝업
-            setTimeout(() => {
-                const team = teams[currentTeamIdx];
-                showTurnPopup(team.name, team.color);
-            }, 500);
-        }
-
-        function confirmReset() {
-            playSound('click');
-            document.getElementById('confirm-modal').classList.remove('hidden');
-            document.getElementById('confirm-modal').classList.add('flex');
-        }
-
-        function closeConfirm() {
-            playSound('click');
-            document.getElementById('confirm-modal').classList.add('hidden');
-            document.getElementById('confirm-modal').classList.remove('flex');
-        }
-
-        function executeReset() {
-            closeConfirm();
-            playSound('click');
-            document.getElementById('hall-of-fame-modal').classList.add('hidden');
-            document.getElementById('hall-of-fame-modal').classList.remove('flex');
-            document.getElementById('game-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('flex');
-            document.getElementById('intro-screen').style.display = 'flex';
-            
-            rankings = []; currentTeamIdx = 0; gameState = 'WAIT_ROLL'; currentRoll = 0; bonusRoll = false;
-            teams.forEach(t => { t.finished = false; t.items = []; });
-            pieces.forEach(p => { p.pos = -1; p.history = []; });
-            document.querySelectorAll('.piece').forEach(el => el.style.display = 'none');
-            
-            const resultDisplay = document.getElementById('roll-result');
-            resultDisplay.innerText = "대기 중...";
-            resultDisplay.className = "mt-4 text-center text-xl md:text-2xl font-black text-emerald-300 h-8 flex items-center justify-center";
-            
-            document.getElementById('btn-digital-roll').disabled = false;
-            document.querySelectorAll('.yut-btn').forEach(b => b.disabled = false);
-        }
-
         function showInGameTutorial() {
             playSound('click');
             document.getElementById('ingame-tutorial-modal').classList.remove('hidden');
@@ -701,14 +655,83 @@
             document.getElementById('ingame-tutorial-modal').classList.add('hidden');
             document.getElementById('ingame-tutorial-modal').classList.remove('flex');
         }
-        
+
+        function startGame() {
+            playSound('click');
+            document.getElementById('tutorial-screen').style.display = 'none';
+            document.getElementById('game-screen').classList.remove('hidden');
+            document.getElementById('game-screen').classList.add('flex');
+            initGame();
+            setTimeout(() => showTurnPopup(teams[currentTeamIdx].name, teams[currentTeamIdx].color), 500);
+        }
+
+        function openConfirmModal(title, desc, actionCallback) {
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-desc').innerText = desc;
+            const confirmBtn = document.getElementById('confirm-action-btn');
+            confirmBtn.onclick = () => {
+                playSound('click');
+                closeConfirm();
+                actionCallback();
+            };
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function closeConfirm() {
+            playSound('click');
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+        }
+
+        function confirmReset() {
+            playSound('click');
+            openConfirmModal("진행 상황 초기화", "현재 진행 중인 게임을 완전히 종료하고 초기 화면으로 돌아가시겠습니까? (복구 불가)", executeReset);
+        }
+
+        function confirmEndGame() {
+            playSound('click');
+            openConfirmModal("게임 조기 종료", "정말로 게임을 여기서 종료하고 전체 순위표를 확인하시겠습니까?", forceEndGame);
+        }
+
+        function executeReset() {
+            document.getElementById('hall-of-fame-modal').classList.add('hidden');
+            document.getElementById('hall-of-fame-modal').classList.remove('flex');
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('flex');
+            document.getElementById('intro-screen').style.display = 'flex';
+            
+            rankings = []; currentTeamIdx = 0; gameState = 'WAIT_ROLL'; currentRoll = 0; bonusRoll = false;
+            teams.forEach(t => { t.finished = false; t.items = []; });
+            pieces.forEach(p => { p.pos = -1; p.history = []; });
+        }
+
+        function forceEndGame() {
+            let remainingTeams = teams.filter(t => !t.finished);
+            remainingTeams.sort((a, b) => {
+                const getScore = (teamId) => {
+                    let score = 0;
+                    pieces.filter(p => p.teamId === teamId).forEach(p => {
+                        if (p.pos === 100) score += 1000;
+                        else if (p.pos === 30) score += 500;
+                        else if (p.pos > 0) score += p.pos;
+                    });
+                    return score;
+                };
+                return getScore(b.id) - getScore(a.id);
+            });
+            remainingTeams.forEach(t => rankings.push(t));
+            teams.forEach(t => t.finished = true);
+            showHallOfFame();
+        }
+
         function showTurnPopup(teamName, teamColor) {
             const toast = document.getElementById('turn-toast');
             const text = document.getElementById('turn-toast-text');
             text.innerHTML = `<span style="color: ${teamColor}">${teamName}</span> 차례입니다!`;
             
             toast.classList.remove('hidden');
-            void toast.offsetWidth; // trigger reflow
+            void toast.offsetWidth; 
             toast.classList.remove('opacity-0');
             toast.classList.add('flex');
             
@@ -944,19 +967,19 @@
         function highlightSelectablePieces() {
             pieces.forEach(p => {
                 const el = document.getElementById(`piece_${p.id}`);
-                // 대시보드 버튼의 하이라이트는 updateTurnUI()->renderDashboard() 에서 처리됨
+                const dashBtn = document.getElementById(`dash_btn_${p.id}`);
                 if (p.teamId === currentTeamIdx && p.pos !== 100) {
                     if(currentRoll === -1 && p.pos === -1) {
-                        el.classList.remove('clickable'); return;
+                        el.classList.remove('clickable'); dashBtn.classList.remove('border-cyan-400', 'shadow-[0_0_10px_#22d3ee]'); return;
                     }
                     if (el.style.display !== 'none') el.classList.add('clickable');
+                    dashBtn.classList.add('border-cyan-400', 'shadow-[0_0_10px_#22d3ee]');
                 } else {
-                    el.classList.remove('clickable'); 
+                    el.classList.remove('clickable'); dashBtn.classList.remove('border-cyan-400', 'shadow-[0_0_10px_#22d3ee]');
                 }
             });
         }
 
-        // --- [핵심 안정화] 윷판 이동 로직 (후퇴/빽도 예외 처리 완벽 적용) ---
         function calculateDestination(startPos, steps, historyArray) {
             if (steps < 0) { 
                 let newHistory = [...historyArray];
@@ -1131,6 +1154,11 @@
         }
 
         function nextTurn() {
+            // [버그 수정] 해당 조가 완전히 통과(100)해서 finished 처리되었을 때, 보너스 턴이 무한루프를 도는 현상 방지
+            if (teams[currentTeamIdx].finished) {
+                bonusRoll = false;
+            }
+
             if (bonusRoll) { bonusRoll = false; gameState = 'WAIT_ROLL'; updateTurnUI(); return; }
 
             let loopCount = 0;
@@ -1146,10 +1174,7 @@
 
             gameState = 'WAIT_ROLL'; 
             updateTurnUI();
-            
-            // 다음 턴 알림 팝업
-            const team = teams[currentTeamIdx];
-            showTurnPopup(team.name, team.color);
+            showTurnPopup(teams[currentTeamIdx].name, teams[currentTeamIdx].color);
         }
 
         function checkWinCondition() {
@@ -1157,6 +1182,7 @@
             if (teamPieces.every(p => p.pos === 100)) {
                 teams[currentTeamIdx].finished = true;
                 rankings.push(teams[currentTeamIdx]); 
+                bonusRoll = false; // 완주 즉시 보너스 초기화
             }
         }
         function isGameOver() { return teams.every(t => t.finished); }
