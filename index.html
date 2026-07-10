@@ -68,7 +68,6 @@
 
         #board-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
 
-        /* 노드(칸) 스타일 */
         .yut-node {
             position: absolute; transform: translate(-50%, -50%); border-radius: 50%;
             display: flex; align-items: center; justify-content: center; font-weight: 800; z-index: 10;
@@ -87,7 +86,6 @@
         .yut-node.event-node { background-color: rgba(250, 204, 21, 0.2); border-color: #facc15; color: #facc15; }
         .yut-node.item-node { background-color: rgba(244, 114, 182, 0.2); border-color: #f472b6; color: #f472b6; }
 
-        /* 캐릭터 이미지 게임 말 스타일 */
         .piece {
             position: absolute; width: 9%; height: 9%; border-radius: 50%;
             transform: translate(-50%, -50%); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -165,12 +163,13 @@
     <!-- ========================================== -->
     <div id="intro-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 fade-in overflow-y-auto">
         <button onclick="openQuizBank()" class="absolute top-4 right-4 md:top-8 md:right-8 bg-white/10 hover:bg-white/20 text-yellow-300 px-4 py-2 md:px-5 md:py-2.5 rounded-full border border-yellow-300/40 font-bold transition-all shadow-lg backdrop-blur-md mt-16 md:mt-0 text-sm md:text-base flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253"></path></svg>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             <span>퀴즈 아카이브</span>
         </button>
 
         <div class="text-center glass-panel p-8 md:p-12 w-full max-w-2xl my-auto">
-            <img src="1.png" alt="포이" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><circle cx=\'50\' cy=\'50\' r=\'40\' fill=\'#34d399\'/></svg>'" class="w-28 md:w-36 mx-auto mb-6 drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] animate-float">
+            <!-- 요청하신 기존 이미지 복구 적용 -->
+            <img src="계절(봄)_노르딕워킹 포이,마리.png" alt="포이 마리 노르딕워킹" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><circle cx=\'50\' cy=\'50\' r=\'40\' fill=\'#34d399\'/></svg>'" class="w-28 md:w-36 mx-auto mb-6 drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] animate-float">
             
             <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-3 break-keep tracking-tight">숲길 마스터</h1>
             <p class="text-lg md:text-xl lg:text-2xl text-emerald-300 mb-8 font-bold break-keep opacity-90">포이·마리의 안전 워킹 윷놀이</p>
@@ -341,7 +340,7 @@
                 에코 숲길 대탐험🌳
             </h1>
             <div class="flex items-center gap-2 md:gap-3">
-                <button onclick="showInGameTutorial()" class="glass-btn px-2 py-1.5 md:px-3 text-xs md:text-sm bg-blue-500/20 border-blue-500/30 text-blue-200 hover:bg-blue-500/40">📖 규칙</button>
+                <button onclick="showInGameTutorial()" class="glass-btn px-2 py-1.5 md:px-3 text-xs md:text-sm bg-blue-500/20 border-blue-500/30 text-blue-200 hover:bg-blue-500/40 flex items-center gap-1"><span class="text-sm md:text-base">📖</span> 규칙</button>
                 <button id="mute-btn" onclick="toggleMute()" class="glass-btn px-2 py-1.5 md:px-3 text-xs md:text-sm bg-white/10 border-white/20 text-gray-200 hover:text-white">🔊 소리 ON</button>
                 <div id="turn-indicator" class="text-sm md:text-base lg:text-lg font-bold bg-white/10 px-3 py-1.5 md:px-5 md:py-2 rounded-full border border-white/20 shadow-inner text-white whitespace-nowrap">
                     LOADING...
@@ -445,7 +444,7 @@
     <!-- LOGIC SCRIPTS                              -->
     <!-- ========================================== -->
     <script>
-        // --- 0. 웹 오디오 사운드 시스템 ---
+        // --- 0. 프리미엄 웹 오디오 사운드 시스템 ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx;
         let isMuted = false;
@@ -471,31 +470,79 @@
             playSound('click');
         }
 
+        // 투박한 소리 대신 신디사이저 느낌의 고급스러운 효과음 함수 적용
         function playSound(type) {
             if (!audioCtx || isMuted) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
             const t = audioCtx.currentTime;
 
+            const playTone = (freq, type, attack, decay, sustain, release, vol) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, t);
+                
+                gain.gain.setValueAtTime(0, t);
+                gain.gain.linearRampToValueAtTime(vol, t + attack);
+                gain.gain.exponentialRampToValueAtTime(Math.max(sustain * vol, 0.01), t + attack + decay);
+                gain.gain.setValueAtTime(Math.max(sustain * vol, 0.01), t + attack + decay + 0.1); 
+                gain.gain.exponentialRampToValueAtTime(0.001, t + attack + decay + 0.1 + release);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(t);
+                osc.stop(t + attack + decay + 0.1 + release + 0.1);
+            };
+
             switch (type) {
-                case 'click': osc.type = 'sine'; osc.frequency.setValueAtTime(600, t); gain.gain.setValueAtTime(0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1); osc.start(t); osc.stop(t + 0.1); break;
-                case 'roll': osc.type = 'triangle'; osc.frequency.setValueAtTime(200, t); osc.frequency.exponentialRampToValueAtTime(100, t + 0.05); gain.gain.setValueAtTime(0.15, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05); osc.start(t); osc.stop(t + 0.05); break;
-                case 'move': osc.type = 'sine'; osc.frequency.setValueAtTime(500, t); gain.gain.setValueAtTime(0.15, t); gain.gain.linearRampToValueAtTime(0.01, t + 0.1); osc.start(t); osc.stop(t + 0.1); break;
-                case 'catch': osc.type = 'square'; osc.frequency.setValueAtTime(300, t); osc.frequency.exponentialRampToValueAtTime(150, t + 0.2); gain.gain.setValueAtTime(0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2); osc.start(t); osc.stop(t + 0.2); break;
-                case 'correct': osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, t); osc.frequency.setValueAtTime(659.25, t + 0.1); osc.frequency.setValueAtTime(783.99, t + 0.2); osc.frequency.setValueAtTime(1046.50, t + 0.3); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.5); osc.start(t); osc.stop(t + 0.5); break;
-                case 'wrong': osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, t); osc.frequency.linearRampToValueAtTime(150, t + 0.3); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.3); osc.start(t); osc.stop(t + 0.3); break;
-                case 'item': osc.type = 'sine'; osc.frequency.setValueAtTime(880, t); osc.frequency.setValueAtTime(1760, t + 0.1); gain.gain.setValueAtTime(0.15, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.4); osc.start(t); osc.stop(t + 0.4); break;
-                case 'penalty': osc.type = 'sawtooth'; osc.frequency.setValueAtTime(250, t); osc.frequency.setValueAtTime(200, t + 0.2); osc.frequency.setValueAtTime(150, t + 0.4); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.6); osc.start(t); osc.stop(t + 0.6); break;
-                case 'win': osc.type = 'triangle'; osc.frequency.setValueAtTime(440, t); osc.frequency.setValueAtTime(554.37, t + 0.2); osc.frequency.setValueAtTime(659.25, t + 0.4); osc.frequency.setValueAtTime(880, t + 0.6); gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 1.5); osc.start(t); osc.stop(t + 1.5); break;
+                case 'click':
+                    playTone(800, 'sine', 0.01, 0.05, 0, 0.05, 0.15);
+                    playTone(1200, 'sine', 0.01, 0.03, 0, 0.05, 0.1); 
+                    break;
+                case 'roll':
+                    playTone(300, 'triangle', 0.02, 0.05, 0, 0.05, 0.1);
+                    break;
+                case 'move':
+                    playTone(500, 'sine', 0.02, 0.1, 0.2, 0.1, 0.15);
+                    playTone(750, 'sine', 0.02, 0.1, 0.1, 0.1, 0.05); 
+                    break;
+                case 'catch':
+                    playTone(150, 'square', 0.01, 0.2, 0, 0.2, 0.2);
+                    playTone(100, 'sawtooth', 0.01, 0.2, 0, 0.2, 0.2);
+                    break;
+                case 'correct':
+                    playTone(523.25, 'sine', 0.05, 0.1, 0.5, 0.3, 0.15); 
+                    setTimeout(() => playTone(659.25, 'sine', 0.05, 0.1, 0.5, 0.3, 0.15), 100); 
+                    setTimeout(() => playTone(783.99, 'sine', 0.05, 0.1, 0.5, 0.3, 0.15), 200); 
+                    setTimeout(() => playTone(1046.50, 'sine', 0.05, 0.2, 0.5, 0.5, 0.15), 300); 
+                    break;
+                case 'wrong':
+                    playTone(200, 'sawtooth', 0.1, 0.2, 0.5, 0.3, 0.1);
+                    playTone(210, 'sawtooth', 0.1, 0.2, 0.5, 0.3, 0.1); 
+                    break;
+                case 'item':
+                    playTone(880, 'sine', 0.05, 0.1, 0.5, 0.5, 0.1);
+                    setTimeout(() => playTone(1760, 'sine', 0.05, 0.1, 0.5, 0.5, 0.1), 150);
+                    setTimeout(() => playTone(3520, 'sine', 0.05, 0.3, 0, 0.5, 0.05), 300); 
+                    break;
+                case 'penalty':
+                    playTone(250, 'square', 0.1, 0.2, 0.5, 0.3, 0.15);
+                    setTimeout(() => playTone(200, 'square', 0.1, 0.2, 0.5, 0.3, 0.15), 200);
+                    setTimeout(() => playTone(150, 'square', 0.1, 0.4, 0, 0.5, 0.15), 400);
+                    break;
+                case 'win':
+                    playTone(440, 'triangle', 0.1, 0.2, 0.5, 0.5, 0.15);
+                    setTimeout(() => playTone(554.37, 'triangle', 0.1, 0.2, 0.5, 0.5, 0.15), 200);
+                    setTimeout(() => playTone(659.25, 'triangle', 0.1, 0.2, 0.5, 0.5, 0.15), 400);
+                    setTimeout(() => playTone(880, 'triangle', 0.1, 0.4, 0.5, 1.0, 0.15), 600);
+                    break;
             }
         }
 
-        // --- 1. 기초 설정 ---
+        // --- 1. 기초 설정 (이미지 맵핑 적용) ---
         let selectedTeamCount = 6; 
         let selectedPieceCount = 2; 
         
-        // 아이콘 이미지 맵핑 (1~6조)
+        // 아이콘 이미지 맵핑 (1~6조 첨부파일 적용)
         const allTeams = [
             { id: 0, name: "1조", color: "#f87171", img: "1.png", finished: false, items: [] },
             { id: 1, name: "2조", color: "#60a5fa", img: "2.png", finished: false, items: [] },
@@ -618,17 +665,6 @@
             document.getElementById('education-screen').style.display = 'none';
             document.getElementById('tutorial-screen').style.display = 'flex';
         }
-        
-        function showInGameTutorial() {
-            playSound('click');
-            document.getElementById('ingame-tutorial-modal').classList.remove('hidden');
-            document.getElementById('ingame-tutorial-modal').classList.add('flex');
-        }
-        function closeInGameTutorial() {
-            playSound('click');
-            document.getElementById('ingame-tutorial-modal').classList.add('hidden');
-            document.getElementById('ingame-tutorial-modal').classList.remove('flex');
-        }
 
         function startGame() {
             playSound('click');
@@ -648,6 +684,19 @@
             
             rankings = []; currentTeamIdx = 0; gameState = 'WAIT_ROLL'; currentRoll = 0; bonusRoll = false;
             teams.forEach(t => { t.finished = false; t.items = []; });
+        }
+
+        // 인게임 규칙 모달 제어
+        function showInGameTutorial() {
+            playSound('click');
+            document.getElementById('ingame-tutorial-modal').classList.remove('hidden');
+            document.getElementById('ingame-tutorial-modal').classList.add('flex');
+        }
+
+        function closeInGameTutorial() {
+            playSound('click');
+            document.getElementById('ingame-tutorial-modal').classList.add('hidden');
+            document.getElementById('ingame-tutorial-modal').classList.remove('flex');
         }
 
         // --- 4. 윷판 렌더링 ---
@@ -693,7 +742,7 @@
                 pDiv.style.display = "none"; 
                 
                 pDiv.innerHTML = `
-                    <img src="${teams[p.teamId].img}" alt="${teams[p.teamId].name}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><circle cx=\\'50\\' cy=\\'50\\' r=\\'40\\' fill=\\'${teams[p.teamId].color}\\'/></svg>'">
+                    <img src="${teams[p.teamId].img}" class="w-full h-full object-contain rounded-full bg-white/90 border-2 border-white/50" alt="말" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><circle cx=\\'50\\' cy=\\'50\\' r=\\'40\\' fill=\\'${teams[p.teamId].color}\\'/></svg>'">
                     <div id="badge_${p.id}" class="piggyback-badge hidden">x2</div>
                 `;
                 
@@ -724,8 +773,8 @@
                     const isClickable = gameState === 'WAIT_PIECE' && currentTeamIdx === t.id && p.pos !== 100;
                     
                     return `<button id="dash_btn_${p.id}" onclick="if(gameState==='WAIT_PIECE' && currentTeamIdx===${t.id}) onPieceClicked('${p.id}')" 
-                            class="w-full py-1 md:py-2 px-1 rounded-xl font-bold text-xs md:text-sm transition-all border ${p.pos === 100 ? 'bg-white/5 text-gray-500 border-white/5' : 'bg-white/10 hover:bg-white/20 border-white/20 text-white shadow-sm'} break-keep flex flex-col items-center justify-center ${isClickable ? 'ring-2 ring-emerald-400/50' : ''}">
-                            <img src="${t.img}" class="w-6 h-6 md:w-8 md:h-8 mb-1 object-contain rounded-full border border-white/20 bg-white/10" onerror="this.style.display='none'">
+                            class="w-full py-1.5 md:py-2.5 px-1 rounded-xl font-bold text-xs md:text-sm transition-all border ${p.pos === 100 ? 'bg-white/5 text-gray-500 border-white/5' : 'bg-white/10 hover:bg-white/20 border-white/20 text-white shadow-sm'} break-keep flex flex-col items-center justify-center gap-1 ${isClickable ? 'ring-2 ring-emerald-400/50 shadow-[0_0_10px_rgba(52,211,153,0.3)]' : ''}">
+                            <img src="${t.img}" class="w-6 h-6 md:w-8 md:h-8 object-contain rounded-full border border-white/30 bg-white/90" alt="말" onerror="this.style.display='none'">
                             <span class="text-[10px] md:text-xs font-medium opacity-80" style="color:${p.pos === 100 ? '#6b7280' : t.color}">${status}</span>
                         </button>`;
                 }).join('');
@@ -736,13 +785,13 @@
                 const rankIndex = rankings.findIndex(r => r.id === t.id);
                 if (rankIndex > -1) {
                     const colors = ['bg-yellow-500 text-black', 'bg-gray-300 text-black', 'bg-yellow-700 text-white', 'bg-emerald-500 text-white', 'bg-emerald-600 text-white', 'bg-emerald-700 text-white'];
-                    rankBadge = `<span class="px-2 py-0.5 rounded-full ${colors[rankIndex]} text-xs md:text-sm ml-2 font-bold shadow-sm">${rankIndex + 1}위</span>`;
+                    rankBadge = `<span class="px-2 py-0.5 rounded-full ${colors[rankIndex]} text-xs ml-2 font-bold shadow-sm">${rankIndex + 1}위</span>`;
                 }
 
                 dashboard.innerHTML += `
                     <div class="p-3 md:p-4 rounded-2xl border transition-all duration-300 ${currentTeamIdx === t.id && !t.finished ? 'border-emerald-400 bg-emerald-900/20 shadow-[0_0_15px_rgba(52,211,153,0.15)]' : 'border-white/10 bg-white/5 hover:bg-white/10'}">
                         <div class="flex items-center justify-between mb-3">
-                            <div class="text-base md:text-xl font-bold flex items-center gap-2 break-keep" style="color: ${t.color}">${t.name} ${rankBadge}</div>
+                            <div class="text-sm md:text-base font-bold flex items-center gap-2 break-keep" style="color: ${t.color}">${t.name} ${rankBadge}</div>
                             <div class="flex gap-1 overflow-x-auto">${itemsHtml}</div>
                         </div>
                         <div class="grid ${gridCols} gap-2">${piecesHtml}</div>
@@ -763,11 +812,11 @@
             if(gameState === 'WAIT_ROLL') {
                 buttons.forEach(b => b.disabled = false); rollBtn.disabled = false;
                 resultDisplay.innerText = bonusRoll ? "한 번 더 던지세요!" : "윷을 던지세요";
-                resultDisplay.className = "mt-2 md:mt-3 text-center text-sm md:text-xl font-bold text-emerald-400 animate-pulse break-keep";
+                resultDisplay.className = "mt-3 md:mt-4 text-center text-sm md:text-base font-bold text-emerald-400 animate-pulse break-keep";
             } else {
                 buttons.forEach(b => b.disabled = true); rollBtn.disabled = true;
                 resultDisplay.innerText = "이동할 말을 선택하세요";
-                resultDisplay.className = "mt-2 md:mt-3 text-center text-sm md:text-xl font-bold text-yellow-300 break-keep";
+                resultDisplay.className = "mt-3 md:mt-4 text-center text-sm md:text-base font-bold text-yellow-300 break-keep";
             }
             renderDashboard();
         }
@@ -880,7 +929,7 @@
             });
         }
 
-        // --- [핵심 안정화] 윷판 이동 로직 (후퇴/빽도 예외 처리 완벽 적용) ---
+        // [핵심 안정성] 지름길 및 빽도 완주 처리 알고리즘
         function calculateDestination(startPos, steps, historyArray) {
             if (steps < 0) { 
                 let newHistory = [...historyArray];
@@ -942,7 +991,7 @@
             return { dest: current, path: [], newHistory: newHistory };
         }
 
-        // 상대방 잡기 위치 체크 (0과 30은 겹치게 처리)
+        // 포획 룰을 위한 동일 위치 판정 (0과 30은 같은 위치)
         function isSamePosition(pos1, pos2) {
             if (pos1 === pos2) return true;
             if ((pos1 === 0 && pos2 === 30) || (pos1 === 30 && pos2 === 0)) return true;
@@ -979,7 +1028,7 @@
                 setTimeout(() => nextTurn(), 2000); return;
             }
 
-            // [안정성 수정] 0(출발대기)과 30(도착대기)을 포함하여 겹치는 적을 완벽하게 잡기
+            // [안정성 수정] 0(출발대기)과 30(도착대기)을 포함하여 판 위에 있는 모든 적을 잡을 수 있게 수정
             const enemies = pieces.filter(p => p.teamId !== currentTeamIdx && p.pos !== -1 && p.pos !== 100 && isSamePosition(p.pos, destPos));
             
             if (enemies.length > 0) {
@@ -988,10 +1037,10 @@
                 
                 if (destPos === 22 && !fromItem) {
                     playSound('catch');
-                    showAlert("💥 잡았습니다! & ✨ 방건 도착!", "적을 출발선으로 돌려보내고 방건의 축복까지!\n윷을 한 번 더 던집니다!");
+                    showAlert("💥 잡았습니다! & ✨ 방건 도착!", "적을 돌려보내고 방건의 축복까지! 윷을 한 번 더 던집니다!");
                 } else {
                     playSound('catch');
-                    showAlert("💥 잡았습니다!", "적을 출발선으로 돌려보내고 윷을 한 번 더 던집니다!");
+                    showAlert("💥 HIT!", "적을 출발선으로 돌려보내고 윷을 한 번 더 던집니다!");
                 }
                 setTimeout(() => nextTurn(), 2500); return;
             }
@@ -1015,7 +1064,7 @@
                 if (randomItem.effect === "bonus") bonusRoll = true;
 
                 document.getElementById('alert-title').innerText = randomItem.type === 'good' ? "🎁 아이템 획득!" : "⚠️ 돌발 상황!";
-                document.getElementById('alert-title').className = randomItem.type === 'good' ? "text-2xl md:text-3xl font-black text-pink-400 mb-4 break-keep" : "text-2xl md:text-3xl font-black text-red-500 mb-4 break-keep";
+                document.getElementById('alert-title').className = randomItem.type === 'good' ? "text-xl md:text-2xl font-bold text-pink-400 mb-4 break-keep" : "text-xl md:text-2xl font-bold text-red-500 mb-4 break-keep";
                 
                 document.getElementById('alert-desc').innerText = effectDesc;
                 const modal = document.getElementById('alert-modal');
@@ -1091,7 +1140,7 @@
             const colors = ['text-yellow-400 text-3xl md:text-4xl glow-text-yellow', 'text-gray-300 text-2xl md:text-3xl', 'text-yellow-600 text-xl md:text-2xl', 'text-emerald-400 text-lg md:text-xl', 'text-emerald-500 text-base md:text-lg', 'text-emerald-600 text-base md:text-lg'];
 
             rankings.forEach((team, idx) => {
-                list.innerHTML += `<div class="font-black ${colors[idx] || 'text-white'} break-keep bg-white/5 px-6 py-4 rounded-2xl w-full border border-white/10 shadow-sm">${idx + 1}위 : ${team.name} 🎉</div>`;
+                list.innerHTML += `<div class="font-black ${colors[idx] || 'text-white'} break-keep bg-white/5 px-6 py-3 rounded-2xl w-full border border-white/10 shadow-sm">${idx + 1}위 : ${team.name} 🎉</div>`;
             });
 
             modal.classList.remove('hidden');
@@ -1149,7 +1198,7 @@
             renderDashboard();
         }
 
-        // --- 6. 강력한 스마트 중복 방지 퀴즈 로직 ---
+        // --- 6. 퀴즈 아카이브 & 출제 로직 (에러 수정) ---
         function showQuiz() {
             let availableGroups = [...new Set(quizBank.map(q => q.groupId))].filter(g => !recentQuizGroups.includes(g));
             
@@ -1179,7 +1228,7 @@
 
             selectedQuiz.options.forEach((opt) => {
                 const btn = document.createElement('button');
-                btn.className = "w-full text-left p-4 md:p-5 text-base md:text-xl font-bold rounded-xl glass-btn bg-white/5 border border-white/10 hover:bg-white/10 break-keep";
+                btn.className = "w-full text-left p-4 md:p-5 text-base md:text-lg font-bold rounded-xl glass-btn bg-white/5 border border-white/10 hover:bg-white/10 break-keep";
                 btn.innerText = opt.text;
                 btn.onclick = () => handleQuizAnswer(opt, btn, optionsContainer);
                 optionsContainer.appendChild(btn);
@@ -1232,7 +1281,7 @@
         }
         function closeAlert() { document.getElementById('alert-modal').classList.add('hidden'); document.getElementById('alert-modal').classList.remove('flex'); }
 
-        // --- 7. 퀴즈 아카이브 로드 ---
+        // --- 7. 퀴즈 아카이브 호출 맵핑 ---
         function renderQuizBankList() {
             const listContainer = document.getElementById('quiz-bank-list');
             listContainer.innerHTML = ''; 
@@ -1240,27 +1289,30 @@
             quizBank.forEach((quiz, index) => {
                 const correctOpt = quiz.options.find(o => o.isCorrect);
                 listContainer.innerHTML += `
-                    <div class="bg-black/60 border border-white/20 p-5 md:p-6 rounded-2xl shadow-sm mb-6">
-                        <h3 class="text-base md:text-xl font-bold text-white mb-4 break-keep leading-snug">Q${index+1}. ${quiz.question}</h3>
-                        <p class="text-base md:text-lg font-bold text-emerald-400 mb-3 break-keep">정답: ${correctOpt.text}</p>
-                        <p class="text-sm md:text-base text-gray-300 break-keep bg-black/80 p-4 rounded-xl border-l-4 border-emerald-500 leading-relaxed">해설: ${correctOpt.rationale}</p>
+                    <div class="bg-black/60 border border-white/20 p-5 md:p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-base md:text-xl font-bold text-white mb-4 break-keep">Q${index+1}. ${quiz.question}</h3>
+                        <p class="text-sm md:text-lg font-bold text-emerald-400 mb-2 break-keep">정답: ${correctOpt.text}</p>
+                        <p class="text-xs md:text-base text-gray-300 break-keep bg-black/80 p-3 rounded-xl border-l-4 border-emerald-500 leading-relaxed">해설: ${correctOpt.rationale}</p>
                     </div>
                 `;
             });
         }
         
+        // 전역 스코프에 노출하여 HTML 버튼 onClick 이벤트가 인식하도록 함
         function openQuizBank() {
             playSound('click');
             renderQuizBankList(); 
             document.getElementById('quiz-bank-screen').classList.remove('hidden');
             document.getElementById('quiz-bank-screen').classList.add('flex');
         }
+        window.openQuizBank = openQuizBank;
         
         function closeQuizBank() {
             playSound('click');
             document.getElementById('quiz-bank-screen').classList.add('hidden');
             document.getElementById('quiz-bank-screen').classList.remove('flex');
         }
+        window.closeQuizBank = closeQuizBank;
 
         document.addEventListener('dblclick', function(event) { event.preventDefault(); }, { passive: false });
     </script>
