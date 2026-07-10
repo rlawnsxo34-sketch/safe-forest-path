@@ -153,6 +153,11 @@
 </head>
 <body class="flex flex-col h-screen w-screen relative text-base md:text-lg">
 
+    <!-- 팝업: 차례 안내 (토스트) -->
+    <div id="turn-toast" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[200] hidden flex-col items-center justify-center p-8 md:p-12 rounded-3xl border-2 border-white/20 shadow-[0_10px_40px_rgba(0,0,0,0.6)] bg-black/85 backdrop-blur-lg pointer-events-none transition-opacity duration-300 opacity-0">
+        <h2 id="turn-toast-text" class="text-4xl md:text-6xl font-black text-white break-keep tracking-tight text-center drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]"></h2>
+    </div>
+
     <!-- 배경 장식 -->
     <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-emerald-600 rounded-full mix-blend-multiply filter blur-[150px] opacity-30 pointer-events-none"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600 rounded-full mix-blend-multiply filter blur-[150px] opacity-20 pointer-events-none"></div>
@@ -278,7 +283,7 @@
                     <div class="flex items-start"><span class="text-2xl md:text-3xl mr-4 shrink-0">📍</span><p>시작점은 <span class="text-emerald-400 font-bold">왼쪽 아래(START)</span>이며, 반시계 방향(오른쪽)으로 돕니다.</p></div>
                     <div class="flex items-start"><span class="text-2xl md:text-3xl mr-4 shrink-0">✂️</span><p><span class="text-emerald-400 font-bold">우측 하단/우측 상단 모서리</span>에 정확히 도착하면 중앙 지름길로 꺾어갑니다.</p></div>
                     <div class="flex items-start"><span class="text-2xl md:text-3xl mr-4 shrink-0">🎁</span><p><span class="text-yellow-400 font-bold">노란 칸(?)</span>은 퀴즈, <span class="text-pink-400 font-bold">분홍 칸(🎁)</span>은 아이템, <span class="text-yellow-500 font-bold">중앙(✨)</span>은 보너스 턴!</p></div>
-                    <div class="flex items-start"><span class="text-2xl md:text-3xl mr-4 shrink-0">🏆</span><p>말이 한 바퀴를 돌아 출발점에 다시 도착 후, <span class="text-white font-bold">한 번 더 전진하여 완전히 통과</span>해야 성공입니다! <span class="text-sm md:text-lg text-gray-400 block">(초반에 빽도로 밀려나면 즉시 완주 궤도 진입!)</span></p></div>
+                    <div class="flex items-start"><span class="text-2xl md:text-3xl mr-4 shrink-0">🏆</span><p>말이 한 바퀴를 돌아 출발점에 도착 후, <span class="text-white font-bold">한 번 더 전진하여 완전히 통과</span>해야 성공입니다! <span class="text-sm md:text-lg text-gray-400 block">(초반에 빽도로 밀려나면 즉시 완주 궤도 진입!)</span></p></div>
                 </div>
             </div>
             
@@ -288,6 +293,7 @@
         </div>
     </div>
 
+    <!-- 인게임 내 규칙 모달 -->
     <div id="ingame-tutorial-modal" class="fixed inset-0 z-[150] hidden flex-col items-center justify-center p-6 bg-slate-900/90 backdrop-blur-md fade-in">
         <div class="glass-panel p-8 md:p-12 w-full max-w-5xl border-cyan-500/40 shadow-2xl">
             <h2 class="text-3xl md:text-5xl font-bold text-white mb-10 text-center break-keep tracking-tight">📖 윷놀이 현장 규칙</h2>
@@ -497,45 +503,22 @@
             };
 
             switch (type) {
-                case 'click':
-                    playTone(800, 'sine', 0.01, 0.05, 0, 0.05, 0.15);
-                    break;
-                case 'roll':
-                    playTone(300, 'triangle', 0.02, 0.05, 0, 0.05, 0.1);
-                    break;
-                case 'move':
-                    playTone(500, 'sine', 0.02, 0.1, 0.2, 0.1, 0.15);
-                    break;
-                case 'catch':
-                    playTone(150, 'square', 0.01, 0.2, 0, 0.2, 0.2);
-                    break;
-                case 'correct':
-                    playTone(523.25, 'sine', 0.05, 0.1, 0.5, 0.3, 0.15); 
-                    setTimeout(() => playTone(659.25, 'sine', 0.05, 0.1, 0.5, 0.3, 0.15), 100); 
-                    setTimeout(() => playTone(1046.50, 'sine', 0.05, 0.2, 0.5, 0.5, 0.15), 200); 
-                    break;
-                case 'wrong':
-                    playTone(200, 'sawtooth', 0.1, 0.2, 0.5, 0.3, 0.1);
-                    break;
-                case 'item':
-                    playTone(880, 'sine', 0.05, 0.1, 0.5, 0.5, 0.1);
-                    setTimeout(() => playTone(1760, 'sine', 0.05, 0.3, 0, 0.5, 0.05), 150); 
-                    break;
-                case 'penalty':
-                    playTone(250, 'square', 0.1, 0.2, 0.5, 0.3, 0.15);
-                    setTimeout(() => playTone(150, 'square', 0.1, 0.4, 0, 0.5, 0.15), 200);
-                    break;
-                case 'win':
-                    playTone(440, 'triangle', 0.1, 0.2, 0.5, 0.5, 0.15);
-                    setTimeout(() => playTone(554.37, 'triangle', 0.1, 0.2, 0.5, 0.5, 0.15), 200);
-                    setTimeout(() => playTone(880, 'triangle', 0.1, 0.4, 0.5, 1.0, 0.15), 400);
-                    break;
+                case 'click': playTone(800, 'sine', 0.01, 0.05, 0, 0.05, 0.15); break;
+                case 'roll': playTone(300, 'triangle', 0.02, 0.05, 0, 0.05, 0.1); break;
+                case 'move': playTone(500, 'sine', 0.02, 0.1, 0.2, 0.1, 0.15); break;
+                case 'catch': playTone(150, 'square', 0.01, 0.2, 0, 0.2, 0.2); break;
+                case 'correct': playTone(523.25, 'sine', 0.05, 0.1, 0.5, 0.3, 0.15); setTimeout(() => playTone(659.25, 'sine', 0.05, 0.1, 0.5, 0.3, 0.15), 100); setTimeout(() => playTone(1046.50, 'sine', 0.05, 0.2, 0.5, 0.5, 0.15), 200); break;
+                case 'wrong': playTone(200, 'sawtooth', 0.1, 0.2, 0.5, 0.3, 0.1); break;
+                case 'item': playTone(880, 'sine', 0.05, 0.1, 0.5, 0.5, 0.1); setTimeout(() => playTone(1760, 'sine', 0.05, 0.3, 0, 0.5, 0.05), 150); break;
+                case 'penalty': playTone(250, 'square', 0.1, 0.2, 0.5, 0.3, 0.15); setTimeout(() => playTone(150, 'square', 0.1, 0.4, 0, 0.5, 0.15), 200); break;
+                case 'win': playTone(440, 'triangle', 0.1, 0.2, 0.5, 0.5, 0.15); setTimeout(() => playTone(554.37, 'triangle', 0.1, 0.2, 0.5, 0.5, 0.15), 200); setTimeout(() => playTone(880, 'triangle', 0.1, 0.4, 0.5, 1.0, 0.15), 400); break;
             }
         }
 
         let selectedTeamCount = 6; 
         let selectedPieceCount = 2; 
         
+        // 아이콘 이미지 1.png ~ 6.png 로 수정 적용
         const allTeams = [
             { id: 0, name: "1조", color: "#f87171", img: "1.png", finished: false, items: [] },
             { id: 1, name: "2조", color: "#60a5fa", img: "2.png", finished: false, items: [] },
@@ -565,7 +548,7 @@
             { groupId: "photo3", type: "객관식", question: "숲의 소리를 기록하는 '사운드스케이프' 활동이 우리에게 주는 이점은?", options: [ { text: "새들의 노랫소리를 통해 숲이 얼마나 건강한지 알 수 있다.", isCorrect: true, rationale: "정답! 다양한 생물의 소리(사운드스케이프)는 숲의 생태적 건강성을 측정하는 훌륭한 지표가 됩니다." }, { text: "큰 소리를 녹음해 두었다가 야생동물을 쫓아내는 데 쓴다.", isCorrect: false, rationale: "숲에서는 큰 소리를 내지 않는 것이 기본 에티켓입니다." }, { text: "소리를 크게 틀어놓고 신나게 춤을 출 수 있다.", isCorrect: false, rationale: "숲의 평화를 깨뜨리는 행동입니다." }, { text: "친구들끼리 멀리서 소리치며 대화할 때 편리하다.", isCorrect: false, rationale: "조용히 자연의 소리를 감상하는 것이 목적입니다." } ] },
             { groupId: "walking1", type: "객관식", question: "가파른 내리막길을 내려갈 때, 무릎이 아프지 않게 걷는 올바른 방법은?", options: [ { text: "빨리 내려가기 위해 가볍게 통통 뛰면서 내려간다.", isCorrect: false, rationale: "뛰어서 내려가면 무릎에 강한 충격이 가해져 연골이 다칩니다." }, { text: "무릎을 쫙 펴고 씩씩하게 뒤꿈치부터 쿵쿵 디딘다.", isCorrect: false, rationale: "무릎을 쫙 펴고 걸으면 발을 디딜 때의 충격이 척추까지 전달됩니다." }, { text: "무릎을 살짝 굽히고 보폭을 좁게 해서 걷는다.", isCorrect: true, rationale: "정답! 무릎을 살짝 굽혀야 다리 근육이 스프링처럼 충격을 흡수해 줍니다." }, { text: "신발 앞꿈치만 땅에 닿게 까치발로 조심조심 내려간다.", isCorrect: false, rationale: "앞꿈치만 사용하면 종아리에 쥐가 나거나 쉽게 미끄러집니다." } ] },
             { groupId: "walking2", type: "OX", question: "오르막길에서는 한 걸음을 아주 넓게 딛고 빨리 올라가는 것이 덜 지친다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "보폭을 넓게 하면 허벅지 근육이 무리하게 쓰여 금방 지치고 숨이 찹니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 보폭을 평소 걷기보다 약간 좁게 하고, 천천히 일정한 리듬으로 걷는 것이 좋습니다." } ] },
-            { groupId: "walking3", type: "OX", question: "등산을 할 때는 지치기 전에 짧게 자주 쉬어주는 것이 원칙이다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 완전히 지쳐버리면 체력을 회복하기 어렵기 때문에, 지치기 전에 짧게 쉬는 주기 조절이 좋습니다." }, { text: "X (아니다)", isCorrect: false, rationale: "끝까지 참고 올라가다 길게 쉬면 오히려 체온이 떨어지고 쥐가 나기 쉽습니다." } ] },
+            { groupId: "walking3", type: "OX", question: "등산을 할 때는 지치기 전에 짧게 자주 쉬어주는 것이 원칙이다.", options: [ { text: "O (그렇다)", isCorrect: true, rationale: "정답! 완전히 지쳐버리면 체력을 회복하기 어렵기 때문에, 지치기 전에 짧게 쉬는 것이 좋습니다." }, { text: "X (아니다)", isCorrect: false, rationale: "끝까지 참고 올라가다 길게 쉬면 오히려 체온이 떨어지고 쥐가 나기 쉽습니다." } ] },
             { groupId: "walking4", type: "OX", question: "올바른 산행을 위해 등산화 끈은 올라갈 때와 내려갈 때 항상 똑같은 세기로 꽉 묶어야 한다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "올라갈 때는 발목이 편하게 살짝 느슨하게 묶는 것이 좋습니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 내려갈 때는 발목을 더 단단하게 조여 발가락 끝이 신발 앞코에 닿아 아픈 것을 막아야 합니다." } ] },
             { groupId: "stick1", type: "객관식", question: "노르딕워킹이나 안전 산행을 위한 '등산 스틱'의 올바른 사용법은 무엇일까요?", options: [ { text: "한 손에만 스틱 1개를 쥐고 체중을 싣는다.", isCorrect: false, rationale: "스틱은 반드시 양손에 하나씩 쥐어야 신체 균형이 맞고 체중이 분산됩니다." }, { text: "오르막에서는 스틱을 길게, 내리막에서는 짧게 줄인다.", isCorrect: false, rationale: "반대입니다. 오르막은 약간 짧게, 내리막은 길게 조절해야 합니다." }, { text: "손목 끈 안으로 손을 아래에서 위로 끼워 손잡이를 감싸 쥔다.", isCorrect: true, rationale: "정답! 끈을 제대로 활용해야 악력 저하를 막고 체중을 분산시킬 수 있습니다." }, { text: "평지에서는 팔꿈치가 완전히 펴지도록 길게 세팅한다.", isCorrect: false, rationale: "평지에서는 팔꿈치가 90도 직각이 되는 길이가 가장 걷기 편안합니다." } ] },
             { groupId: "stick2", type: "OX", question: "등산 스틱의 손목 끈은 귀찮으면 손을 끼우지 않고 손잡이만 꽉 쥐고 걸어도 된다.", options: [ { text: "O (그렇다)", isCorrect: false, rationale: "손잡이만 쥐면 악력이 금방 떨어져 피로해집니다." }, { text: "X (아니다)", isCorrect: true, rationale: "정답! 체중 분산과 부상 방지를 위해 손목 끈은 반드시 올바르게 착용해야 합니다." } ] },
@@ -602,6 +585,7 @@
             { type: 'bad', name: "🐝 말벌 떼 조우", desc: "놀라서 뒷걸음질! 2칸 뒤로 물러납니다.", effect: "backward_2" }
         ];
 
+        // --- 2. 정통 윷판 좌표 (출발: 좌하단 0) ---
         const nodeCoords = {
             0: [10, 90], 1: [26, 90], 2: [42, 90], 3: [58, 90], 4: [74, 90], 
             5: [90, 90], 6: [90, 74], 7: [90, 58], 8: [90, 42], 9: [90, 26], 
@@ -625,6 +609,7 @@
             30:100 
         };
 
+        // --- 3. 화면 전환 로직 ---
         function showEducation() {
             playSound('click');
             const teamInput = document.getElementById('team-count-input');
@@ -663,9 +648,14 @@
             document.getElementById('game-screen').classList.remove('hidden');
             document.getElementById('game-screen').classList.add('flex');
             initGame();
+            
+            // 게임 시작 시 1조 팝업
+            setTimeout(() => {
+                const team = teams[currentTeamIdx];
+                showTurnPopup(team.name, team.color);
+            }, 500);
         }
 
-        // 초기화 버튼 확인 창 열기
         function confirmReset() {
             playSound('click');
             document.getElementById('confirm-modal').classList.remove('hidden');
@@ -680,38 +670,16 @@
 
         function executeReset() {
             closeConfirm();
-            resetGame();
-        }
-
-        // [안정성 강화] 완전 초기화(Reset) 기능
-        function resetGame() {
             playSound('click');
-            
-            // 모든 모달 및 화면 숨김 처리
             document.getElementById('hall-of-fame-modal').classList.add('hidden');
             document.getElementById('hall-of-fame-modal').classList.remove('flex');
             document.getElementById('game-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('flex');
-            document.getElementById('alert-modal').classList.add('hidden');
-            document.getElementById('alert-modal').classList.remove('flex');
-            document.getElementById('quiz-modal').classList.add('hidden');
-            document.getElementById('quiz-modal').classList.remove('flex');
-
-            // 초기 인트로 화면 띄우기
             document.getElementById('intro-screen').style.display = 'flex';
             
-            // 변수 및 데이터 완벽 백지화
-            rankings = []; 
-            currentTeamIdx = 0; 
-            gameState = 'WAIT_ROLL'; 
-            currentRoll = 0; 
-            bonusRoll = false;
-            recentQuizGroups = []; // 출제 퀴즈 내역 초기화
-            
+            rankings = []; currentTeamIdx = 0; gameState = 'WAIT_ROLL'; currentRoll = 0; bonusRoll = false;
             teams.forEach(t => { t.finished = false; t.items = []; });
             pieces.forEach(p => { p.pos = -1; p.history = []; });
-
-            // 보드판의 말 시각적 초기화
             document.querySelectorAll('.piece').forEach(el => el.style.display = 'none');
             
             const resultDisplay = document.getElementById('roll-result');
@@ -733,7 +701,27 @@
             document.getElementById('ingame-tutorial-modal').classList.add('hidden');
             document.getElementById('ingame-tutorial-modal').classList.remove('flex');
         }
+        
+        function showTurnPopup(teamName, teamColor) {
+            const toast = document.getElementById('turn-toast');
+            const text = document.getElementById('turn-toast-text');
+            text.innerHTML = `<span style="color: ${teamColor}">${teamName}</span> 차례입니다!`;
+            
+            toast.classList.remove('hidden');
+            void toast.offsetWidth; // trigger reflow
+            toast.classList.remove('opacity-0');
+            toast.classList.add('flex');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('flex');
+                }, 300);
+            }, 2000);
+        }
 
+        // --- 4. 윷판 렌더링 ---
         function initGame() {
             drawBoard(); renderDashboard(); updateTurnUI(); updatePiecesOnBoard();
             window.addEventListener('resize', () => updatePiecesOnBoard());
@@ -804,12 +792,17 @@
                     else if (p.pos === 30) status = "도착대기";
                     else if (p.pos > 0) status = "탐험중";
                     
-                    const isClickable = gameState === 'WAIT_PIECE' && currentTeamIdx === t.id && p.pos !== 100;
+                    let isClickable = false;
+                    if(gameState === 'WAIT_PIECE' && currentTeamIdx === t.id && p.pos !== 100) {
+                        if(!(currentRoll === -1 && p.pos === -1)) {
+                            isClickable = true;
+                        }
+                    }
                     
                     return `<button id="dash_btn_${p.id}" onclick="if(gameState==='WAIT_PIECE' && currentTeamIdx===${t.id}) onPieceClicked('${p.id}')" 
-                            class="w-full py-1.5 md:py-2.5 px-1 rounded-xl font-bold text-xs md:text-sm transition-all border ${p.pos === 100 ? 'bg-white/5 text-gray-500 border-white/5' : 'bg-white/10 hover:bg-white/20 border-white/20 text-white shadow-sm'} break-keep flex flex-col items-center justify-center gap-1 ${isClickable ? 'ring-2 ring-emerald-400/50 shadow-[0_0_10px_rgba(52,211,153,0.3)]' : ''}">
-                            <img src="${t.img}" class="w-6 h-6 md:w-8 md:h-8 object-contain rounded-full border border-white/30 bg-white/90" alt="말" onerror="this.style.display='none'">
-                            <span class="text-[10px] md:text-xs font-medium opacity-80" style="color:${p.pos === 100 ? '#6b7280' : t.color}">${status}</span>
+                            class="w-full py-1.5 md:py-2 px-1 rounded-xl font-bold text-xs md:text-sm transition-all border ${p.pos === 100 ? 'bg-white/5 text-gray-500 border-white/5 opacity-50' : 'bg-white/10 hover:bg-white/20 border-white/20 text-white shadow-sm'} break-keep flex flex-col items-center justify-center ${isClickable ? 'ring-2 ring-emerald-400/80 shadow-[0_0_15px_rgba(52,211,153,0.5)] scale-105' : ''}">
+                            <img src="${t.img}" class="w-8 h-8 md:w-10 md:h-10 object-contain rounded-full bg-white/90 border-2 border-white/50 mb-1" alt="말" onerror="this.style.display='none'">
+                            <span>U${p.id.split('_p')[1]}</span><span class="text-[10px] md:text-xs font-medium opacity-80 mt-0.5" style="color:${p.pos === 100 ? '#6b7280' : t.color}">${status}</span>
                         </button>`;
                 }).join('');
 
@@ -846,15 +839,16 @@
             if(gameState === 'WAIT_ROLL') {
                 buttons.forEach(b => b.disabled = false); rollBtn.disabled = false;
                 resultDisplay.innerText = bonusRoll ? "한 번 더 던지세요!" : "윷을 던지세요";
-                resultDisplay.className = "mt-4 text-center text-xl md:text-2xl font-bold text-emerald-400 animate-pulse break-keep";
+                resultDisplay.className = "mt-3 md:mt-4 text-center text-base md:text-xl font-bold text-emerald-400 animate-pulse break-keep";
             } else {
                 buttons.forEach(b => b.disabled = true); rollBtn.disabled = true;
                 resultDisplay.innerText = "이동할 말을 선택하세요";
-                resultDisplay.className = "mt-4 text-center text-xl md:text-2xl font-bold text-yellow-300 break-keep";
+                resultDisplay.className = "mt-3 md:mt-4 text-center text-base md:text-xl font-bold text-yellow-300 break-keep";
             }
             renderDashboard();
         }
 
+        // --- 5. 윷 던지기 & 이동 로직 ---
         let isRolling = false;
         function rollDigitalYut() {
             if (gameState !== 'WAIT_ROLL' || isRolling) return;
@@ -950,7 +944,7 @@
         function highlightSelectablePieces() {
             pieces.forEach(p => {
                 const el = document.getElementById(`piece_${p.id}`);
-                const dashBtn = document.getElementById(`dash_btn_${p.id}`);
+                // 대시보드 버튼의 하이라이트는 updateTurnUI()->renderDashboard() 에서 처리됨
                 if (p.teamId === currentTeamIdx && p.pos !== 100) {
                     if(currentRoll === -1 && p.pos === -1) {
                         el.classList.remove('clickable'); return;
@@ -962,6 +956,7 @@
             });
         }
 
+        // --- [핵심 안정화] 윷판 이동 로직 (후퇴/빽도 예외 처리 완벽 적용) ---
         function calculateDestination(startPos, steps, historyArray) {
             if (steps < 0) { 
                 let newHistory = [...historyArray];
@@ -1023,6 +1018,7 @@
             return { dest: current, path: [], newHistory: newHistory };
         }
 
+        // 상대방 잡기 위치 체크 (0과 30은 같은 위치로 간주)
         function isSamePosition(pos1, pos2) {
             if (pos1 === pos2) return true;
             if ((pos1 === 0 && pos2 === 30) || (pos1 === 30 && pos2 === 0)) return true;
@@ -1059,6 +1055,7 @@
                 setTimeout(() => nextTurn(), 2000); return;
             }
 
+            // [안정성 수정] 0(출발대기)과 30(도착대기)을 포함하여 판 위에 있는 모든 적을 잡을 수 있게 처리
             const enemies = pieces.filter(p => p.teamId !== currentTeamIdx && p.pos !== -1 && p.pos !== 100 && isSamePosition(p.pos, destPos));
             
             if (enemies.length > 0) {
@@ -1094,7 +1091,7 @@
                 if (randomItem.effect === "bonus") bonusRoll = true;
 
                 document.getElementById('alert-title').innerText = randomItem.type === 'good' ? "🎁 아이템 획득!" : "⚠️ 돌발 상황!";
-                document.getElementById('alert-title').className = randomItem.type === 'good' ? "text-2xl md:text-4xl font-black text-pink-400 mb-6 break-keep" : "text-2xl md:text-4xl font-black text-red-500 mb-6 break-keep";
+                document.getElementById('alert-title').className = randomItem.type === 'good' ? "text-2xl md:text-4xl font-black text-pink-400 mb-4 break-keep" : "text-2xl md:text-4xl font-black text-red-500 mb-4 break-keep";
                 
                 document.getElementById('alert-desc').innerText = effectDesc;
                 const modal = document.getElementById('alert-modal');
@@ -1147,7 +1144,12 @@
                 return;
             }
 
-            gameState = 'WAIT_ROLL'; updateTurnUI();
+            gameState = 'WAIT_ROLL'; 
+            updateTurnUI();
+            
+            // 다음 턴 알림 팝업
+            const team = teams[currentTeamIdx];
+            showTurnPopup(team.name, team.color);
         }
 
         function checkWinCondition() {
@@ -1170,7 +1172,7 @@
             const colors = ['text-yellow-400 text-3xl md:text-5xl glow-text-yellow', 'text-gray-300 text-2xl md:text-4xl', 'text-yellow-600 text-xl md:text-3xl', 'text-emerald-400 text-lg md:text-2xl', 'text-emerald-500 text-base md:text-xl', 'text-emerald-600 text-base md:text-xl'];
 
             rankings.forEach((team, idx) => {
-                list.innerHTML += `<div class="font-black ${colors[idx] || 'text-white'} break-keep bg-white/5 px-8 py-5 rounded-2xl w-full border border-white/10 shadow-sm">${idx + 1}위 : ${team.name} 🎉</div>`;
+                list.innerHTML += `<div class="font-black ${colors[idx] || 'text-white'} break-keep bg-white/5 px-6 py-3 rounded-2xl w-full border border-white/10 shadow-sm">${idx + 1}위 : ${team.name} 🎉</div>`;
             });
 
             modal.classList.remove('hidden');
@@ -1228,6 +1230,7 @@
             renderDashboard();
         }
 
+        // --- 6. 강력한 스마트 중복 방지 퀴즈 로직 ---
         function showQuiz() {
             let availableGroups = [...new Set(quizBank.map(q => q.groupId))].filter(g => !recentQuizGroups.includes(g));
             
@@ -1257,7 +1260,7 @@
 
             selectedQuiz.options.forEach((opt) => {
                 const btn = document.createElement('button');
-                btn.className = "w-full text-left p-5 md:p-8 text-xl md:text-3xl font-bold rounded-2xl glass-btn bg-white/5 border-2 border-white/10 hover:bg-white/10 break-keep";
+                btn.className = "w-full text-left p-4 md:p-5 text-base md:text-lg font-bold rounded-xl glass-btn bg-white/5 border border-white/10 hover:bg-white/10 break-keep";
                 btn.innerText = opt.text;
                 btn.onclick = () => handleQuizAnswer(opt, btn, optionsContainer);
                 optionsContainer.appendChild(btn);
@@ -1281,8 +1284,8 @@
                 clickedButton.classList.add('bg-emerald-500/80', 'text-white', 'border-emerald-300');
                 
                 resultTitle.innerText = "🎉 CORRECT!"; 
-                resultTitle.className = "text-2xl md:text-4xl font-black mb-4 text-emerald-400 break-keep";
-                rationaleBox.className = "bg-emerald-900/40 p-6 md:p-8 rounded-2xl border-2 border-emerald-500/50 mb-6 backdrop-blur-md transition-all block";
+                resultTitle.className = "text-xl md:text-2xl font-black mb-2 text-emerald-400 break-keep";
+                rationaleBox.className = "bg-emerald-900/40 p-4 md:p-5 rounded-xl border border-emerald-500/50 mb-4 backdrop-blur-md transition-all block";
                 
                 document.getElementById('btn-quiz-close').classList.remove('hidden');
             } else {
@@ -1292,8 +1295,8 @@
                 clickedButton.classList.add('bg-red-900/60', 'text-gray-400', 'border-red-800/50');
                 
                 resultTitle.innerText = "🤔 MISS! 다른 보기를 선택하세요."; 
-                resultTitle.className = "text-2xl md:text-4xl font-black mb-4 text-red-400 break-keep";
-                rationaleBox.className = "bg-red-900/30 p-6 md:p-8 rounded-2xl border-2 border-red-500/30 mb-6 backdrop-blur-md transition-all block";
+                resultTitle.className = "text-xl md:text-2xl font-black mb-2 text-red-400 break-keep";
+                rationaleBox.className = "bg-red-900/30 p-4 md:p-5 rounded-xl border border-red-500/30 mb-4 backdrop-blur-md transition-all block";
                 document.getElementById('btn-quiz-close').classList.add('hidden');
             }
             const modalScroll = document.querySelector('.modal-scroll-area'); setTimeout(() => { modalScroll.scrollTop = modalScroll.scrollHeight; }, 100);
@@ -1304,12 +1307,13 @@
         function showAlert(title, desc) {
             document.getElementById('alert-title').innerText = title; document.getElementById('alert-desc').innerText = desc;
             
-            document.getElementById('alert-title').className = "text-3xl md:text-5xl font-black text-pink-400 mb-6 break-keep";
+            document.getElementById('alert-title').className = "text-2xl md:text-4xl font-black text-pink-400 mb-4 break-keep";
             const modal = document.getElementById('alert-modal'); modal.classList.remove('hidden'); modal.classList.add('flex');
             const btn = modal.querySelector('button'); btn.onclick = () => { playSound('click'); closeAlert(); };
         }
         function closeAlert() { document.getElementById('alert-modal').classList.add('hidden'); document.getElementById('alert-modal').classList.remove('flex'); }
 
+        // --- 7. 퀴즈 아카이브 로드 ---
         function renderQuizBankList() {
             const listContainer = document.getElementById('quiz-bank-list');
             listContainer.innerHTML = ''; 
@@ -1317,10 +1321,10 @@
             quizBank.forEach((quiz, index) => {
                 const correctOpt = quiz.options.find(o => o.isCorrect);
                 listContainer.innerHTML += `
-                    <div class="bg-black/60 border-2 border-white/20 p-6 md:p-8 rounded-3xl shadow-sm mb-6">
-                        <h3 class="text-2xl md:text-4xl font-bold text-white mb-6 break-keep leading-snug">Q${index+1}. ${quiz.question}</h3>
-                        <p class="text-xl md:text-3xl font-bold text-emerald-400 mb-4 break-keep">정답: ${correctOpt.text}</p>
-                        <p class="text-lg md:text-2xl text-gray-300 break-keep bg-black/80 p-5 rounded-2xl border-l-4 border-emerald-500 leading-relaxed">해설: ${correctOpt.rationale}</p>
+                    <div class="bg-black/60 border-2 border-white/20 p-5 md:p-6 rounded-2xl shadow-sm mb-6">
+                        <h3 class="text-base md:text-xl font-bold text-white mb-4 break-keep leading-snug">Q${index+1}. ${quiz.question}</h3>
+                        <p class="text-sm md:text-lg font-bold text-emerald-400 mb-3 break-keep">정답: ${correctOpt.text}</p>
+                        <p class="text-xs md:text-base text-gray-300 break-keep bg-black/80 p-4 rounded-xl border-l-4 border-emerald-500 leading-relaxed">해설: ${correctOpt.rationale}</p>
                     </div>
                 `;
             });
